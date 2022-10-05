@@ -1,3 +1,4 @@
+package Main;
 /*
  * Author: Tyler Chen
  * UCID: 30066806
@@ -44,7 +45,7 @@ public class Iteration3Solution {
 	public static void main(String[] args) {
 
 		Iteration3Solution client = new Iteration3Solution();
-		client.registry = new Source(new Peer("144.126.219.80", 55921, null)); //own
+		client.registry = new Source(new Peer("143.198.76.236", 55921, null)); //own
 		// test env
 		//client.registry = new Source(new Peer("136.159.5.22", 55921, null));
 

@@ -4,7 +4,6 @@
  * Iteration 3
  * CPSC 559
  */
-test1
 
 import java.io.IOException;
 import java.net.DatagramPacket;

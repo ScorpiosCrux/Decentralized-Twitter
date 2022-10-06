@@ -26,14 +26,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
+import Network.NetworkHandler;
 import Settings.UserSettings;
 
 public class Iteration3Solution {
+
+	// Handlers
+	private NetworkHandler networkHandler;
 
 	private UserSettings settings;
 	private boolean registry_connected;
 
 	private Source registry;
+
 	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
 	private Vector<UDPMessageLog> peersSent = new Vector<UDPMessageLog>();
 	private Vector<UDPMessageLog> peersReceived = new Vector<UDPMessageLog>();
@@ -47,6 +52,7 @@ public class Iteration3Solution {
 
 	public Iteration3Solution(UserSettings settings) {
 		this.settings = settings;
+		this.networkHandler = new NetworkHandler();
 	}
 
 	void peerCommunication() {
@@ -138,18 +144,9 @@ public class Iteration3Solution {
 		return message;
 	}
 
-	// Gets the IP address from the socket
-	private String getIP(Socket socket) {
-		return socket.getInetAddress().getHostAddress();
-	}
+	
 
-	// -1 to let the OS choose a port
-	private DatagramSocket createUDPSocket(int port) throws SocketException {
-		if (port == -1)
-			return new DatagramSocket();
-		else
-			return new DatagramSocket(port);
-	}
+
 
 	//////////////////////////// SOCKET FUNCTIONS
 	//////////////////////////// //////////////////////////////////////
@@ -373,7 +370,7 @@ public class Iteration3Solution {
 		Socket registry_socket = createSocket(this.registry.peer.getIP(), this.registry.peer.getPort());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(registry_socket.getInputStream()));
 
-		this.peer_socket = createUDPSocket(this.port);
+		this.peer_socket = networkHandler.createUDPSocket(this.port);
 		this.externalIP = getExternalIP();
 		this.port = peer_socket.getLocalPort();
 

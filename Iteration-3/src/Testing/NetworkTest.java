@@ -5,23 +5,23 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Main.Iteration3Solution;
-import Main.Main;
 import Main.Peer;
 import Main.Source;
+import Network.NetworkHandler;
 import Settings.UserSettings;
 
 public class NetworkTest {
 
     private static boolean setup = false;
     private Iteration3Solution client;
-    private UserSettings settings; 
+    private UserSettings settings;
 
     @BeforeEach
     public void setup() {
@@ -40,16 +40,25 @@ public class NetworkTest {
 
     @Test
     void testRegistryFailedConnection() {
-        //Registry must be off for this to pass
+        // Registry must be off for this to pass
         Exception e = assertThrows(IOException.class, () -> client.start(settings.client_port));
         assertTrue(e.getMessage().contains("Connection refused"));
     }
 
     @Test
     void testRegistrySuccessfulConnection() throws IOException {
-        //Registry must be on for this to pass
+        // Registry must be on for this to pass
         client.start(settings.client_port);
         assertTrue(client.isRegistryConnected());
     }
 
+    @Test
+    void createdUDPSocket() throws SocketException {
+        NetworkHandler nh = new NetworkHandler();
+        DatagramSocket socket;
+        int port = 31824;
+
+        socket = nh.createUDPSocket(port);
+        assertEquals("Port Number should be the same", port, socket.getLocalPort());
+    }
 }

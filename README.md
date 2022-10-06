@@ -11,3 +11,5 @@
 
 ## Changelog
 - Added Settings File. 
+- Major Refact 1: Large-Class
+    - NetworkHandler.java methods from Iteration3Solution.java

@@ -42,38 +42,13 @@ public class Iteration3Solution {
 	private String externalIP;
 	private int port;
 
-	public static void main(String[] args) {
-		UserSettings settings = new UserSettings();
-		Iteration3Solution client = new Iteration3Solution(settings);
-
-		Source registry = new Source(new Peer(settings.registry_ip, settings.registry_port, null)); // own
-		client.setRegistry(registry);
-
-		// initial connection to the registry
-		try {
-			client.start(settings.client_port);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.exit(0);
-		}
-
-		// communication with the peer
-		client.peerCommunication();
-
-		// final communicatino with registry
-		try {
-			client.stop();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
-	}
+	
 
 	public Iteration3Solution(UserSettings settings) {
 		this.settings = settings;
 	}
 
-	private void peerCommunication() {
+	void peerCommunication() {
 		// create objects for group management and snippetHandler, these are in their
 		// own threads
 		GroupManagement gm = new GroupManagement("Group Management", this.peer_socket, this.externalIP,

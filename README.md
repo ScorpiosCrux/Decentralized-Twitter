@@ -7,3 +7,7 @@
 - Tested on Java 17
 - Compile with `javac /*.java` outside the registry folder
 - Run with `java registry/Registry`
+
+
+## Changelog
+- Added Settings File. 

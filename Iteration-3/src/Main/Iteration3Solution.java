@@ -26,7 +26,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
+import Settings.UserSettings;
+
 public class Iteration3Solution {
+
+	private UserSettings settings;
 
 	private Source registry;
 	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
@@ -38,20 +42,16 @@ public class Iteration3Solution {
 	private String externalIP;
 	private int port;
 
-	private final String teamName = "TylerChen";
-
-	boolean running_on_lan;
-
 	public static void main(String[] args) {
+		UserSettings settings = new UserSettings();
+		Iteration3Solution client = new Iteration3Solution(settings);
 
-		Iteration3Solution client = new Iteration3Solution();
-		client.registry = new Source(new Peer("143.198.76.236", 55921, null)); //own
-		// test env
-		//client.registry = new Source(new Peer("136.159.5.22", 55921, null));
+		Source registry = new Source(new Peer(settings.registry_ip, settings.registry_port, null)); // own
+		client.setRegistry(registry);
 
 		// initial connection to the registry
 		try {
-			client.start();
+			client.start(settings.client_port);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			System.exit(0);
@@ -67,6 +67,10 @@ public class Iteration3Solution {
 			ioe.printStackTrace();
 		}
 
+	}
+
+	public Iteration3Solution(UserSettings settings) {
+		this.settings = settings;
 	}
 
 	private void peerCommunication() {
@@ -119,6 +123,14 @@ public class Iteration3Solution {
 			// for (Map.Entry<Source, Vector<Peer>> s : this.listOfSources.entrySet())
 			// System.out.println("Looped. Number of peers: " + s.getValue().size());
 		}
+	}
+
+	public void setRegistry(Source registry) {
+		this.registry = registry;
+	}
+
+	public Source getRegistry() {
+		return this.registry;
 	}
 
 	//////////////////////////// SOCKET FUNCTIONS
@@ -330,7 +342,7 @@ public class Iteration3Solution {
 	private String handleRequest(Socket socket, String request) throws IOException {
 		switch (request) {
 			case "get team name":
-				return teamName + "\n";
+				return settings.team_name + "\n";
 			case "get code":
 				String language = "Java";
 				String newline = "\n";
@@ -343,7 +355,7 @@ public class Iteration3Solution {
 			case "get report":
 				return generateReport();
 			case "get location":
-				if (running_on_lan == true) {
+				if (settings.running_on_lan == true) {
 					return "127.0.0.1" + ":" + this.peer_socket.getLocalPort() + "\n";
 				} else {
 					// https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
@@ -381,20 +393,7 @@ public class Iteration3Solution {
 	///////////////////////////// QOS FUNCTIONS
 	///////////////////////////// ///////////////////////////////////////
 
-	public void start() throws IOException {
-		while (true) {
-			System.out.print("Which port would you like to use? ");
-			Scanner port_in = new Scanner(System.in);
-			try {
-				this.port = port_in.nextInt();
-				break;
-			} catch (Exception e) {
-				continue;
-			}
-
-		}
-
-		this.running_on_lan = false;
+	public void start(int port) throws IOException {
 		Socket registry_socket = createSocket(this.registry.peer.getIP(), this.registry.peer.getPort());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(registry_socket.getInputStream()));
 
@@ -447,7 +446,7 @@ public class Iteration3Solution {
 			InetAddress address = InetAddress.getByName(ip);
 			System.out.println("\n\n\n\n\nAddress that sent stop: " + address.toString());
 
-			String data = "ack" + teamName;
+			String data = "ack" + settings.team_name;
 			buffer = data.getBytes();
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 

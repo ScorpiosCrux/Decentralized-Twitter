@@ -31,6 +31,7 @@ import Settings.UserSettings;
 public class Iteration3Solution {
 
 	private UserSettings settings;
+	private boolean registry_connected;
 
 	private Source registry;
 	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
@@ -376,6 +377,9 @@ public class Iteration3Solution {
 		this.externalIP = getExternalIP();
 		this.port = peer_socket.getLocalPort();
 
+		if (registry_socket.isConnected())
+			this.registry_connected = true;
+
 		while (registry_socket.isConnected()) {
 			String request = readSocket(reader, registry_socket); // Read request
 			String returnMessage = handleRequest(registry_socket, request); // Handle request
@@ -410,6 +414,10 @@ public class Iteration3Solution {
 
 		registry_socket.close();
 
+	}
+
+	public boolean isRegistryConnected(){
+		return registry_connected;
 	}
 
 	private void sendUDPStopMessage(Peer peer) {

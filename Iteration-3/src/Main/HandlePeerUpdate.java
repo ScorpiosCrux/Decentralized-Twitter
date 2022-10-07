@@ -5,6 +5,7 @@ package Main;
  * Iteration 3
  * CPSC 559
  */
+
 //This class handles incoming UDP Message with "peer" at the start
 //
 
@@ -20,53 +21,53 @@ import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
+import MainHandlers.PeerCommHandler;
+import Settings.UserSettings;
 
-public class HandlePeerUpdate extends Thread{
+public class HandlePeerUpdate extends Thread {
 	private Thread t;
 	private String threadName;
 	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
-	private Vector<UDPMessageLog> peersReceived = new Vector<UDPMessageLog>();
+	private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>();
+
 	private UDPMessage message_pck;
 	private Source source;
-	
-	HandlePeerUpdate(String tName, Hashtable<Source, Vector<Peer>> listOfSources, UDPMessage message, Source source,
-			Vector<UDPMessageLog> peersReceived){
-		this.threadName = tName;
-		this.listOfSources = listOfSources;
+
+	public HandlePeerUpdate(UserSettings settings, UDPMessage message, PeerCommHandler parent) {
+		this.threadName = "Peer Update Handler";
 		this.message_pck = message;
-		this.source = source;
-		this.peersReceived = peersReceived;
+		this.source = new Source(new Peer(settings.registry_ip, settings.registry_port, null));
 	}
-	
-	//run the thread
+
+	// run the thread
 	public void run() {
-		
+
 		Peer peer = createPeer();
-		this.peersReceived.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
+		this.peers_received.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
 		if (peer != null)
 			updateAddPeer(peer, source);
-		
+
 	}
-	
-	//Start the thread
+
+	// Start the thread
 	public void start() {
 		if (t == null) {
 			this.t = new Thread(this, threadName);
 			this.t.start();
 		}
 	}
-	
-	//Checks to see if the ip is a valid ip.
-	//Inspired from: https://mkyong.com/regular-expressions/how-to-validate-ip-address-with-regular-expression/
+
+	// Checks to see if the ip is a valid ip.
+	// Inspired from:
+	// https://mkyong.com/regular-expressions/how-to-validate-ip-address-with-regular-expression/
 	private boolean isValidIP(String ip) {
-		String IPV4_PATTERN =
-	            "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
+		String IPV4_PATTERN = "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
 		Pattern pattern = Pattern.compile(IPV4_PATTERN);
 		Matcher matcher = pattern.matcher(ip);
 		return matcher.matches();
 	}
-	
-	//Check to see if the port is a valid port
+
+	// Check to see if the port is a valid port
 	private boolean isValidPort(String port_in) {
 		int port;
 		try {
@@ -76,28 +77,28 @@ public class HandlePeerUpdate extends Thread{
 				return true;
 			else
 				return false;
-			
-		}catch (Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
-	//Find a peer in the data structure for storing all peers and sources
-	private ReturnSearch findPeer(Peer peer){
+
+	// Find a peer in the data structure for storing all peers and sources
+	private ReturnSearch findPeer(Peer peer) {
 		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
-			for (int i = 0; i < listOfPeers.size(); i++) 
-				if (listOfPeers.get(i).equals(peer)) 
+			for (int i = 0; i < listOfPeers.size(); i++)
+				if (listOfPeers.get(i).equals(peer))
 					return new ReturnSearch(s.getKey(), i);
 		}
 		return new ReturnSearch(null, -1);
 	}
-	
-	//Either updates the time stamp for the peer or adds a new peer
+
+	// Either updates the time stamp for the peer or adds a new peer
 	private void updateAddPeer(Peer peer, Source sourcePeer) {
-		ReturnSearch res = findPeer(peer);				//check if the peer exists in the data structure
-		//if peer exist in data structure:
+		ReturnSearch res = findPeer(peer); // check if the peer exists in the data structure
+		// if peer exist in data structure:
 		if (res.getSource() != null && res.getIteration() != -1) {
 			Vector<Peer> listOfPeers = listOfSources.get(res.getSource());
 			listOfPeers.get(res.getIteration()).setInstant(Instant.now());
@@ -107,12 +108,11 @@ public class HandlePeerUpdate extends Thread{
 			this.listOfSources.put(sourcePeer, listOfPeers);
 		}
 	}
-	
-	
-	//Gets the ip and port then splits.
-	//Trims the ip and port then checks if they're valid.
-	//		if: created successfully, return a peer.
-	//		else: return null
+
+	// Gets the ip and port then splits.
+	// Trims the ip and port then checks if they're valid.
+	// if: created successfully, return a peer.
+	// else: return null
 	private Peer createPeer() {
 		Peer peer = null;
 		try {
@@ -121,11 +121,9 @@ public class HandlePeerUpdate extends Thread{
 			String[] ip_port_lst = ip_port.split(":");
 			String ip_raw = ip_port_lst[0].trim();
 			String port_raw = ip_port_lst[1].trim();
-			
-			
+
 			boolean validIp = isValidIP(ip_raw);
 			boolean validPort = isValidPort(port_raw);
-			
 
 			if (validIp && validPort) {
 				int port = Integer.parseInt(port_raw);
@@ -137,6 +135,4 @@ public class HandlePeerUpdate extends Thread{
 		return peer;
 	}
 
-	
-	
 }

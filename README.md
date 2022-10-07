@@ -14,7 +14,7 @@
 - Major Refact 1: Large-Class
     - NetworkHandler.java methods from Iteration3Solution.java\
 
-- Major Refactor 2: Long Methods
+- Major Refactor 2: Long Methods GenerateReport?
 
 - Long params
     -PeerCommHandler Constructor (after e53e8c5) actual: 025d73c
@@ -24,3 +24,4 @@
 
 
 - Duplicate Code
+

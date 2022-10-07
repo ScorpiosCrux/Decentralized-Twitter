@@ -46,7 +46,7 @@ public class RequestHandler {
             case "receive peers":
                 return "0";
             case "get report":
-                return generateReport();
+                //return generateReport();
             case "get location":
                 if (settings.running_on_lan == true) {
                     return "127.0.0.1" + ":" + settings.client_port + "\n";
@@ -98,7 +98,7 @@ public class RequestHandler {
         return code;
     }
 
-    // Generates report based on assignment specs
+    /* // Generates report based on assignment specs
     private String generateReport() {
         Hashtable<Source, Vector<Peer>> listOfSources = main.getAllSources();
         Vector<UDPMessageLog> peers_received = main.getPeersReceived();
@@ -155,7 +155,7 @@ public class RequestHandler {
 
         return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
                 peer_list_sources + peers_recd + peers_sent_str + snip_list;
-    }
+    } */
 
     
 

@@ -3,12 +3,12 @@ package MainHandlers;
 import java.util.Hashtable;
 import java.util.Vector;
 
-
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 
 public class PeerCommHandler {
@@ -18,7 +18,8 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-	private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();
+    private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();
+
 
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler) {
@@ -35,23 +36,23 @@ public class PeerCommHandler {
     }
 
     public void start() {
-        // infinite loop until a stop has been received. this is the thread for receiving UDP messages
+        // infinite loop until a stop has been received. this is the thread for
+        // receiving UDP messages
         boolean stop = false;
         while (true) {
-            UDPMessage message = receiveUDPMsg();
+            UDPMessage message = network_handler.receiveUDPMsg();
             String msgType = "";
             // System.out.println("Received message: " + message.message);
 
             try {
-                msgType = message.message.substring(0, 4);
+                msgType = message.getMessage().substring(0, 4);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             switch (msgType) {
                 case "peer":
-                    HandlePeerUpdate pu = new HandlePeerUpdate("PeerUpdate", this.all_sources, message, this.registry,
-                            this.peersReceived);
+                    HandlePeerUpdate pu = new HandlePeerUpdate(this.settings, message, this);
                     pu.start();
                     break;
                 case "snip":
@@ -75,7 +76,7 @@ public class PeerCommHandler {
         }
     }
 
-    public Hashtable<Source, Vector<Peer>> getAllSources(){
+    public Hashtable<Source, Vector<Peer>> getAllSources() {
         return all_sources;
     }
 

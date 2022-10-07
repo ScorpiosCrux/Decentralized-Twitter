@@ -86,7 +86,7 @@ public class NetworkHandler {
 
     // Received UDP messages and returns a UDPMessage with information about the
 	// source and the content itself
-	private UDPMessage receiveUDPMsg() {
+	public UDPMessage receiveUDPMsg() {
 		// System.out.println("Waiting for UDP message");
 		try {
 			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);

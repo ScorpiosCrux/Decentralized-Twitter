@@ -8,9 +8,9 @@ package Main.HelperDataClasses;
 
 public class UDPMessage {
 	private String message;
-	private Peer sourcePeer;
+	private PeerOld sourcePeer;
 
-	public UDPMessage(String message, Peer sourcePeer) {
+	public UDPMessage(String message, PeerOld sourcePeer) {
 		this.message = message;
 		this.sourcePeer = sourcePeer;
 	}
@@ -19,7 +19,7 @@ public class UDPMessage {
 		return this.message;
 	}
 
-	public Peer getSourcePeer() {
+	public PeerOld getSourcePeer() {
 		return sourcePeer;
 	}
 

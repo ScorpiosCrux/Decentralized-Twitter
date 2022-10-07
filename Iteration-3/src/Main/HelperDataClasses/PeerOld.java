@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Peer {
+public class PeerOld {
 	private String ip;
 	private int port;
 	private boolean active;
@@ -18,7 +18,7 @@ public class Peer {
 	private String creationTime;
 	private int timeStamp;
 	
-	public Peer(String ip, int port, String sourcePeer) {
+	public PeerOld(String ip, int port, String sourcePeer) {
 		this.ip = ip;
 		this.port = port;
 		this.active = true;
@@ -75,7 +75,7 @@ public class Peer {
 		return this.sourcePeer;
 	}
 	
-	//Allows Comparable to work
+	// Allows Comparable to work
 	public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -83,7 +83,7 @@ public class Peer {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Peer other = (Peer) obj;
+        PeerOld other = (PeerOld) obj;
         if (!(ip.equals(other.ip) && port == other.port))
             return false;
         return true;

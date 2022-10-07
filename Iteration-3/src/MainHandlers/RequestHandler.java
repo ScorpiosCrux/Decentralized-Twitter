@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import Main.Iteration3Solution;
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessageLog;
@@ -109,7 +109,7 @@ public class RequestHandler {
 
     // Generates report based on assignment specs
     private String generateReport() {
-        Hashtable<Source, Vector<Peer>> all_sources = peer_comm_handler.getAllSources();
+        Hashtable<Source, Vector<PeerOld>> all_sources = peer_comm_handler.getAllSources();
         Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
         Vector<UDPMessageLog> peers_received = peer_comm_handler.getAllPeersRec();
         Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
@@ -122,12 +122,12 @@ public class RequestHandler {
         String peers_sent_str = "";
         String snip_list = "";
 
-        for (Map.Entry<Source, Vector<Peer>> e : all_sources.entrySet()) {
+        for (Map.Entry<Source, Vector<PeerOld>> e : all_sources.entrySet()) {
             Source source = e.getKey();
             String sourceLocation = source.getPeer().toString() + "\n";
-            Vector<Peer> listOfPeers = e.getValue();
+            Vector<PeerOld> listOfPeers = e.getValue();
             String peers = "";
-            for (Peer p : listOfPeers) {
+            for (PeerOld p : listOfPeers) {
                 String peer_string = p.toString() + "\n";
                 peers += peer_string;
                 peer_list += peer_string;

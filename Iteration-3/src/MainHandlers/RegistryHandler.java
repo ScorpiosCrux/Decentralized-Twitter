@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import Main.Iteration3Solution;
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.Source;
 import Settings.UserSettings;
 import Testing.PrintHandler;
@@ -32,7 +32,7 @@ public class RegistryHandler {
 
         
 
-        this.registry = new Source(new Peer(settings.registry_ip, settings.registry_port, null));
+        this.registry = new Source(new PeerOld(settings.registry_ip, settings.registry_port, null));
     }
 
     // Getters and Setters
@@ -67,7 +67,9 @@ public class RegistryHandler {
             if (returnMessage.equals("-1")) {
                 print_handler.printError("Error 0 returned from handleRequest");
                 break;
-            } else if (returnMessage.equals("1"))
+            } else if (returnMessage.equals("0")){
+                continue;
+            }else if (returnMessage.equals("1"))
                 break;
             network_handler.writeSocket(registry_socket, returnMessage); // Send response
             print_handler.printResponse(returnMessage, request);
@@ -91,22 +93,22 @@ public class RegistryHandler {
 
     // Adds the source and peers to listOfSources reading from the reader.
     private void receivePeers(Socket socket, BufferedReader reader) throws IOException {
-        Hashtable<Source, Vector<Peer>> listOfSources = peer_comm_handler.getAllSources();
+        Hashtable<Source, Vector<PeerOld>> listOfSources = peer_comm_handler.getAllSources();
 
         // Check to see if the additional source is already in the list.
         // Source source = new Source(new Peer(getIP(socket), socket.getPort(), null));
         if (!listOfSources.contains(registry)) {
-            listOfSources.put(registry, new Vector<Peer>());
+            listOfSources.put(registry, new Vector<PeerOld>());
         }
 
         String numOfPeersString = reader.readLine();
         try {
             int numOfPeers = Integer.parseInt(numOfPeersString);
-            Vector<Peer> currentList = listOfSources.get(registry);
+            Vector<PeerOld> currentList = listOfSources.get(registry);
             for (int i = 0; i < numOfPeers; i++) {
                 String peer = reader.readLine();
                 String[] parts = peer.split(":");
-                Peer newPeer = new Peer(parts[0], Integer.parseInt(parts[1]), registry.getPeer().toString());
+                PeerOld newPeer = new PeerOld(parts[0], Integer.parseInt(parts[1]), registry.getPeer().toString());
                 currentList.add(newPeer);
             }
             listOfSources.put(registry, currentList);

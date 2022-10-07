@@ -18,7 +18,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
@@ -32,7 +32,7 @@ public class SnippetHandler extends Thread{
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
-	private Hashtable<Source, Vector<Peer>> all_sources;
+	private Hashtable<Source, Vector<PeerOld>> all_sources;
     private Vector<SnippetLog> all_snippets;
 
 
@@ -74,10 +74,10 @@ public class SnippetHandler extends Thread{
                 	content = br.readLine();
                 
                 
-                Peer ourselves = new Peer(public_ip, port, null);
+                PeerOld ourselves = new PeerOld(public_ip, port, null);
                 ReturnSearch location = findPeer(ourselves);
                 
-                Peer p = all_sources.get(location.getSource()).get(location.getIteration());
+                PeerOld p = all_sources.get(location.getSource()).get(location.getIteration());
                 p.setTimeStamp(p.getTimeStamp()+1);
             
 				broadcast(content, p);
@@ -103,11 +103,11 @@ public class SnippetHandler extends Thread{
 	}
 
 	//broadcast the message to all peers while logging it
-	private void broadcast(String content, Peer ourselves) {
+	private void broadcast(String content, PeerOld ourselves) {
 		
-		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
-			Vector<Peer> listOfPeers = s.getValue();
-			for (Peer p : listOfPeers) {
+		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+			Vector<PeerOld> listOfPeers = s.getValue();
+			for (PeerOld p : listOfPeers) {
 				if (p.isActive() && !p.equals(ourselves)) {
 					
 					sendUDPMessage(p, content, ourselves);
@@ -117,7 +117,7 @@ public class SnippetHandler extends Thread{
 	}
 	
 	//send the snippet to peer
-	private void sendUDPMessage(Peer peer, String content, Peer ourselves) {
+	private void sendUDPMessage(PeerOld peer, String content, PeerOld ourselves) {
 		try {
 			String ip = peer.getIP();
 			int port = peer.getPort();
@@ -142,7 +142,7 @@ public class SnippetHandler extends Thread{
 	}
 	
 	//handle the incoming snippet, updating our timestamp and also adding it to our logs
-	public void handleIncomingSnip(String message, Peer sourcePeer) {
+	public void handleIncomingSnip(String message, PeerOld sourcePeer) {
 		try {
 			
 			message = message.substring(4, message.length());
@@ -150,9 +150,9 @@ public class SnippetHandler extends Thread{
 			int received_timestamp = Integer.parseInt(message_split[0]);
 			String content = message_split[1];
 			
-			Peer ourselves = new Peer(public_ip, port, null);	        
+			PeerOld ourselves = new PeerOld(public_ip, port, null);	        
 	        ReturnSearch location = findPeer(ourselves);
-	        Peer p = all_sources.get(location.getSource()).get(location.getIteration());
+	        PeerOld p = all_sources.get(location.getSource()).get(location.getIteration());
 	        int max = Math.max(p.getTimeStamp(), received_timestamp) + 1;
 			p.setTimeStamp(max);
 			
@@ -167,9 +167,9 @@ public class SnippetHandler extends Thread{
 	}
 	
 	//this finds the peer in our datastructure
-	private ReturnSearch findPeer(Peer peer){
-		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
-			Vector<Peer> listOfPeers = s.getValue();
+	private ReturnSearch findPeer(PeerOld peer){
+		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) 
 				if (listOfPeers.get(i).equals(peer)) 
 					return new ReturnSearch(s.getKey(), i);

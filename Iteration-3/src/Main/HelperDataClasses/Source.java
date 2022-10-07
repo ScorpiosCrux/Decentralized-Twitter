@@ -10,10 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Source {
-    private Peer peer;
+    private PeerOld peer;
     private String time;
 
-    public Source(Peer peer) {
+    public Source(PeerOld peer) {
         this.peer = peer;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -21,7 +21,7 @@ public class Source {
         this.time = formatter.format(date);
     }
 
-    public Peer getPeer() {
+    public PeerOld getPeer() {
         return this.peer;
     }
 

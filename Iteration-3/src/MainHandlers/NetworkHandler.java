@@ -13,7 +13,7 @@ import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
@@ -91,7 +91,7 @@ public class NetworkHandler {
 		try {
 			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
 			outgoing_udp.receive(packet);
-			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort(), null);
+			PeerOld sourcePeer = new PeerOld(packet.getAddress().getHostAddress(), packet.getPort(), null);
 			String message = new String(packet.getData(), 0, packet.getLength());
 			return new UDPMessage(message, sourcePeer);
 		} catch (Exception e) {

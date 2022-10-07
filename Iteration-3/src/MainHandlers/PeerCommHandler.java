@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessage;
@@ -22,7 +22,7 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();// Used in all below
+    private Hashtable<Source, Vector<PeerOld>> all_sources = new Hashtable<Source, Vector<PeerOld>>();// Used in all below
     private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
@@ -62,7 +62,6 @@ public class PeerCommHandler {
                     pu.start();
                     break;
                 case "snip":
-                    // System.out.println("\n\n" + message.message + "\n\n");
                     snippet_handler.handleIncomingSnip(message.getMessage(), message.getSourcePeer());
                     break;
                 case "stop":
@@ -81,7 +80,7 @@ public class PeerCommHandler {
     }
 
     // Sends a stop message to registry request to stop
-    private void sendUDPStopMessage(Peer peer) {
+    private void sendUDPStopMessage(PeerOld peer) {
         try {
             String ip = peer.getIP();
             int port = peer.getPort();
@@ -95,7 +94,7 @@ public class PeerCommHandler {
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
             this.group_management.getSendLogs().add(new UDPMessageLog(peer,
-                    new Peer(network_handler.getExternalIP(), settings.client_port, null), null));
+                    new PeerOld(network_handler.getExternalIP(), settings.client_port, null), null));
             network_handler.getOutGoingUDP().send(response);
             // System.out.println("Broadcast to: " + peer.toString());
 
@@ -106,7 +105,7 @@ public class PeerCommHandler {
 
     }
 
-    public Hashtable<Source, Vector<Peer>> getAllSources() {
+    public Hashtable<Source, Vector<PeerOld>> getAllSources() {
         return all_sources;
     }
 

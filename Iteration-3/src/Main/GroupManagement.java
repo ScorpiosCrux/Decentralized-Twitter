@@ -16,7 +16,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.NetworkHandler;
@@ -34,7 +34,7 @@ public class GroupManagement extends Thread {
 	private NetworkHandler network_handler;
 	private PeerCommHandler parent;
 
-	private Hashtable<Source, Vector<Peer>> all_sources;
+	private Hashtable<Source, Vector<PeerOld>> all_sources;
     private Vector<UDPMessageLog> peers_sent;
 	
 	private Thread t;
@@ -104,9 +104,9 @@ public class GroupManagement extends Thread {
 	// false - inactive
 	private void checkActivity(int inactivity_max) {
 
-		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
-			Vector<Peer> listOfPeers = s.getValue();
-			for (Peer peer : s.getValue()) {
+		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+			Vector<PeerOld> listOfPeers = s.getValue();
+			for (PeerOld peer : s.getValue()) {
 
 				// Inspired by:
 				// https://stackoverflow.com/questions/4927856/how-can-i-calculate-a-time-difference-in-java
@@ -130,7 +130,7 @@ public class GroupManagement extends Thread {
 
 	// Function for sending a UDPMessage via the socket we created in main and sends
 	// a "peer" message to the peer param
-	private void sendUDPMessage(Peer peer) {
+	private void sendUDPMessage(PeerOld peer) {
 		try {
 			String ip = peer.getIP();
 			int port = peer.getPort();
@@ -142,7 +142,7 @@ public class GroupManagement extends Thread {
 			buffer = data.getBytes();
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-			peers_sent.add(new UDPMessageLog(peer, new Peer(this.ip, this.port, null), null));
+			peers_sent.add(new UDPMessageLog(peer, new PeerOld(this.ip, this.port, null), null));
 			outgoingSocket.send(response);
 			// System.out.println("Broadcast to: " + peer.toString());
 
@@ -155,12 +155,12 @@ public class GroupManagement extends Thread {
 
 	// Function that broadcasts to all active peers that we know about
 	private void broadcast() {
-		Peer ourselves = new Peer(ip, port, null);
+		PeerOld ourselves = new PeerOld(ip, port, null);
 
-		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
-			Vector<Peer> listOfPeers = s.getValue();
+		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) {
-				Peer peer = listOfPeers.get(i);
+				PeerOld peer = listOfPeers.get(i);
 				if (peer.isActive() && !peer.equals(ourselves))
 					sendUDPMessage(peer);
 			}

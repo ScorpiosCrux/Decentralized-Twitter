@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class UDPMessageLog {
-	Peer msgOrigin;
-	Peer transmittedPeer;
+	PeerOld msgOrigin;
+	PeerOld transmittedPeer;
 	String timeStamp;
 	
-	public UDPMessageLog(Peer msgOrigin, Peer transmittedPeer, String timeStamp){
+	public UDPMessageLog(PeerOld msgOrigin, PeerOld transmittedPeer, String timeStamp){
 		this.msgOrigin = msgOrigin;
 		this.transmittedPeer = transmittedPeer;
 		if (timeStamp == null) {
@@ -27,11 +27,11 @@ public class UDPMessageLog {
 		}
 	}
 
-	public Peer getMsgOrigin(){
+	public PeerOld getMsgOrigin(){
 		return this.msgOrigin;
 	}
 
-	public Peer getTransmittedPeer(){
+	public PeerOld getTransmittedPeer(){
 		return this.transmittedPeer;
 	}
 

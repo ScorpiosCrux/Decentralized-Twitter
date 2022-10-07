@@ -16,7 +16,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessage;
@@ -27,7 +27,7 @@ import Settings.UserSettings;
 public class HandlePeerUpdate extends Thread {
 	private PeerCommHandler parent;
 	private UDPMessage message_pck;
-	private Hashtable<Source, Vector<Peer>> all_sources;
+	private Hashtable<Source, Vector<PeerOld>> all_sources;
 	private Vector<UDPMessageLog> peers_received;
 
 
@@ -45,13 +45,13 @@ public class HandlePeerUpdate extends Thread {
 	
 		this.threadName = "Peer Update Handler";
 		this.message_pck = message;
-		this.source = new Source(new Peer(settings.registry_ip, settings.registry_port, null));
+		this.source = new Source(new PeerOld(settings.registry_ip, settings.registry_port, null));
 
 	}
 
 	// run the thread
 	public void run() {
-		Peer peer = createPeer();
+		PeerOld peer = createPeer();
 		this.peers_received.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
 		if (peer != null) {
 			this.all_sources = parent.getAllSources();
@@ -96,9 +96,9 @@ public class HandlePeerUpdate extends Thread {
 	}
 
 	// Find a peer in the data structure for storing all peers and sources
-	private ReturnSearch findPeer(Peer peer) {
-		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
-			Vector<Peer> listOfPeers = s.getValue();
+	private ReturnSearch findPeer(PeerOld peer) {
+		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++)
 				if (listOfPeers.get(i).equals(peer))
 					return new ReturnSearch(s.getKey(), i);
@@ -107,14 +107,14 @@ public class HandlePeerUpdate extends Thread {
 	}
 
 	// Either updates the time stamp for the peer or adds a new peer
-	private void updateAddPeer(Peer peer, Source sourcePeer) {
+	private void updateAddPeer(PeerOld peer, Source sourcePeer) {
 		ReturnSearch res = findPeer(peer); // check if the peer exists in the data structure
 		// if peer exist in data structure:
 		if (res.getSource() != null && res.getIteration() != -1) {
-			Vector<Peer> listOfPeers = all_sources.get(res.getSource());
+			Vector<PeerOld> listOfPeers = all_sources.get(res.getSource());
 			listOfPeers.get(res.getIteration()).setInstant(Instant.now());
 		} else if (res.getSource() == null && res.getIteration() == -1) {
-			Vector<Peer> listOfPeers = all_sources.get(sourcePeer); // all sources is nested. Create new vector and append.
+			Vector<PeerOld> listOfPeers = all_sources.get(sourcePeer); // all sources is nested. Create new vector and append.
 			// Vector<Peer> listOfPeers = new Vector<Peer>(); // all sources is nested. Create new vector and append.
 			listOfPeers.add(peer);
 			this.all_sources.put(sourcePeer, listOfPeers);
@@ -126,8 +126,8 @@ public class HandlePeerUpdate extends Thread {
 	// Trims the ip and port then checks if they're valid.
 	// if: created successfully, return a peer.
 	// else: return null
-	private Peer createPeer() {
-		Peer peer = null;
+	private PeerOld createPeer() {
+		PeerOld peer = null;
 		try {
 			String message = message_pck.getMessage();
 			String ip_port = message.substring(4, message.length());
@@ -140,7 +140,7 @@ public class HandlePeerUpdate extends Thread {
 
 			if (validIp && validPort) {
 				int port = Integer.parseInt(port_raw);
-				peer = new Peer(ip_raw, port, message_pck.getSourcePeer().toString());
+				peer = new PeerOld(ip_raw, port, message_pck.getSourcePeer().toString());
 			}
 		} catch (Exception e) {
 			System.err.println("Unable to createPeer in HandlePeerUpdate.");

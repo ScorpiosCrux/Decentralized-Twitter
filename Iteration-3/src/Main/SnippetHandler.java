@@ -36,7 +36,7 @@ public class SnippetHandler extends Thread{
 	private Vector<SnippetLog> allSnippets = new Vector<SnippetLog>();
 	private String public_ip;
 	private int port;
-	private boolean stop;
+	private boolean stop = false;
 
 	
 	public SnippetHandler(UserSettings settings, NetworkHandler network_handler, PeerCommHandler parent){
@@ -49,9 +49,8 @@ public class SnippetHandler extends Thread{
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.public_ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
-		this.stop = false;
 		
-		System.out.println("Created HandlePeerUpdate Thread!");
+		System.out.println("Snippet Handler Thread Created!");
 	}
 	
 	public void run() {
@@ -61,7 +60,6 @@ public class SnippetHandler extends Thread{
         String content;
 		//Inspired from a discord message in the 559 server
         while (stop != true) {
-			this.listOfSources = this.data.getAllSources();
             try {
                 
                 if (!br.ready()) {

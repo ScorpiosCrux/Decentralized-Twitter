@@ -28,8 +28,7 @@ public class PeerCommHandler {
 
         // create objects for group management and snippetHandler, these are in their
         // own threads
-        this.group_management = new GroupManagement("Group Management", this.peer_socket, this.externalIP,
-                this.settings.client_port, this.listOfSources, this.peersSent);
+        this.group_management = new GroupManagement(settings, network_handler, this);
         group_management.start();
 
         snippet_handler = new SnippetHandler(settings, network_handler, this);

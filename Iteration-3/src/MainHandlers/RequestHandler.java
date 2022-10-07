@@ -163,21 +163,7 @@ public class RequestHandler {
 
     
 
-  /*   // Received UDP messages and returns a UDPMessage with information about the
-	// source and the content itself
-	private UDPMessage receiveUDPMsg() {
-		// System.out.println("Waiting for UDP message");
-		try {
-			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
-			peer_socket.receive(packet);
-			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort(), null);
-			String message = new String(packet.getData(), 0, packet.getLength());
-			return new UDPMessage(message, sourcePeer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	} */
+    
 
     
 }

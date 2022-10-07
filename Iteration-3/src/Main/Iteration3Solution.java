@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import MainHandlers.RequestHandler;
 import MainHandlers.NetworkHandler;
+import MainHandlers.PeerCommHandler;
 import MainHandlers.RegistryHandler;
 import Settings.UserSettings;
 import Testing.PrintHandler;
@@ -67,7 +68,8 @@ public class Iteration3Solution {
 		}
 
 		// communication with the peer
-		// client.peerCommunication();
+		PeerCommHandler peer_comm_handler = new PeerCommHandler(settings, network_handler);
+		peer_comm_handler.start();
 
 /* 		// final communicatino with registry
 		try {

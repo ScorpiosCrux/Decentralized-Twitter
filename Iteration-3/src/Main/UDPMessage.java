@@ -10,7 +10,7 @@ public class UDPMessage {
 	String message;
 	Peer sourcePeer;
 	
-	UDPMessage (String message, Peer sourcePeer){
+	public UDPMessage (String message, Peer sourcePeer){
 		this.message = message;
 		this.sourcePeer = sourcePeer;
 	}

@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -12,6 +13,8 @@ import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
+import Main.Peer;
+import Main.UDPMessage;
 import Settings.UserSettings;
 
 		// this.peer_socket = network_handler.createUDPSocket(this.settings.client_port);
@@ -75,5 +78,21 @@ public class NetworkHandler {
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		writer.write(message);
 		writer.flush();
+	}
+
+    // Received UDP messages and returns a UDPMessage with information about the
+	// source and the content itself
+	private UDPMessage receiveUDPMsg() {
+		// System.out.println("Waiting for UDP message");
+		try {
+			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+			outgoing_udp.receive(packet);
+			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort(), null);
+			String message = new String(packet.getData(), 0, packet.getLength());
+			return new UDPMessage(message, sourcePeer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

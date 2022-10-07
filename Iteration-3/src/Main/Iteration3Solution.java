@@ -35,6 +35,7 @@ public class Iteration3Solution {
 	private NetworkHandler network_handler;
 	private PrintHandler print_handler;
 	private RequestHandler request_handler;
+	private PeerCommHandler peer_comm_handler;
 
 	private UserSettings settings;
 
@@ -48,9 +49,10 @@ public class Iteration3Solution {
 		}
 		this.print_handler = new PrintHandler();
 		this.request_handler = new RequestHandler(settings, this);
+		this.peer_comm_handler = new PeerCommHandler(settings, network_handler);
 
 		// Should be last
-		this.registry_handler = new RegistryHandler(settings, this);
+		this.registry_handler = new RegistryHandler(settings, this, peer_comm_handler);
 
 
 		// initial connection to the registry
@@ -62,7 +64,6 @@ public class Iteration3Solution {
 		}
 
 		// communication with the peer
-		PeerCommHandler peer_comm_handler = new PeerCommHandler(settings, network_handler);
 		peer_comm_handler.start();
 
 /* 		// final communicatino with registry

@@ -1,15 +1,10 @@
 package Main;
 
-import java.io.IOException;
-
 import Settings.UserSettings;
 
 public class Main {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		UserSettings settings = new UserSettings();
 		Iteration3Solution client = new Iteration3Solution(settings);
-
-		
-
 	}
 }

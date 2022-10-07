@@ -1,5 +1,8 @@
 package MainHandlers;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -75,6 +78,32 @@ public class PeerCommHandler {
             // System.out.println("Looped. Number of peers: " + s.getValue().size());
         }
     }
+
+    // Sends a stop message to registry request to stop
+    private void sendUDPStopMessage(Peer peer) {
+		try {
+			String ip = peer.getIP();
+			int port = peer.getPort();
+
+			byte[] buffer = new byte[1024];
+			InetAddress address = InetAddress.getByName(ip);
+			System.out.println("\n\n\n\n\nAddress that sent stop: " + address.toString());
+
+			String data = "ack" + settings.team_name;
+			buffer = data.getBytes();
+			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
+
+			this.group_management.getSendLogs().add(new UDPMessageLog(peer, new Peer(network_handler.getExternalIP(), settings.client_port, null), null));
+			network_handler.getOutGoingUDP().send(response);
+			// System.out.println("Broadcast to: " + peer.toString());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
+		}
+
+	}
+
 
     public Hashtable<Source, Vector<Peer>> getAllSources() {
         return all_sources;

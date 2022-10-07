@@ -163,4 +163,8 @@ public class GroupManagement extends Thread {
 		}
 	}
 
+	public Vector<UDPMessageLog> getSendLogs(){
+		return this.peersSent;
+	}
+
 }

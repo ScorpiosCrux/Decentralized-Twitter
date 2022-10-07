@@ -1,4 +1,5 @@
 package Main;
+
 /*
  * Author: Tyler Chen
  * UCID: 30066806
@@ -7,13 +8,26 @@ package Main;
  */
 //This class is a log for Snippets
 public class SnippetLog {
-	int timeStamp;
-	String content;
-	Peer sourcePeer;
-	
-	SnippetLog(int timeStamp, String content, Peer sourcePeer){
+	private int timeStamp;
+	private String content;
+	private Peer sourcePeer;
+
+	SnippetLog(int timeStamp, String content, Peer sourcePeer) {
 		this.timeStamp = timeStamp;
 		this.content = content;
 		this.sourcePeer = sourcePeer;
 	}
+
+	public int getTimeStamp() {
+		return this.timeStamp;
+	}
+
+	public String getContent() {
+		return this.content;
+	}
+
+	public Peer getSourcePeer() {
+		return this.sourcePeer;
+	}
+
 }

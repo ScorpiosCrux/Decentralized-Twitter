@@ -26,5 +26,17 @@ public class UDPMessageLog {
 			this.timeStamp = timeStamp;
 		}
 	}
+
+	public Peer getMsgOrigin(){
+		return this.msgOrigin;
+	}
+
+	public Peer getTransmittedPeer(){
+		return this.transmittedPeer;
+	}
+
+	public String getTimeStamp(){
+		return this.timeStamp;
+	}
 	
 }

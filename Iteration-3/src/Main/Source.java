@@ -1,4 +1,5 @@
 package Main;
+
 /*
  * Author: Tyler Chen
  * UCID: 30066806
@@ -9,20 +10,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Source {
-	Peer peer;
-	String time;
-	
-	
-	public Source(Peer peer) {
-		this.peer = peer;
-		
-	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	    Date date = new Date();  
-	    this.time = formatter.format(date);  
-	}
-	
-	//Allows Comparable to work
-	public boolean equals(Object obj) {
+    private Peer peer;
+    private String time;
+
+    public Source(Peer peer) {
+        this.peer = peer;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        this.time = formatter.format(date);
+    }
+
+    public Peer getPeer() {
+        return this.peer;
+    }
+
+    public String getTime() {
+        return this.time;
+    }
+
+    // Allows Comparable to work
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -33,6 +41,6 @@ public class Source {
         if (!(peer.equals(other.peer)))
             return false;
         return true;
-    }   
-	
+    }
+
 }

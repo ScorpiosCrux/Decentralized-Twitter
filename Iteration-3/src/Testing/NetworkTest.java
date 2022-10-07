@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import Main.Iteration3Solution;
 import Main.Peer;
 import Main.Source;
-import Network.NetworkHandler;
+import MainHandlers.NetworkHandler;
 import Settings.UserSettings;
 
 public class NetworkTest {
@@ -61,4 +61,6 @@ public class NetworkTest {
         socket = nh.createUDPSocket(port);
         assertEquals("Port Number should be the same", port, socket.getLocalPort());
     }
+
+
 }

@@ -7,5 +7,5 @@ public class UserSettings {
 	final public int registry_port = 55921;
 	
 	final public boolean running_on_lan = false;
-	final public int client_port = 30000;
+	final public int client_port = 30001;
 }

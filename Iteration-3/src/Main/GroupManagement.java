@@ -30,30 +30,34 @@ import Settings.UserSettings;
 
 public class GroupManagement extends Thread {
 
-	UserSettings settings;
-	NetworkHandler network_handler;
-	PeerCommHandler parent;
+	private UserSettings settings;
+	private NetworkHandler network_handler;
+	private PeerCommHandler parent;
 
+	private Hashtable<Source, Vector<Peer>> all_sources;
+    private Vector<UDPMessageLog> peers_sent;
+	
 	private Thread t;
 	private String threadName;
 
 	private DatagramSocket outgoingSocket;
 	private String ip;
 	private int port;
-	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
 	private boolean stop;
-	private Vector<UDPMessageLog> peersSent = new Vector<UDPMessageLog>();
 
 	public GroupManagement(UserSettings settings, NetworkHandler network_handler, PeerCommHandler parent) {
 		this.settings = settings;
 		this.network_handler = network_handler;
 		this.parent = parent;
 
+		this.all_sources = parent.getAllSources();
+		this.peers_sent = parent.getAllPeersSent();
+
 		this.threadName = "Group Management";
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
-		this.listOfSources = parent.getAllSources();
+		this.all_sources = parent.getAllSources();
 		this.stop = false;
 		System.out.println("Group Management Thread Created!");
 	}
@@ -76,7 +80,7 @@ public class GroupManagement extends Thread {
 				Thread.sleep(broadcast_intervals * 1000);
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error in GroupManagment!");
+				System.out.println("Error in Group Managment!");
 			}
 
 		}
@@ -100,7 +104,7 @@ public class GroupManagement extends Thread {
 	// false - inactive
 	private void checkActivity(int inactivity_max) {
 
-		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
+		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
 			for (Peer peer : s.getValue()) {
 
@@ -138,7 +142,7 @@ public class GroupManagement extends Thread {
 			buffer = data.getBytes();
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-			peersSent.add(new UDPMessageLog(peer, new Peer(this.ip, this.port, null), null));
+			peers_sent.add(new UDPMessageLog(peer, new Peer(this.ip, this.port, null), null));
 			outgoingSocket.send(response);
 			// System.out.println("Broadcast to: " + peer.toString());
 
@@ -153,7 +157,7 @@ public class GroupManagement extends Thread {
 	private void broadcast() {
 		Peer ourselves = new Peer(ip, port, null);
 
-		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
+		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) {
 				Peer peer = listOfPeers.get(i);
@@ -164,7 +168,7 @@ public class GroupManagement extends Thread {
 	}
 
 	public Vector<UDPMessageLog> getSendLogs(){
-		return this.peersSent;
+		return this.peers_sent;
 	}
 
 }

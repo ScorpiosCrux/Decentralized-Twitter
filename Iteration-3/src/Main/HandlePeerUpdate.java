@@ -25,27 +25,38 @@ import MainHandlers.PeerCommHandler;
 import Settings.UserSettings;
 
 public class HandlePeerUpdate extends Thread {
+	private PeerCommHandler parent;
+	private UDPMessage message_pck;
+	private Hashtable<Source, Vector<Peer>> all_sources;
+	private Vector<UDPMessageLog> peers_received;
+
+
 	private Thread t;
 	private String threadName;
-	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
-	private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>();
+	
 
-	private UDPMessage message_pck;
 	private Source source;
 
+
 	public HandlePeerUpdate(UserSettings settings, UDPMessage message, PeerCommHandler parent) {
+		this.parent = parent;
+		this.all_sources = parent.getAllSources();
+		this.peers_received = parent.getAllPeersRec();
+	
 		this.threadName = "Peer Update Handler";
 		this.message_pck = message;
 		this.source = new Source(new Peer(settings.registry_ip, settings.registry_port, null));
+
 	}
 
 	// run the thread
 	public void run() {
-
 		Peer peer = createPeer();
 		this.peers_received.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
-		if (peer != null)
+		if (peer != null) {
+			this.all_sources = parent.getAllSources();
 			updateAddPeer(peer, source);
+		}
 
 	}
 
@@ -86,7 +97,7 @@ public class HandlePeerUpdate extends Thread {
 
 	// Find a peer in the data structure for storing all peers and sources
 	private ReturnSearch findPeer(Peer peer) {
-		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
+		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++)
 				if (listOfPeers.get(i).equals(peer))
@@ -100,12 +111,14 @@ public class HandlePeerUpdate extends Thread {
 		ReturnSearch res = findPeer(peer); // check if the peer exists in the data structure
 		// if peer exist in data structure:
 		if (res.getSource() != null && res.getIteration() != -1) {
-			Vector<Peer> listOfPeers = listOfSources.get(res.getSource());
+			Vector<Peer> listOfPeers = all_sources.get(res.getSource());
 			listOfPeers.get(res.getIteration()).setInstant(Instant.now());
 		} else if (res.getSource() == null && res.getIteration() == -1) {
-			Vector<Peer> listOfPeers = listOfSources.get(sourcePeer);
+			Vector<Peer> listOfPeers = all_sources.get(sourcePeer); // all sources is nested. Create new vector and append.
+			// Vector<Peer> listOfPeers = new Vector<Peer>(); // all sources is nested. Create new vector and append.
 			listOfPeers.add(peer);
-			this.listOfSources.put(sourcePeer, listOfPeers);
+			this.all_sources.put(sourcePeer, listOfPeers);
+			System.out.println("New Peer! Source and list of peers has been updated!");
 		}
 	}
 

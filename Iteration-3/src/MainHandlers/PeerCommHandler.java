@@ -9,6 +9,7 @@ import java.util.Vector;
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
@@ -21,8 +22,10 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();
-
+    private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();// Used in all below
+    private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
+    private Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
+    private Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
 
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler) {
@@ -74,39 +77,50 @@ public class PeerCommHandler {
             if (stop == true)
                 break;
 
-            // for (Map.Entry<Source, Vector<Peer>> s : this.listOfSources.entrySet())
-            // System.out.println("Looped. Number of peers: " + s.getValue().size());
         }
     }
 
     // Sends a stop message to registry request to stop
     private void sendUDPStopMessage(Peer peer) {
-		try {
-			String ip = peer.getIP();
-			int port = peer.getPort();
+        try {
+            String ip = peer.getIP();
+            int port = peer.getPort();
 
-			byte[] buffer = new byte[1024];
-			InetAddress address = InetAddress.getByName(ip);
-			System.out.println("\n\n\n\n\nAddress that sent stop: " + address.toString());
+            byte[] buffer = new byte[1024];
+            InetAddress address = InetAddress.getByName(ip);
+            System.out.println("\n\n\n\n\nAddress that sent stop: " + address.toString());
 
-			String data = "ack" + settings.team_name;
-			buffer = data.getBytes();
-			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
+            String data = "ack" + settings.team_name;
+            buffer = data.getBytes();
+            DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-			this.group_management.getSendLogs().add(new UDPMessageLog(peer, new Peer(network_handler.getExternalIP(), settings.client_port, null), null));
-			network_handler.getOutGoingUDP().send(response);
-			// System.out.println("Broadcast to: " + peer.toString());
+            this.group_management.getSendLogs().add(new UDPMessageLog(peer,
+                    new Peer(network_handler.getExternalIP(), settings.client_port, null), null));
+            network_handler.getOutGoingUDP().send(response);
+            // System.out.println("Broadcast to: " + peer.toString());
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
-		}
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
+        }
 
-	}
-
+    }
 
     public Hashtable<Source, Vector<Peer>> getAllSources() {
         return all_sources;
+    }
+
+
+    public Vector<UDPMessageLog> getAllPeersRec(){
+        return peers_received;
+    }
+
+    public Vector<SnippetLog> getAllSnippets(){
+        return all_snippets;
+    }
+
+    public Vector<UDPMessageLog> getAllPeersSent(){
+        return peers_sent;
     }
 
 }

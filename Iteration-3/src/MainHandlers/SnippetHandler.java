@@ -32,10 +32,11 @@ public class SnippetHandler extends Thread{
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
-	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
+	private Hashtable<Source, Vector<Peer>> all_sources;
+    private Vector<SnippetLog> all_snippets;
 
 
-	private Vector<SnippetLog> allSnippets = new Vector<SnippetLog>();
+
 	private String public_ip;
 	private int port;
 	private boolean stop = false;
@@ -46,8 +47,10 @@ public class SnippetHandler extends Thread{
 		this.network_handler = network_handler;
 		this.parent = parent;
 
+		this.all_snippets = parent.getAllSnippets();
+
 		this.threadName = "Snippet Handler";
-		this.listOfSources = parent.getAllSources();
+		this.all_sources = parent.getAllSources();
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.public_ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
@@ -74,11 +77,11 @@ public class SnippetHandler extends Thread{
                 Peer ourselves = new Peer(public_ip, port, null);
                 ReturnSearch location = findPeer(ourselves);
                 
-                Peer p = listOfSources.get(location.getSource()).get(location.getIteration());
+                Peer p = all_sources.get(location.getSource()).get(location.getIteration());
                 p.setTimeStamp(p.getTimeStamp()+1);
             
 				broadcast(content, p);
-				System.out.println("Tweet has been tweeted! \nTweet your throughts: ");
+				System.out.println("Tweet has been tweeted! \nTweet your thoughts: ");
             } catch (Exception e) {
             	e.printStackTrace();
             }
@@ -102,7 +105,7 @@ public class SnippetHandler extends Thread{
 	//broadcast the message to all peers while logging it
 	private void broadcast(String content, Peer ourselves) {
 		
-		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
+		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
 			for (Peer p : listOfPeers) {
 				if (p.isActive() && !p.equals(ourselves)) {
@@ -127,7 +130,7 @@ public class SnippetHandler extends Thread{
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 			
 			outgoingSocket.send(response);
-			allSnippets.add(new SnippetLog(ourselves.getTimeStamp(), content, ourselves));
+			all_snippets.add(new SnippetLog(ourselves.getTimeStamp(), content, ourselves));
 			
 			//System.out.println("Broadcast to: " + peer.toString());
 			
@@ -149,12 +152,12 @@ public class SnippetHandler extends Thread{
 			
 			Peer ourselves = new Peer(public_ip, port, null);	        
 	        ReturnSearch location = findPeer(ourselves);
-	        Peer p = listOfSources.get(location.getSource()).get(location.getIteration());
+	        Peer p = all_sources.get(location.getSource()).get(location.getIteration());
 	        int max = Math.max(p.getTimeStamp(), received_timestamp) + 1;
 			p.setTimeStamp(max);
 			
 			System.out.println("Message has been sent from: " + sourcePeer.toString() + ". They sent: " + content);
-			this.allSnippets.add(new SnippetLog(p.getTimeStamp(), content, sourcePeer));
+			this.all_snippets.add(new SnippetLog(p.getTimeStamp(), content, sourcePeer));
 	        
 	        
 		} catch (Exception e) {
@@ -165,7 +168,7 @@ public class SnippetHandler extends Thread{
 	
 	//this finds the peer in our datastructure
 	private ReturnSearch findPeer(Peer peer){
-		for (Map.Entry<Source, Vector<Peer>> s : listOfSources.entrySet()) {
+		for (Map.Entry<Source, Vector<Peer>> s : all_sources.entrySet()) {
 			Vector<Peer> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) 
 				if (listOfPeers.get(i).equals(peer)) 

@@ -6,10 +6,9 @@ import java.util.Vector;
 
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
-import Main.Peer;
-import Main.SnippetHandler;
-import Main.Source;
-import Main.UDPMessage;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
 public class PeerCommHandler {

@@ -1,4 +1,4 @@
-package Main;
+package Main.HelperDataClasses;
 
 /*
  * Author: Tyler Chen

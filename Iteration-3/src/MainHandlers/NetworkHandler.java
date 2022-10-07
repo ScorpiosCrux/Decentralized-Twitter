@@ -13,8 +13,8 @@ import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import Main.Peer;
-import Main.UDPMessage;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
 		// this.peer_socket = network_handler.createUDPSocket(this.settings.client_port);

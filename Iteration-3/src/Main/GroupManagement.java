@@ -16,6 +16,9 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import Settings.UserSettings;

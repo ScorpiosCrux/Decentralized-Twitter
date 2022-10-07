@@ -1,4 +1,4 @@
-package Main;
+package MainHandlers;
 /*
  * Author: Tyler Chen
  * UCID: 30066806
@@ -18,8 +18,10 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
-import MainHandlers.NetworkHandler;
-import MainHandlers.PeerCommHandler;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.ReturnSearch;
+import Main.HelperDataClasses.SnippetLog;
+import Main.HelperDataClasses.Source;
 import Settings.UserSettings;
 
 public class SnippetHandler extends Thread{

@@ -12,10 +12,10 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import Main.Iteration3Solution;
-import Main.Peer;
-import Main.SnippetLog;
-import Main.Source;
-import Main.UDPMessageLog;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.SnippetLog;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 import Testing.PrintHandler;
 

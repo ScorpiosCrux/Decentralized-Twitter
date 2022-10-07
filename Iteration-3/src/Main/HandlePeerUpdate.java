@@ -15,6 +15,12 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.ReturnSearch;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessageLog;
+
 public class HandlePeerUpdate extends Thread{
 	private Thread t;
 	private String threadName;

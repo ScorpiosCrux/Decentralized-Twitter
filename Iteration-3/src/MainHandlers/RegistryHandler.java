@@ -8,8 +8,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import Main.Iteration3Solution;
-import Main.Peer;
-import Main.Source;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.Source;
 import Settings.UserSettings;
 import Testing.PrintHandler;
 

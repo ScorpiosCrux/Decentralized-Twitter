@@ -15,7 +15,7 @@ public class UDPMessageLog {
 	Peer transmittedPeer;
 	String timeStamp;
 	
-	UDPMessageLog(Peer msgOrigin, Peer transmittedPeer, String timeStamp){
+	public UDPMessageLog(Peer msgOrigin, Peer transmittedPeer, String timeStamp){
 		this.msgOrigin = msgOrigin;
 		this.transmittedPeer = transmittedPeer;
 		if (timeStamp == null) {

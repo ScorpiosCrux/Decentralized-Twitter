@@ -48,7 +48,7 @@ public class GroupManagement extends Thread{
 	
 	public void run() {
 		//inactivity max should be double of broadcast_intervals in SECONDS
-		int inactivity_max = 10;
+		int inactivity_max = 60;
 		int broadcast_intervals = 5;
 		
 		boolean checkInactivePeers = false;

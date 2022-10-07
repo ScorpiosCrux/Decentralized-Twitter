@@ -45,7 +45,6 @@ public class Iteration3Solution {
 
 	private DatagramSocket peer_socket;
 	private String externalIP;
-	private int port;
 
 	public Iteration3Solution(UserSettings settings) {
 		this.settings = settings;
@@ -54,8 +53,6 @@ public class Iteration3Solution {
 		this.message_handler = new MessageHandler();
 	}
 
-
-	
 	public UserSettings getSettings() {
 		return this.settings;
 	}
@@ -88,11 +85,12 @@ public class Iteration3Solution {
 		// create objects for group management and snippetHandler, these are in their
 		// own threads
 		GroupManagement gm = new GroupManagement("Group Management", this.peer_socket, this.externalIP,
-				this.port, this.listOfSources, this.peersSent);
+				this.settings.client_port, this.listOfSources, this.peersSent);
 		gm.start();
 
-		SnippetHandler sh = new SnippetHandler("SnippetHandler", this.listOfSources, this.peer_socket, this.externalIP,
-				this.port, this.allSnippets);
+		SnippetHandler sh = new SnippetHandler(this, "SnippetHandler", this.listOfSources, this.peer_socket,
+				this.externalIP,
+				this.settings.client_port, this.allSnippets);
 		sh.start();
 
 		// infinite loop until a stop has been received. this is the thread for
@@ -205,7 +203,7 @@ public class Iteration3Solution {
 				this.registry.getPeer().getPort());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(registry_socket.getInputStream()));
 
-		this.peer_socket = network_handler.createUDPSocket(this.port);
+		this.peer_socket = network_handler.createUDPSocket(this.settings.client_port);
 		this.externalIP = network_handler.getExternalIP();
 
 		if (registry_socket.isConnected())
@@ -257,7 +255,7 @@ public class Iteration3Solution {
 			buffer = data.getBytes();
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-			peersSent.add(new UDPMessageLog(peer, new Peer(this.externalIP, this.port, null), null));
+			peersSent.add(new UDPMessageLog(peer, new Peer(this.externalIP, this.settings.client_port, null), null));
 			peer_socket.send(response);
 			// System.out.println("Broadcast to: " + peer.toString());
 
@@ -265,7 +263,6 @@ public class Iteration3Solution {
 			e.printStackTrace();
 			System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
 		}
-
 	}
 
 	public boolean isRegistryConnected() {

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Vector;
 
 public class SnippetHandler extends Thread{
+	private Iteration3Solution data;
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
@@ -27,9 +28,11 @@ public class SnippetHandler extends Thread{
 	private String ip;
 	private int port;
 	private boolean stop;
+
 	
-	SnippetHandler(String tName, Hashtable<Source, Vector<Peer>> listOfSources, DatagramSocket socket, String ip, 
+	SnippetHandler(Iteration3Solution data, String tName, Hashtable<Source, Vector<Peer>> listOfSources, DatagramSocket socket, String ip, 
 			int port, Vector<SnippetLog> allSnippets){
+		this.data = data;
 		this.threadName = tName;
 		this.listOfSources = listOfSources;
 		this.outgoingSocket = socket;
@@ -42,12 +45,13 @@ public class SnippetHandler extends Thread{
 	}
 	
 	public void run() {
-		
+		// TODO: Duplicate Code
 		System.out.println("Tweet your thoughts: ");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String content;
 		//Inspired from a discord message in the 559 server
         while (stop != true) {
+			this.listOfSources = this.data.getAllSources();
             try {
                 
                 if (!br.ready()) {
@@ -65,8 +69,6 @@ public class SnippetHandler extends Thread{
             
 				broadcast(content, p);
 				System.out.println("Tweet has been tweeted! \nTweet your throughts: ");
-				
-
             } catch (Exception e) {
             	e.printStackTrace();
             }

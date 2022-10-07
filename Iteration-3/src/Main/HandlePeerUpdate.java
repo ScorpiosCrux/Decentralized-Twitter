@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.ReturnSearch;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.PeerCommHandler;
@@ -27,7 +27,7 @@ import Settings.UserSettings;
 public class HandlePeerUpdate extends Thread {
 	private PeerCommHandler parent;
 	private UDPMessage message_pck;
-	private Hashtable<Source, Vector<PeerOld>> all_sources;
+	private Hashtable<SourceOld, Vector<PeerOld>> all_sources;
 	private Vector<UDPMessageLog> peers_received;
 
 
@@ -35,7 +35,7 @@ public class HandlePeerUpdate extends Thread {
 	private String threadName;
 	
 
-	private Source source;
+	private SourceOld source;
 
 
 	public HandlePeerUpdate(UserSettings settings, UDPMessage message, PeerCommHandler parent) {
@@ -45,7 +45,7 @@ public class HandlePeerUpdate extends Thread {
 	
 		this.threadName = "Peer Update Handler";
 		this.message_pck = message;
-		this.source = new Source(new PeerOld(settings.registry_ip, settings.registry_port, null));
+		this.source = new SourceOld(new PeerOld(settings.registry_ip, settings.registry_port, null));
 
 	}
 
@@ -97,7 +97,7 @@ public class HandlePeerUpdate extends Thread {
 
 	// Find a peer in the data structure for storing all peers and sources
 	private ReturnSearch findPeer(PeerOld peer) {
-		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
 			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++)
 				if (listOfPeers.get(i).equals(peer))
@@ -107,7 +107,7 @@ public class HandlePeerUpdate extends Thread {
 	}
 
 	// Either updates the time stamp for the peer or adds a new peer
-	private void updateAddPeer(PeerOld peer, Source sourcePeer) {
+	private void updateAddPeer(PeerOld peer, SourceOld sourcePeer) {
 		ReturnSearch res = findPeer(peer); // check if the peer exists in the data structure
 		// if peer exist in data structure:
 		if (res.getSource() != null && res.getIteration() != -1) {

@@ -10,7 +10,7 @@ import Main.GroupManagement;
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
@@ -22,7 +22,7 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    private Hashtable<Source, Vector<PeerOld>> all_sources = new Hashtable<Source, Vector<PeerOld>>();// Used in all below
+    private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
     private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
@@ -105,7 +105,7 @@ public class PeerCommHandler {
 
     }
 
-    public Hashtable<Source, Vector<PeerOld>> getAllSources() {
+    public Hashtable<SourceOld, Vector<PeerOld>> getAllSources() {
         return all_sources;
     }
 

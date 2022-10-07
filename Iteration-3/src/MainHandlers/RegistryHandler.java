@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import Main.Iteration3Solution;
 import Main.HelperDataClasses.PeerOld;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Settings.UserSettings;
 import Testing.PrintHandler;
 
@@ -20,7 +20,7 @@ public class RegistryHandler {
     private RequestHandler request_handler;
     private PeerCommHandler peer_comm_handler;
 
-    private Source registry;
+    private SourceOld registry;
     private boolean registry_connected;
 
     // Constructor
@@ -32,7 +32,7 @@ public class RegistryHandler {
 
         
 
-        this.registry = new Source(new PeerOld(settings.registry_ip, settings.registry_port, null));
+        this.registry = new SourceOld(new PeerOld(settings.registry_ip, settings.registry_port, null));
     }
 
     // Getters and Setters
@@ -41,11 +41,11 @@ public class RegistryHandler {
         return registry_connected;
     }
 
-    public void setRegistry(Source registry) {
+    public void setRegistry(SourceOld registry) {
         this.registry = registry;
     }
 
-    public Source getRegistry() {
+    public SourceOld getRegistry() {
         return this.registry;
     }
 
@@ -93,7 +93,7 @@ public class RegistryHandler {
 
     // Adds the source and peers to listOfSources reading from the reader.
     private void receivePeers(Socket socket, BufferedReader reader) throws IOException {
-        Hashtable<Source, Vector<PeerOld>> listOfSources = peer_comm_handler.getAllSources();
+        Hashtable<SourceOld, Vector<PeerOld>> listOfSources = peer_comm_handler.getAllSources();
 
         // Check to see if the additional source is already in the list.
         // Source source = new Source(new Peer(getIP(socket), socket.getPort(), null));

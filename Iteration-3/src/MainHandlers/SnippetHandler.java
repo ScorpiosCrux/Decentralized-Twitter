@@ -21,7 +21,7 @@ import java.util.Vector;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Settings.UserSettings;
 
 public class SnippetHandler extends Thread{
@@ -32,7 +32,7 @@ public class SnippetHandler extends Thread{
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
-	private Hashtable<Source, Vector<PeerOld>> all_sources;
+	private Hashtable<SourceOld, Vector<PeerOld>> all_sources;
     private Vector<SnippetLog> all_snippets;
 
 
@@ -105,7 +105,7 @@ public class SnippetHandler extends Thread{
 	//broadcast the message to all peers while logging it
 	private void broadcast(String content, PeerOld ourselves) {
 		
-		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
 			Vector<PeerOld> listOfPeers = s.getValue();
 			for (PeerOld p : listOfPeers) {
 				if (p.isActive() && !p.equals(ourselves)) {
@@ -168,7 +168,7 @@ public class SnippetHandler extends Thread{
 	
 	//this finds the peer in our datastructure
 	private ReturnSearch findPeer(PeerOld peer){
-		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
 			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) 
 				if (listOfPeers.get(i).equals(peer)) 

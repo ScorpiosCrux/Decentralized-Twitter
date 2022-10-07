@@ -12,7 +12,7 @@ import java.util.Vector;
 import Main.Iteration3Solution;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 
@@ -109,7 +109,7 @@ public class RequestHandler {
 
     // Generates report based on assignment specs
     private String generateReport() {
-        Hashtable<Source, Vector<PeerOld>> all_sources = peer_comm_handler.getAllSources();
+        Hashtable<SourceOld, Vector<PeerOld>> all_sources = peer_comm_handler.getAllSources();
         Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
         Vector<UDPMessageLog> peers_received = peer_comm_handler.getAllPeersRec();
         Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
@@ -122,8 +122,8 @@ public class RequestHandler {
         String peers_sent_str = "";
         String snip_list = "";
 
-        for (Map.Entry<Source, Vector<PeerOld>> e : all_sources.entrySet()) {
-            Source source = e.getKey();
+        for (Map.Entry<SourceOld, Vector<PeerOld>> e : all_sources.entrySet()) {
+            SourceOld source = e.getKey();
             String sourceLocation = source.getPeer().toString() + "\n";
             Vector<PeerOld> listOfPeers = e.getValue();
             String peers = "";

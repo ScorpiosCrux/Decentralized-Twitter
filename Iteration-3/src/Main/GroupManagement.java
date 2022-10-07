@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import Main.HelperDataClasses.PeerOld;
-import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
@@ -34,7 +34,7 @@ public class GroupManagement extends Thread {
 	private NetworkHandler network_handler;
 	private PeerCommHandler parent;
 
-	private Hashtable<Source, Vector<PeerOld>> all_sources;
+	private Hashtable<SourceOld, Vector<PeerOld>> all_sources;
     private Vector<UDPMessageLog> peers_sent;
 	
 	private Thread t;
@@ -104,7 +104,7 @@ public class GroupManagement extends Thread {
 	// false - inactive
 	private void checkActivity(int inactivity_max) {
 
-		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
 			Vector<PeerOld> listOfPeers = s.getValue();
 			for (PeerOld peer : s.getValue()) {
 
@@ -157,7 +157,7 @@ public class GroupManagement extends Thread {
 	private void broadcast() {
 		PeerOld ourselves = new PeerOld(ip, port, null);
 
-		for (Map.Entry<Source, Vector<PeerOld>> s : all_sources.entrySet()) {
+		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
 			Vector<PeerOld> listOfPeers = s.getValue();
 			for (int i = 0; i < listOfPeers.size(); i++) {
 				PeerOld peer = listOfPeers.get(i);

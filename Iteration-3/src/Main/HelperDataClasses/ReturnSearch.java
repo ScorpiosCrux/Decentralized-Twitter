@@ -8,15 +8,15 @@ package Main.HelperDataClasses;
 
 public class ReturnSearch {
 
-	private Source source;
+	private SourceOld source;
 	private Integer iteration;
 
-	public ReturnSearch(Source key, int i) {
+	public ReturnSearch(SourceOld key, int i) {
 		source = key;
 		iteration = i;
 	}
 
-	public Source getSource() {
+	public SourceOld getSource() {
 		return source;
 	}
 

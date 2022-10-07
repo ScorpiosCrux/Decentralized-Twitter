@@ -1,46 +1,35 @@
 package Main.HelperDataClasses;
 
-/*
- * Author: Tyler Chen
- * UCID: 30066806
- * Iteration 3
- * CPSC 559
- */
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Vector;
 
 public class Source {
-    private PeerOld peer;
-    private String time;
 
-    public Source(PeerOld peer) {
-        this.peer = peer;
+    private String ip;
+    private int port;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        this.time = formatter.format(date);
+    private Vector<Peer> peers;
+
+    public Source(String ip, int port){
+        this.ip = ip;
+        this.port = port;
+        
+        this.peers = new Vector<Peer>();
     }
 
-    public PeerOld getPeer() {
-        return this.peer;
+    public Vector<Peer> getPeers(){
+        return this.peers;
     }
 
-    public String getTime() {
-        return this.time;
+    public void addPeer(Peer peer){
+        this.peers.add(peer);
     }
 
-    // Allows Comparable to work
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Source other = (Source) obj;
-        if (!(peer.equals(other.peer)))
-            return false;
-        return true;
+    public String getIP(){
+        return this.ip;
     }
 
+    public int port(){
+        return this.port;
+    }
+    
 }

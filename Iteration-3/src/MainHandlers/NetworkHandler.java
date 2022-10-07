@@ -12,7 +12,20 @@ import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
+import Settings.UserSettings;
+
+		// this.peer_socket = network_handler.createUDPSocket(this.settings.client_port);
+		// this.externalIP = network_handler.getExternalIP();
+
 public class NetworkHandler {
+
+    private String external_ip;
+    private DatagramSocket outgoing_udp;
+
+    public NetworkHandler(UserSettings settings) throws IOException{
+        this.outgoing_udp = createUDPSocket(settings.client_port);
+		this.external_ip = getExternalIP();
+    }
 
     // Gets the IP address from the socket
     public String getIP(Socket socket) {

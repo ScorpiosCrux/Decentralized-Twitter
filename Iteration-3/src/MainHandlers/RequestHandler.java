@@ -1,8 +1,10 @@
 package MainHandlers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Hashtable;
 import java.util.Map;
@@ -15,13 +17,22 @@ import Main.SnippetLog;
 import Main.Source;
 import Main.UDPMessageLog;
 import Settings.UserSettings;
+import Testing.PrintHandler;
 
-public class MessageHandler {
+public class RequestHandler {
+    
+	private UserSettings settings;
+    private Iteration3Solution main;
+
+	public RequestHandler(UserSettings settings, Iteration3Solution main){
+		this.settings = settings;
+        this.main = main;
+	}
+
     // This function handles the requests from the registry and returns a response.
     // Other code: -1=error; 0=no response; 1=connection closed, exit main loop
-    public String handleRequest(Iteration3Solution data, Socket socket, String request) throws IOException {
-        UserSettings settings = data.getSettings();
-        NetworkHandler network_handler = data.getNetworkHandler();
+    public String handleRequest(Socket socket, String request) throws IOException {
+        NetworkHandler network_handler = main.getNetworkHandler();
         switch (request) {
             case "get team name":
                 return settings.team_name + "\n";
@@ -35,12 +46,12 @@ public class MessageHandler {
             case "receive peers":
                 return "0";
             case "get report":
-                return generateReport(data);
+                return generateReport();
             case "get location":
                 if (settings.running_on_lan == true) {
-                    return "127.0.0.1" + ":" + data.getOutgoingUDP().getLocalPort() + "\n";
+                    return "127.0.0.1" + ":" + settings.client_port + "\n";
                 } else {
-                    return network_handler.getExternalIP() + ":" + data.getOutgoingUDP().getLocalPort() + "\n";
+                    return network_handler.getExternalIP() + ":" + settings.client_port + "\n";
                 }
             case "close":
                 network_handler.closeSocket(socket);
@@ -53,26 +64,46 @@ public class MessageHandler {
     private String genSrcCodeRes() {
         String sourceCode = "";
 
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Iteration2Solution.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Peer.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Source.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/GroupManagement.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/HandlePeerUpdate.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/ReturnSearch.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/SnippetHandler.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/SnippetLog.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/UDPMessage.java");
-        sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/UDPMessageLog.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Iteration2Solution.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Peer.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/Source.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/GroupManagement.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/HandlePeerUpdate.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/ReturnSearch.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/SnippetHandler.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/SnippetLog.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/UDPMessage.java");
+        // sourceCode += readCode("/Users/vivid/Dev/Java/CPSC-559/Iteration-2/src/UDPMessageLog.java");
 
         return sourceCode;
     }
 
+    // Stolen from https://www.w3schools.com/java/java_files_read.asp
+    private String readCode(String path) {
+        String code = "";
+
+        try {
+            File myObj = new File(path);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                code += data + "\n";
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        return code;
+    }
+
     // Generates report based on assignment specs
-    private String generateReport(Iteration3Solution data) {
-        Hashtable<Source, Vector<Peer>> listOfSources = data.getAllSources();
-        Vector<UDPMessageLog> peers_received = data.getPeersReceived();
-        Vector<UDPMessageLog> peers_sent = data.getPeersSent();
-        Vector<SnippetLog> all_snippets = data.getAllSnippets();
+    private String generateReport() {
+        Hashtable<Source, Vector<Peer>> listOfSources = main.getAllSources();
+        Vector<UDPMessageLog> peers_received = main.getPeersReceived();
+        Vector<UDPMessageLog> peers_sent = main.getPeersSent();
+        Vector<SnippetLog> all_snippets = main.getAllSnippets();
 
         int numOfSources = listOfSources.size();
         int totalNumOfPeers = 0;
@@ -126,25 +157,27 @@ public class MessageHandler {
                 peer_list_sources + peers_recd + peers_sent_str + snip_list;
     }
 
-    // Stolen from https://www.w3schools.com/java/java_files_read.asp
-    private String readCode(String path) {
-        String code = "";
+    
 
-        try {
-            File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                code += data + "\n";
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+    
 
-        return code;
-    }
+    
+
+  /*   // Received UDP messages and returns a UDPMessage with information about the
+	// source and the content itself
+	private UDPMessage receiveUDPMsg() {
+		// System.out.println("Waiting for UDP message");
+		try {
+			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+			peer_socket.receive(packet);
+			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort(), null);
+			String message = new String(packet.getData(), 0, packet.getLength());
+			return new UDPMessage(message, sourcePeer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	} */
 
     
 }

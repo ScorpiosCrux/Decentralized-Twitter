@@ -50,14 +50,14 @@ public class GroupManagement extends Thread {
 		this.network_handler = network_handler;
 		this.parent = parent;
 
-		this.all_sources = parent.getAllSources();
+		//this.all_sources = parent.getAllSources();
 		this.peers_sent = parent.getAllPeersSent();
 
 		this.threadName = "Group Management";
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
-		this.all_sources = parent.getAllSources();
+		//this.all_sources = parent.getAllSources();
 		this.stop = false;
 		System.out.println("Group Management Thread Created!");
 	}

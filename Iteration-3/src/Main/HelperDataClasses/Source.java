@@ -4,14 +4,14 @@ import java.util.Vector;
 
 public class Source {
 
-    private String ip;
-    private int port;
+    private String source_ip;
+    private int source_port;
 
     private Vector<Peer> peers;
 
     public Source(String ip, int port){
-        this.ip = ip;
-        this.port = port;
+        this.source_ip = ip;
+        this.source_port = port;
         
         this.peers = new Vector<Peer>();
     }
@@ -25,11 +25,11 @@ public class Source {
     }
 
     public String getIP(){
-        return this.ip;
+        return this.source_ip;
     }
 
     public int port(){
-        return this.port;
+        return this.source_port;
     }
     
 }

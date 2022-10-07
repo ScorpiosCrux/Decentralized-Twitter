@@ -7,8 +7,8 @@ import java.time.format.DateTimeFormatter;
 public class Peer {
     
     // This peer
-    private String ip;
-	private int port;
+    private String peer_ip;
+	private int peer_port;
 
 	private boolean active;
 	private Instant lastCommunication;
@@ -17,8 +17,8 @@ public class Peer {
 
 	
 	public Peer(String ip, int port) {
-		this.ip = ip;
-		this.port = port;
+		this.peer_ip = ip;
+		this.peer_port = port;
 		
 		this.active = true;
 		this.lastCommunication = Instant.now();
@@ -31,15 +31,15 @@ public class Peer {
 
 
 	public String toString() {
-		return ip + ":" + port;
+		return peer_ip + ":" + peer_port;
 	}
 	
 	public String getIP() {
-		return ip;
+		return peer_ip;
 	}
 	
 	public int getPort() {
-		return port;
+		return peer_port;
 	}
 	
 	public boolean isActive() {
@@ -81,7 +81,7 @@ public class Peer {
         if (getClass() != obj.getClass())
             return false;
         Peer other = (Peer) obj;
-        if (!(ip.equals(other.ip) && port == other.port))
+        if (!(peer_ip.equals(other.peer_ip) && peer_port == other.peer_port))
             return false;
         return true;
     }   

@@ -10,6 +10,8 @@ import Main.GroupManagement;
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
@@ -22,7 +24,9 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
+    // private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
+    // private Vector<Source> all_sources = new Vector<Source>();
+    private SourceList all_sources = new SourceList();
     private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
@@ -34,11 +38,11 @@ public class PeerCommHandler {
 
         // create objects for group management and snippetHandler, these are in their
         // own threads
-        this.group_management = new GroupManagement(settings, network_handler, this);
+        /* this.group_management = new GroupManagement(settings, network_handler, this);
         group_management.start();
 
         snippet_handler = new SnippetHandler(settings, network_handler, this);
-        snippet_handler.start();
+        snippet_handler.start(); */
     }
 
     public void start() {
@@ -105,7 +109,7 @@ public class PeerCommHandler {
 
     }
 
-    public Hashtable<SourceOld, Vector<PeerOld>> getAllSources() {
+    public SourceList getAllSources() {
         return all_sources;
     }
 

@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import Main.Iteration3Solution;
 import Main.HelperDataClasses.PeerOld;
+import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.SourceOld;
 import Settings.UserSettings;
 import Testing.PrintHandler;
@@ -93,25 +94,16 @@ public class RegistryHandler {
 
     // Adds the source and peers to listOfSources reading from the reader.
     private void receivePeers(Socket socket, BufferedReader reader) throws IOException {
-        Hashtable<SourceOld, Vector<PeerOld>> listOfSources = peer_comm_handler.getAllSources();
-
-        // Check to see if the additional source is already in the list.
-        // Source source = new Source(new Peer(getIP(socket), socket.getPort(), null));
-        if (!listOfSources.contains(registry)) {
-            listOfSources.put(registry, new Vector<PeerOld>());
-        }
+        SourceList all_sources = peer_comm_handler.getAllSources();
 
         String numOfPeersString = reader.readLine();
         try {
             int numOfPeers = Integer.parseInt(numOfPeersString);
-            Vector<PeerOld> currentList = listOfSources.get(registry);
             for (int i = 0; i < numOfPeers; i++) {
                 String peer = reader.readLine();
                 String[] parts = peer.split(":");
-                PeerOld newPeer = new PeerOld(parts[0], Integer.parseInt(parts[1]), registry.getPeer().toString());
-                currentList.add(newPeer);
+                all_sources.addPeer(settings.registry_ip, settings.registry_port, parts[0], Integer.parseInt(parts[1]));
             }
-            listOfSources.put(registry, currentList);
         } catch (Exception e) {
             System.out.println("Error in receiving peers!");
         }

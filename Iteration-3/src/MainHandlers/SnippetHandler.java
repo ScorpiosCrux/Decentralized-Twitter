@@ -50,7 +50,7 @@ public class SnippetHandler extends Thread{
 		this.all_snippets = parent.getAllSnippets();
 
 		this.threadName = "Snippet Handler";
-		this.all_sources = parent.getAllSources();
+		//this.all_sources = parent.getAllSources();
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.public_ip = network_handler.getExternalIP();
 		this.port = settings.client_port;

@@ -40,7 +40,7 @@ public class HandlePeerUpdate extends Thread {
 
 	public HandlePeerUpdate(UserSettings settings, UDPMessage message, PeerCommHandler parent) {
 		this.parent = parent;
-		this.all_sources = parent.getAllSources();
+		//this.all_sources = parent.getAllSources();
 		this.peers_received = parent.getAllPeersRec();
 	
 		this.threadName = "Peer Update Handler";
@@ -54,7 +54,7 @@ public class HandlePeerUpdate extends Thread {
 		PeerOld peer = createPeer();
 		this.peers_received.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
 		if (peer != null) {
-			this.all_sources = parent.getAllSources();
+			//this.all_sources = parent.getAllSources();
 			updateAddPeer(peer, source);
 		}
 

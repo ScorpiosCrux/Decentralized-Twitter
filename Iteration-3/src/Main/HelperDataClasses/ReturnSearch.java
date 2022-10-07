@@ -7,12 +7,21 @@ package Main.HelperDataClasses;
  */
 
 public class ReturnSearch {
-	
-	Source source;
-	Integer iteration;
-	
+
+	private Source source;
+	private Integer iteration;
+
 	public ReturnSearch(Source key, int i) {
 		source = key;
 		iteration = i;
 	}
+
+	public Source getSource() {
+		return source;
+	}
+
+	public Integer getIteration() {
+		return iteration;
+	}
+
 }

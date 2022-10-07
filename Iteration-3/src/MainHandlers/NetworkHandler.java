@@ -30,6 +30,10 @@ public class NetworkHandler {
 		this.external_ip = getExternalIP();
     }
 
+    public DatagramSocket getOutGoingUDP(){
+        return outgoing_udp;
+    }
+
     // Gets the IP address from the socket
     public String getIP(Socket socket) {
         return socket.getInetAddress().getHostAddress();
@@ -44,14 +48,14 @@ public class NetworkHandler {
     }
 
     // Gets the externalIP for broadcasting
-    public String getExternalIP() throws IOException {
+    public String getExternalIP() {
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
             String ip = in.readLine();
             return ip;
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             System.out.println("Error getting External IP!");
             e.printStackTrace();
             return "Error!";

@@ -39,10 +39,8 @@ public class Iteration3Solution {
 	private UserSettings settings;
 
 
-	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
 	private Vector<UDPMessageLog> peersSent = new Vector<UDPMessageLog>();
 	private Vector<UDPMessageLog> peersReceived = new Vector<UDPMessageLog>();
-	private Vector<SnippetLog> allSnippets = new Vector<SnippetLog>();
 
 
 	public Iteration3Solution(UserSettings settings) {

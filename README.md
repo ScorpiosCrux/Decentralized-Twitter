@@ -12,4 +12,7 @@
 ## Changelog
 - Added Settings File. 
 - Major Refact 1: Large-Class
-    - NetworkHandler.java methods from Iteration3Solution.java
+    - NetworkHandler.java methods from Iteration3Solution.java\
+
+- Long params
+    -PeerCommHandler Constructor (after e53e8c5)

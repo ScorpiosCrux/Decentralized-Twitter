@@ -1,8 +1,14 @@
 package MainHandlers;
 
+import java.util.Hashtable;
+import java.util.Vector;
+
+
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
+import Main.Peer;
 import Main.SnippetHandler;
+import Main.Source;
 import Main.UDPMessage;
 import Settings.UserSettings;
 
@@ -13,6 +19,9 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
+	private Hashtable<Source, Vector<Peer>> all_sources = new Hashtable<Source, Vector<Peer>>();
+
+    // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler) {
         this.settings = settings;
         this.network_handler = network_handler;
@@ -23,9 +32,7 @@ public class PeerCommHandler {
                 this.settings.client_port, this.listOfSources, this.peersSent);
         group_management.start();
 
-        snippet_handler = new SnippetHandler(this, "SnippetHandler", this.listOfSources, this.peer_socket,
-                this.externalIP,
-                this.settings.client_port, this.allSnippets);
+        snippet_handler = new SnippetHandler(settings, network_handler, this);
         snippet_handler.start();
     }
 
@@ -70,6 +77,10 @@ public class PeerCommHandler {
             // for (Map.Entry<Source, Vector<Peer>> s : this.listOfSources.entrySet())
             // System.out.println("Looped. Number of peers: " + s.getValue().size());
         }
+    }
+
+    public Hashtable<Source, Vector<Peer>> getAllSources(){
+        return all_sources;
     }
 
 }

@@ -18,28 +18,38 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
+import MainHandlers.NetworkHandler;
+import MainHandlers.PeerCommHandler;
+import Settings.UserSettings;
+
 public class SnippetHandler extends Thread{
-	private Iteration3Solution data;
+	private UserSettings settings;
+	private NetworkHandler network_handler;
+	private PeerCommHandler parent; 
+
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
 	private Hashtable<Source, Vector<Peer>> listOfSources = new Hashtable<Source, Vector<Peer>>();
+
+
 	private Vector<SnippetLog> allSnippets = new Vector<SnippetLog>();
-	private String ip;
+	private String public_ip;
 	private int port;
 	private boolean stop;
 
 	
-	SnippetHandler(Iteration3Solution data, String tName, Hashtable<Source, Vector<Peer>> listOfSources, DatagramSocket socket, String ip, 
-			int port, Vector<SnippetLog> allSnippets){
-		this.data = data;
-		this.threadName = tName;
-		this.listOfSources = listOfSources;
-		this.outgoingSocket = socket;
-		this.ip = ip;
-		this.port = port;
+	public SnippetHandler(UserSettings settings, NetworkHandler network_handler, PeerCommHandler parent){
+		this.settings = settings;
+		this.network_handler = network_handler;
+		this.parent = parent;
+
+		this.threadName = "Snippet Handler";
+		this.listOfSources = parent.getAllSources();
+		this.outgoingSocket = network_handler.getOutGoingUDP();
+		this.public_ip = network_handler.getExternalIP();
+		this.port = settings.client_port;
 		this.stop = false;
-		this.allSnippets = allSnippets;
 		
 		System.out.println("Created HandlePeerUpdate Thread!");
 	}
@@ -61,7 +71,7 @@ public class SnippetHandler extends Thread{
                 	content = br.readLine();
                 
                 
-                Peer ourselves = new Peer(ip, port, null);
+                Peer ourselves = new Peer(public_ip, port, null);
                 ReturnSearch location = findPeer(ourselves);
                 
                 Peer p = listOfSources.get(location.source).get(location.iteration);
@@ -125,8 +135,7 @@ public class SnippetHandler extends Thread{
 			e.printStackTrace();
 			System.out.println("Unable to sendUDPMessage (SnippetHandler): " + peer.toString());
 		}
-		
-		
+
 	}
 	
 	//handle the incoming snippet, updating our timestamp and also adding it to our logs
@@ -138,7 +147,7 @@ public class SnippetHandler extends Thread{
 			int received_timestamp = Integer.parseInt(message_split[0]);
 			String content = message_split[1];
 			
-			Peer ourselves = new Peer(ip, port, null);	        
+			Peer ourselves = new Peer(public_ip, port, null);	        
 	        ReturnSearch location = findPeer(ourselves);
 	        Peer p = listOfSources.get(location.source).get(location.iteration);
 	        int max = Math.max(p.getTimeStamp(), received_timestamp) + 1;

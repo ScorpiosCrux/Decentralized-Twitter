@@ -36,9 +36,7 @@ public class PeerCommHandler {
     }
 
     public void start() {
-
-        // infinite loop until a stop has been received. this is the thread for
-        // receiving UDP messages
+        // infinite loop until a stop has been received. this is the thread for receiving UDP messages
         boolean stop = false;
         while (true) {
             UDPMessage message = receiveUDPMsg();
@@ -53,16 +51,16 @@ public class PeerCommHandler {
 
             switch (msgType) {
                 case "peer":
-                    HandlePeerUpdate pu = new HandlePeerUpdate("PeerUpdate", this.listOfSources, message, this.registry,
+                    HandlePeerUpdate pu = new HandlePeerUpdate("PeerUpdate", this.all_sources, message, this.registry,
                             this.peersReceived);
                     pu.start();
                     break;
                 case "snip":
                     // System.out.println("\n\n" + message.message + "\n\n");
-                    sh.handleIncomingSnip(message.message, message.sourcePeer);
+                    snippet_handler.handleIncomingSnip(message.getMessage(), message.getSourcePeer());
                     break;
                 case "stop":
-                    sendUDPStopMessage(message.sourcePeer);
+                    sendUDPStopMessage(message.getSourcePeer());
                     stop = true;
                     group_management.setStop();
                     snippet_handler.setStop();

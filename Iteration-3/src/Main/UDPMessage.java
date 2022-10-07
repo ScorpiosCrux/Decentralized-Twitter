@@ -7,13 +7,20 @@ package Main;
  */
 
 public class UDPMessage {
-	String message;
-	Peer sourcePeer;
-	
-	public UDPMessage (String message, Peer sourcePeer){
+	private String message;
+	private Peer sourcePeer;
+
+	public UDPMessage(String message, Peer sourcePeer) {
 		this.message = message;
 		this.sourcePeer = sourcePeer;
 	}
-	
-	
+
+	public String getMessage() {
+		return this.message;
+	}
+
+	public Peer getSourcePeer() {
+		return sourcePeer;
+	}
+
 }

@@ -39,10 +39,6 @@ public class Iteration3Solution {
 	private UserSettings settings;
 
 
-	private Vector<UDPMessageLog> peersSent = new Vector<UDPMessageLog>();
-	private Vector<UDPMessageLog> peersReceived = new Vector<UDPMessageLog>();
-
-
 	public Iteration3Solution(UserSettings settings) {
 		this.settings = settings;
 		try {
@@ -87,23 +83,6 @@ public class Iteration3Solution {
 
 	public PrintHandler getPrintHandler() {
 		return this.print_handler;
-	}
-
-	public Vector<UDPMessageLog> getPeersSent() {
-		return this.peersSent;
-	}
-
-	public Vector<UDPMessageLog> getPeersReceived() {
-		return this.peersReceived;
-	}
-
-	public Vector<SnippetLog> getAllSnippets() {
-		return this.allSnippets;
-	}
-
-
-	public Hashtable<Source, Vector<Peer>> getAllSources() {
-		return this.listOfSources;
 	}
 
 	

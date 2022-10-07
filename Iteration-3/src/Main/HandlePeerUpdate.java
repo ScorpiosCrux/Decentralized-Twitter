@@ -42,7 +42,7 @@ public class HandlePeerUpdate extends Thread{
 	public void run() {
 		
 		Peer peer = createPeer();
-		this.peersReceived.add(new UDPMessageLog(message_pck.sourcePeer, peer, null));
+		this.peersReceived.add(new UDPMessageLog(message_pck.getSourcePeer(), peer, null));
 		if (peer != null)
 			updateAddPeer(peer, source);
 		
@@ -98,10 +98,10 @@ public class HandlePeerUpdate extends Thread{
 	private void updateAddPeer(Peer peer, Source sourcePeer) {
 		ReturnSearch res = findPeer(peer);				//check if the peer exists in the data structure
 		//if peer exist in data structure:
-		if (res.source != null && res.iteration != -1) {
-			Vector<Peer> listOfPeers = listOfSources.get(res.source);
-			listOfPeers.get(res.iteration).setInstant(Instant.now());
-		} else if (res.source == null && res.iteration == -1) {
+		if (res.getSource() != null && res.getIteration() != -1) {
+			Vector<Peer> listOfPeers = listOfSources.get(res.getSource());
+			listOfPeers.get(res.getIteration()).setInstant(Instant.now());
+		} else if (res.getSource() == null && res.getIteration() == -1) {
 			Vector<Peer> listOfPeers = listOfSources.get(sourcePeer);
 			listOfPeers.add(peer);
 			this.listOfSources.put(sourcePeer, listOfPeers);
@@ -116,7 +116,7 @@ public class HandlePeerUpdate extends Thread{
 	private Peer createPeer() {
 		Peer peer = null;
 		try {
-			String message = message_pck.message;
+			String message = message_pck.getMessage();
 			String ip_port = message.substring(4, message.length());
 			String[] ip_port_lst = ip_port.split(":");
 			String ip_raw = ip_port_lst[0].trim();
@@ -129,7 +129,7 @@ public class HandlePeerUpdate extends Thread{
 
 			if (validIp && validPort) {
 				int port = Integer.parseInt(port_raw);
-				peer = new Peer(ip_raw, port, message_pck.sourcePeer.toString());
+				peer = new Peer(ip_raw, port, message_pck.getSourcePeer().toString());
 			}
 		} catch (Exception e) {
 			System.err.println("Unable to createPeer in HandlePeerUpdate.");

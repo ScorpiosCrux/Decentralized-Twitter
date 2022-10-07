@@ -74,7 +74,7 @@ public class SnippetHandler extends Thread{
                 Peer ourselves = new Peer(public_ip, port, null);
                 ReturnSearch location = findPeer(ourselves);
                 
-                Peer p = listOfSources.get(location.source).get(location.iteration);
+                Peer p = listOfSources.get(location.getSource()).get(location.getIteration());
                 p.setTimeStamp(p.getTimeStamp()+1);
             
 				broadcast(content, p);
@@ -149,7 +149,7 @@ public class SnippetHandler extends Thread{
 			
 			Peer ourselves = new Peer(public_ip, port, null);	        
 	        ReturnSearch location = findPeer(ourselves);
-	        Peer p = listOfSources.get(location.source).get(location.iteration);
+	        Peer p = listOfSources.get(location.getSource()).get(location.getIteration());
 	        int max = Math.max(p.getTimeStamp(), received_timestamp) + 1;
 			p.setTimeStamp(max);
 			

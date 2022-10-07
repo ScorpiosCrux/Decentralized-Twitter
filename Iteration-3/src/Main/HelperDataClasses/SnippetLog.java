@@ -12,7 +12,7 @@ public class SnippetLog {
 	private String content;
 	private Peer sourcePeer;
 
-	SnippetLog(int timeStamp, String content, Peer sourcePeer) {
+	public SnippetLog(int timeStamp, String content, Peer sourcePeer) {
 		this.timeStamp = timeStamp;
 		this.content = content;
 		this.sourcePeer = sourcePeer;

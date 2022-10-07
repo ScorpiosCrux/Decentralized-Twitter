@@ -27,8 +27,10 @@ public class RegistryHandler {
     public RegistryHandler(UserSettings settings, Iteration3Solution main, PeerCommHandler peer_comm_handler) {
         this.settings = settings;
         this.main = main;
-        this.request_handler = new RequestHandler(settings, main);
+        this.request_handler = new RequestHandler(settings, main, peer_comm_handler);
         this.peer_comm_handler = peer_comm_handler;
+
+        
 
         this.registry = new Source(new Peer(settings.registry_ip, settings.registry_port, null));
     }

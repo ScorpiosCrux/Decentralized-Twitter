@@ -4,18 +4,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Vector;
+
 import Main.Iteration3Solution;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.SnippetLog;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 
 public class RequestHandler {
 
     private UserSettings settings;
     private Iteration3Solution main;
+    private PeerCommHandler peer_comm_handler;
 
-    public RequestHandler(UserSettings settings, Iteration3Solution main) {
+    public RequestHandler(UserSettings settings, Iteration3Solution main, PeerCommHandler peer_comm_handler) {
         this.settings = settings;
         this.main = main;
+        this.peer_comm_handler = peer_comm_handler;
     }
 
     // This function handles the requests from the registry and returns a response.
@@ -97,69 +107,67 @@ public class RequestHandler {
         return code;
     }
 
-    /*
-     * // Generates report based on assignment specs
-     * private String generateReport() {
-     * Hashtable<Source, Vector<Peer>> listOfSources = main.getAllSources();
-     * Vector<UDPMessageLog> peers_received = main.getPeersReceived();
-     * Vector<UDPMessageLog> peers_sent = main.getPeersSent();
-     * Vector<SnippetLog> all_snippets = main.getAllSnippets();
-     * 
-     * int numOfSources = listOfSources.size();
-     * int totalNumOfPeers = 0;
-     * String peer_list_sources = "";
-     * String peer_list = "";
-     * String peers_recd = "";
-     * String peers_sent_str = "";
-     * String snip_list = "";
-     * 
-     * for (Map.Entry<Source, Vector<Peer>> e : listOfSources.entrySet()) {
-     * Source source = e.getKey();
-     * String sourceLocation = source.getPeer().toString() + "\n";
-     * Vector<Peer> listOfPeers = e.getValue();
-     * String peers = "";
-     * for (Peer p : listOfPeers) {
-     * String peer_string = p.toString() + "\n";
-     * peers += peer_string;
-     * peer_list += peer_string;
-     * totalNumOfPeers++;
-     * }
-     * // adds one source
-     * peer_list_sources += sourceLocation + source.getTime() + "\n" +
-     * listOfPeers.size() + "\n" + peers;
-     * }
-     * 
-     * peers_recd += peers_received.size() + "\n";
-     * for (UDPMessageLog m : peers_received) {
-     * try {
-     * peers_recd += m.getMsgOrigin().toString() + " " +
-     * m.getTransmittedPeer().toString() + " "
-     * + m.getTimeStamp() + "\n";
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * 
-     * peers_sent_str += peers_sent.size() + "\n";
-     * for (UDPMessageLog m : peers_sent) {
-     * try {
-     * peers_sent_str += m.getMsgOrigin().toString() + " " +
-     * m.getTransmittedPeer().toString() + " "
-     * + m.getTimeStamp() + "\n";
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * 
-     * snip_list += all_snippets.size() + "\n";
-     * for (SnippetLog sl : all_snippets) {
-     * snip_list += sl.getTimeStamp() + " " + sl.getContent() + " " +
-     * sl.getSourcePeer().toString() + "\n";
-     * }
-     * 
-     * return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
-     * peer_list_sources + peers_recd + peers_sent_str + snip_list;
-     * }
-     */
+    // Generates report based on assignment specs
+    private String generateReport() {
+        Hashtable<Source, Vector<Peer>> all_sources = peer_comm_handler.getAllSources();
+        Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
+        Vector<UDPMessageLog> peers_received = peer_comm_handler.getAllPeersRec();
+        Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
+
+        int numOfSources = all_sources.size();
+        int totalNumOfPeers = 0;
+        String peer_list_sources = "";
+        String peer_list = "";
+        String peers_recd = "";
+        String peers_sent_str = "";
+        String snip_list = "";
+
+        for (Map.Entry<Source, Vector<Peer>> e : all_sources.entrySet()) {
+            Source source = e.getKey();
+            String sourceLocation = source.getPeer().toString() + "\n";
+            Vector<Peer> listOfPeers = e.getValue();
+            String peers = "";
+            for (Peer p : listOfPeers) {
+                String peer_string = p.toString() + "\n";
+                peers += peer_string;
+                peer_list += peer_string;
+                totalNumOfPeers++;
+            }
+            // adds one source
+            peer_list_sources += sourceLocation + source.getTime() + "\n" +
+                    listOfPeers.size() + "\n" + peers;
+        }
+
+        peers_recd += peers_received.size() + "\n";
+        for (UDPMessageLog m : peers_received) {
+            try {
+                peers_recd += m.getMsgOrigin().toString() + " " +
+                        m.getTransmittedPeer().toString() + " "
+                        + m.getTimeStamp() + "\n";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        peers_sent_str += peers_sent.size() + "\n";
+        for (UDPMessageLog m : peers_sent) {
+            try {
+                peers_sent_str += m.getMsgOrigin().toString() + " " +
+                        m.getTransmittedPeer().toString() + " "
+                        + m.getTimeStamp() + "\n";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        snip_list += all_snippets.size() + "\n";
+        for (SnippetLog sl : all_snippets) {
+            snip_list += sl.getTimeStamp() + " " + sl.getContent() + " " +
+                    sl.getSourcePeer().toString() + "\n";
+        }
+
+        return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
+                peer_list_sources + peers_recd + peers_sent_str + snip_list;
+    }
 
 }

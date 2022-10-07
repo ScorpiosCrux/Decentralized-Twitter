@@ -7,7 +7,6 @@ package Main;
  */
 
 import java.io.IOException;
-import MainHandlers.RequestHandler;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import MainHandlers.RegistryHandler;
@@ -20,7 +19,6 @@ public class Iteration3Solution {
 	private RegistryHandler registry_handler;
 	private NetworkHandler network_handler;
 	private PrintHandler print_handler;
-	private RequestHandler request_handler;
 	private PeerCommHandler peer_comm_handler;
 
 	private UserSettings settings;
@@ -34,7 +32,6 @@ public class Iteration3Solution {
 			e.printStackTrace();
 		}
 		this.print_handler = new PrintHandler();
-		this.request_handler = new RequestHandler(settings, this);
 		this.peer_comm_handler = new PeerCommHandler(settings, network_handler);
 
 		// Should be last

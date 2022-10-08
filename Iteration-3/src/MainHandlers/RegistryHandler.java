@@ -12,7 +12,6 @@ import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.SourceOld;
 import Settings.UserSettings;
-import Testing.PrintHandler;
 
 public class RegistryHandler {
 
@@ -30,9 +29,7 @@ public class RegistryHandler {
         this.main = main;
         this.request_handler = new RequestHandler(settings, main, peer_comm_handler);
         this.peer_comm_handler = peer_comm_handler;
-
         
-
         this.registry = new SourceOld(new PeerOld(settings.registry_ip, settings.registry_port, null));
     }
 
@@ -92,7 +89,9 @@ public class RegistryHandler {
         return message;
     }
 
-    // Adds the source and peers to listOfSources reading from the reader.
+    /* 
+     * Receive peers from registry. Adds the peers to a SourceList.
+     */
     private void receivePeers(Socket socket, BufferedReader reader) throws IOException {
         SourceList all_sources = peer_comm_handler.getAllSources();
 

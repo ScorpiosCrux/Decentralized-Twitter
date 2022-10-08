@@ -18,7 +18,6 @@ public class SourceList {
             Source new_source = new Source(source_ip, source_port);
             new_source.addPeer(new Peer(peer_ip, peer_port));
             this.sources.add(new_source);
-
         }
     }
 
@@ -29,6 +28,14 @@ public class SourceList {
                 return source;
         }
         return null;
+    }
+
+    public boolean isEmpty(){
+        return sources.isEmpty();
+    }
+
+    public int getSize(){
+        return sources.size();
     }
 
 }

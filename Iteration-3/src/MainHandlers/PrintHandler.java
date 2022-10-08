@@ -1,4 +1,4 @@
-package Testing;
+package MainHandlers;
 
 public class PrintHandler {
     public void printResponse(String message, String request) {

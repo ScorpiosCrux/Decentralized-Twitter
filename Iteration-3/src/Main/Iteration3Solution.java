@@ -9,9 +9,9 @@ package Main;
 import java.io.IOException;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
+import MainHandlers.PrintHandler;
 import MainHandlers.RegistryHandler;
 import Settings.UserSettings;
-import Testing.PrintHandler;
 
 public class Iteration3Solution {
 

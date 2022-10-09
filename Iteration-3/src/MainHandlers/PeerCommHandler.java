@@ -24,7 +24,8 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    // private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
+    // private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new
+    // Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
     // private Vector<Source> all_sources = new Vector<Source>();
     private SourceList all_sources;
     private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
@@ -36,7 +37,9 @@ public class PeerCommHandler {
         this.settings = settings;
         this.network_handler = network_handler;
         this.all_sources = all_sources;
+    }
 
+    public void start() {
         // create objects for group management and snippetHandler, these are in their
         // own threads
         this.group_management = new GroupManagement(settings, network_handler, this);
@@ -44,9 +47,7 @@ public class PeerCommHandler {
 
         snippet_handler = new SnippetHandler(settings, network_handler, this);
         snippet_handler.start();
-    }
 
-    public void start() {
         // infinite loop until a stop has been received. this is the thread for
         // receiving UDP messages
         boolean stop = false;
@@ -114,16 +115,15 @@ public class PeerCommHandler {
         return all_sources;
     }
 
-
-    public Vector<UDPMessageLog> getAllPeersRec(){
+    public Vector<UDPMessageLog> getAllPeersRec() {
         return peers_received;
     }
 
-    public Vector<SnippetLog> getAllSnippets(){
+    public Vector<SnippetLog> getAllSnippets() {
         return all_snippets;
     }
 
-    public Vector<UDPMessageLog> getAllPeersSent(){
+    public Vector<UDPMessageLog> getAllPeersSent() {
         return peers_sent;
     }
 

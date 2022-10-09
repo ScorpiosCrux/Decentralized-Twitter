@@ -28,36 +28,39 @@ public class Iteration3Solution {
 	private final SourceList all_sources = new SourceList();
 
 	public Iteration3Solution(UserSettings settings) {
+		startRegistryCommunication(settings);
+		startPeerCommunication();
+		finishRegistryCommunication();
+	}
+
+	public void startRegistryCommunication(UserSettings settings) {
 		this.settings = settings;
+		this.print_handler = new PrintHandler();
 		try {
 			this.network_handler = new NetworkHandler(settings);
+			this.peer_comm_handler = new PeerCommHandler(settings, network_handler, all_sources);
+			this.registry_handler = new RegistryHandler(settings, this, peer_comm_handler);
+			registry_handler.start(settings.client_port);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		this.print_handler = new PrintHandler();
-		
-		// Should be last
-		this.peer_comm_handler = new PeerCommHandler(settings, network_handler, all_sources);
-		this.registry_handler = new RegistryHandler(settings, this, peer_comm_handler);
-		
-		
-		// initial connection to the registry
-		try {
-			registry_handler.start(settings.client_port);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
 			System.exit(0);
 		}
-		
+	}
+
+	public void startPeerCommunication() {
 		// communication with the peer
 		peer_comm_handler.start();
+	}
 
-/* 		// final communicatino with registry
-		try {
-			client.stop();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} */
+	public void finishRegistryCommunication() {
+		/*
+		 * // final communicatino with registry
+		 * try {
+		 * client.stop();
+		 * } catch (IOException ioe) {
+		 * ioe.printStackTrace();
+		 * }
+		 */
 	}
 
 	public UserSettings getSettings() {
@@ -72,16 +75,8 @@ public class Iteration3Solution {
 		return this.print_handler;
 	}
 
-	
-
-
-
-	
-
-	
-
-	
-
-
+	public PeerCommHandler getPeerCommHandler(){
+		return this.peer_comm_handler;
+	}
 
 }

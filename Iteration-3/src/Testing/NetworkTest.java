@@ -1,7 +1,9 @@
 package Testing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -36,28 +38,36 @@ public class NetworkTest {
         }
     }
 
-    // @Test
-    // void testRegistryFailedConnection() {
-    //     // Registry must be off for this to pass
-    //     Exception e = assertThrows(IOException.class, () -> client.start(settings.client_port));
-    //     assertTrue(e.getMessage().contains("Connection refused"));
-    // }
+    @Test
+    void testRegistryFailedConnection() {
+        // Registry must be off for this to pass
+        Exception e = assertThrows(IOException.class, () -> client.initRegistryCommunication(settings));
+        assertTrue(e.getMessage().contains("Connection refused"));
+    }
 
     // @Test
     // void testRegistrySuccessfulConnection() throws IOException {
-    //     // Registry must be on for this to pass
-    //     client.start(settings.client_port);
-    //     assertTrue(client.isRegistryConnected());
+    // // Registry must be on for this to pass
+    // client.start(settings.client_port);
+    // assertTrue(client.isRegistryConnected());
     // }
 
-    // @Test
-    // void createdUDPSocket() throws SocketException {
-    //     NetworkHandler nh = new NetworkHandler();
-    //     DatagramSocket socket;
-    //     int port = 31824;
+    @Test
+    void createdUDPSocket() throws SocketException {
 
-    //     socket = nh.createUDPSocket(port);
-    //     assertEquals("Port Number should be the same", port, socket.getLocalPort());
-    // }
+        DatagramSocket socket = null;
+        int port = 31824;
+        NetworkHandler nh;
+        try {
+            nh = new NetworkHandler(settings);
+            socket = nh.createUDPSocket(port);
+            assertEquals("Port Number should be the same", port, socket.getLocalPort());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse("Unable to create UDP Socket", socket == null);
+
+    }
 
 }

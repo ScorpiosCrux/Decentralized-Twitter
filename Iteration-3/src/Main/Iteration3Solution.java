@@ -28,12 +28,12 @@ public class Iteration3Solution {
 	private final SourceList all_sources = new SourceList();
 
 	public Iteration3Solution(UserSettings settings) {
-		startRegistryCommunication(settings);
+		initRegistryCommunication(settings);
 		startPeerCommunication();
 		finishRegistryCommunication();
 	}
 
-	public void startRegistryCommunication(UserSettings settings) {
+	public void initRegistryCommunication(UserSettings settings) {
 		this.settings = settings;
 		this.print_handler = new PrintHandler();
 		try {

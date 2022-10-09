@@ -51,7 +51,8 @@ public class SnippetHandlerTest {
         assertEquals(snippet_handler.getClass(), SnippetHandler.class);
     }
 
-    @Test void SnippetCreationNullValues(){
+    @Test 
+    public void SnippetCreationNullValues(){
         this.settings = null;
         this.network_handler = null;
         this.peer_comm_handler = null;
@@ -62,4 +63,8 @@ public class SnippetHandlerTest {
         Exception e = assertThrows(NullPointerException.class, () -> new SnippetHandler(settings, network_handler, peer_comm_handler));
         assertTrue(e.getMessage().contains("null"));
     }
+
+    
+
+
 }

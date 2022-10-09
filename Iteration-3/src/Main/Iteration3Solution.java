@@ -7,6 +7,8 @@ package Main;
  */
 
 import java.io.IOException;
+
+import Main.HelperDataClasses.SourceList;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import MainHandlers.PrintHandler;
@@ -23,6 +25,7 @@ public class Iteration3Solution {
 
 	private UserSettings settings;
 
+	private final SourceList all_sources = new SourceList();
 
 	public Iteration3Solution(UserSettings settings) {
 		this.settings = settings;
@@ -32,12 +35,12 @@ public class Iteration3Solution {
 			e.printStackTrace();
 		}
 		this.print_handler = new PrintHandler();
-		this.peer_comm_handler = new PeerCommHandler(settings, network_handler);
-
+		
 		// Should be last
+		this.peer_comm_handler = new PeerCommHandler(settings, network_handler, all_sources);
 		this.registry_handler = new RegistryHandler(settings, this, peer_comm_handler);
-
-
+		
+		
 		// initial connection to the registry
 		try {
 			registry_handler.start(settings.client_port);
@@ -45,7 +48,7 @@ public class Iteration3Solution {
 			ioe.printStackTrace();
 			System.exit(0);
 		}
-
+		
 		// communication with the peer
 		peer_comm_handler.start();
 

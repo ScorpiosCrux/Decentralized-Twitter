@@ -62,7 +62,6 @@ public class NetworkHandler {
         }
     }
 
-    
 
     // Creates a socket with ip and port.
 	// Returns the socket

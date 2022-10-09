@@ -26,23 +26,24 @@ public class PeerCommHandler {
 
     // private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
     // private Vector<Source> all_sources = new Vector<Source>();
-    private SourceList all_sources = new SourceList();
-    private Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
-    private Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
-    private Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
+    private SourceList all_sources;
+    private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
+    private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
+    private final Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
 
     // Constructor
-    public PeerCommHandler(UserSettings settings, NetworkHandler network_handler) {
+    public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {
         this.settings = settings;
         this.network_handler = network_handler;
+        this.all_sources = all_sources;
 
         // create objects for group management and snippetHandler, these are in their
         // own threads
-        /* this.group_management = new GroupManagement(settings, network_handler, this);
+        this.group_management = new GroupManagement(settings, network_handler, this);
         group_management.start();
 
         snippet_handler = new SnippetHandler(settings, network_handler, this);
-        snippet_handler.start(); */
+        snippet_handler.start();
     }
 
     public void start() {

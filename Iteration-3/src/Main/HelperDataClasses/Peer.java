@@ -67,6 +67,14 @@ public class Peer {
 		this.timeStamp = ts;
 	}
 
+	public synchronized void setMaxTimeStamp(int received_timestamp) {
+		this.timeStamp = Math.max(this.timeStamp, received_timestamp);
+	}
+
+	public void incrementTimeStamp(){
+		this.timeStamp += 1;
+	}
+
 	public String getCreationTime() {
 		return creationTime;
 	}

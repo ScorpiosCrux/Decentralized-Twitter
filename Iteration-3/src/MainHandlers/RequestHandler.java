@@ -10,10 +10,7 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import Main.Iteration3Solution;
-import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.SourceOld;
-import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 
 public class RequestHandler {
@@ -108,7 +105,7 @@ public class RequestHandler {
     }
 
     // Generates report based on assignment specs
-    private String generateReport() {
+/*     private String generateReport() {
         Hashtable<SourceOld, Vector<PeerOld>> all_sources = null;
         Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
         Vector<UDPMessageLog> peers_received = null;
@@ -148,7 +145,7 @@ public class RequestHandler {
                 e.printStackTrace();
             }
         }
-
+ */
 /*         peers_sent_str += peers_sent.size() + "\n";
         for (UDPMessageLog m : peers_sent) {
             try {
@@ -160,7 +157,7 @@ public class RequestHandler {
             }
         } */
 
-        snip_list += all_snippets.size() + "\n";
+        /* snip_list += all_snippets.size() + "\n";
         for (SnippetLog sl : all_snippets) {
             snip_list += sl.getTimeStamp() + " " + sl.getContent() + " " +
                     sl.getSourcePeer().toString() + "\n";
@@ -168,6 +165,6 @@ public class RequestHandler {
 
         return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
                 peer_list_sources + peers_recd + peers_sent_str + snip_list;
-    }
+    } */
 
 }

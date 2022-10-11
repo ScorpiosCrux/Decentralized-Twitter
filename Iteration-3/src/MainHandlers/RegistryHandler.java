@@ -4,13 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import Main.Iteration3Solution;
-import Main.HelperDataClasses.PeerOld;
+import Main.HelperDataClasses.Peer;
+import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.SourceOld;
 import Settings.UserSettings;
 
 public class RegistryHandler {
@@ -20,7 +17,7 @@ public class RegistryHandler {
     private RequestHandler request_handler;
     private PeerCommHandler peer_comm_handler;
 
-    private SourceOld registry;
+    private Source registry;
     private boolean registry_connected;
 
     // Constructor
@@ -29,8 +26,8 @@ public class RegistryHandler {
         this.main = main;
         this.request_handler = new RequestHandler(settings, main, peer_comm_handler);
         this.peer_comm_handler = peer_comm_handler;
-        
-        this.registry = new SourceOld(new PeerOld(settings.registry_ip, settings.registry_port, null));
+    
+        this.registry = new Source(settings.registry_ip, settings.registry_port);
     }
 
     // Getters and Setters
@@ -39,11 +36,7 @@ public class RegistryHandler {
         return registry_connected;
     }
 
-    public void setRegistry(SourceOld registry) {
-        this.registry = registry;
-    }
-
-    public SourceOld getRegistry() {
+    public Source getRegistry() {
         return this.registry;
     }
 
@@ -51,8 +44,7 @@ public class RegistryHandler {
         NetworkHandler network_handler = main.getNetworkHandler();
         PrintHandler print_handler = main.getPrintHandler();
 
-        Socket registry_socket = network_handler.createSocket(this.registry.getPeer().getIP(),
-                this.registry.getPeer().getPort());
+        Socket registry_socket = network_handler.createSocket(settings.registry_ip, settings.registry_port);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(registry_socket.getInputStream()));
 

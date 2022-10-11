@@ -9,19 +9,10 @@ package Main;
 //This class handles incoming UDP Message with "peer" at the start
 //
 
-import java.time.Instant;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Vector;
-
 import Main.HelperDataClasses.DataValidator;
 import Main.HelperDataClasses.MessageLogs;
-import Main.HelperDataClasses.PeerOld;
-import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessage;
-import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.PeerCommHandler;
 import Settings.UserSettings;
 
@@ -44,15 +35,12 @@ public class HandlePeerUpdate extends Thread {
 
 	// run the thread
 	public void run() {
-		// TODO: Create Peer
 		String peer_ip = parsePeerIP(message_raw);
 		int peer_port = parsePeerPort(message_raw);
 		all_sources.addPeer(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
 				peer_port);
-
 		this.received_logs.addLog(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
 				peer_port);
-
 	}
 
 	public String parsePeerIP(UDPMessage message_raw) {

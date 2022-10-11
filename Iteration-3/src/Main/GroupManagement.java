@@ -26,10 +26,6 @@ import Settings.UserSettings;
 
 public class GroupManagement extends Thread {
 
-	private UserSettings settings;
-	private NetworkHandler network_handler;
-	private PeerCommHandler parent;
-
 	private SourceList all_sources;
 	private MessageLogs sent_logs;
 	
@@ -42,9 +38,6 @@ public class GroupManagement extends Thread {
 	private boolean stop;
 
 	public GroupManagement(UserSettings settings, NetworkHandler network_handler, PeerCommHandler parent) {
-		this.settings = settings;
-		this.network_handler = network_handler;
-		this.parent = parent;
 
 		this.all_sources = parent.getAllSources();
 		this.sent_logs = parent.getSentLogs();

@@ -7,13 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import Main.HelperDataClasses.PeerOld;
+import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
@@ -22,12 +21,10 @@ import Settings.UserSettings;
 
 public class NetworkHandler {
 
-    private String external_ip;
     private DatagramSocket outgoing_udp;
 
     public NetworkHandler(UserSettings settings) throws IOException{
         this.outgoing_udp = createUDPSocket(settings.client_port);
-		this.external_ip = getExternalIP();
     }
 
     public DatagramSocket getOutGoingUDP(){
@@ -90,7 +87,7 @@ public class NetworkHandler {
 		try {
 			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
 			outgoing_udp.receive(packet);
-			PeerOld sourcePeer = new PeerOld(packet.getAddress().getHostAddress(), packet.getPort(), null);
+			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort());
 			String message = new String(packet.getData(), 0, packet.getLength());
 			return new UDPMessage(message, sourcePeer);
 		} catch (Exception e) {

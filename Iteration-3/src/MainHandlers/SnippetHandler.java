@@ -18,10 +18,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
-import Main.HelperDataClasses.PeerOld;
-import Main.HelperDataClasses.ReturnSearch;
+import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.SourceOld;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceList;
+import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
 public class SnippetHandler extends Thread{
@@ -32,10 +33,10 @@ public class SnippetHandler extends Thread{
 	private Thread t;
 	private String threadName;
 	private DatagramSocket outgoingSocket;
-	private Hashtable<SourceOld, Vector<PeerOld>> all_sources;
+	private SourceList all_sources;
     private Vector<SnippetLog> all_snippets;
 
-
+	private Peer ourselves;
 
 	private String public_ip;
 	private int port;
@@ -50,20 +51,21 @@ public class SnippetHandler extends Thread{
 		this.all_snippets = parent.getAllSnippets();
 
 		this.threadName = "Snippet Handler";
-		//this.all_sources = parent.getAllSources();
+		this.all_sources = parent.getAllSources();
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.public_ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
+
+		this.ourselves = new Peer(network_handler.getExternalIP(), settings.client_port);
 		
 		System.out.println("Snippet Handler Thread Created!");
 	}
 	
 	public void run() {
-		// TODO: Duplicate Code
 		System.out.println("Tweet your thoughts: ");
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String content;
-		//Inspired from a discord message in the 559 server
         while (stop != true) {
             try {
                 
@@ -73,14 +75,8 @@ public class SnippetHandler extends Thread{
                 }else
                 	content = br.readLine();
                 
-                
-                PeerOld ourselves = new PeerOld(public_ip, port, null);
-                ReturnSearch location = findPeer(ourselves);
-                
-                PeerOld p = all_sources.get(location.getSource()).get(location.getIteration());
-                p.setTimeStamp(p.getTimeStamp()+1);
-            
-				broadcast(content, p);
+				ourselves.incrementTimeStamp();
+				broadcast(content);
 				System.out.println("Tweet has been tweeted! \nTweet your thoughts: ");
             } catch (Exception e) {
             	e.printStackTrace();
@@ -102,79 +98,62 @@ public class SnippetHandler extends Thread{
 		this.stop = true;
 	}
 
-	//broadcast the message to all peers while logging it
-	private void broadcast(String content, PeerOld ourselves) {
-		
-		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
-			Vector<PeerOld> listOfPeers = s.getValue();
-			for (PeerOld p : listOfPeers) {
-				if (p.isActive() && !p.equals(ourselves)) {
-					
-					sendUDPMessage(p, content, ourselves);
-				}
+	// Function that broadcasts to all active peers that we know about
+	private void broadcast(String content) {
+		Vector<Source> source_list = all_sources.getSources();
+		for (Source s : source_list){
+			Vector<Peer> active_peers = s.getActivePeers();
+			for (Peer p : active_peers){
+				sendUDPMessage(p.getIP(), p.getPort(), content);
 			}
 		}
 	}
 	
 	//send the snippet to peer
-	private void sendUDPMessage(PeerOld peer, String content, PeerOld ourselves) {
+	private void sendUDPMessage(String peer_ip, int peer_port, String content) {
 		try {
-			String ip = peer.getIP();
-			int port = peer.getPort();
-			
 			byte[] buffer = new byte[1024];
-			InetAddress address = InetAddress.getByName(ip);
+			InetAddress address = InetAddress.getByName(peer_ip);
 			
 			String data = "snip" + ourselves.getTimeStamp() + " " + content;
 			buffer = data.getBytes();
-			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
+			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, peer_port);
 			
 			outgoingSocket.send(response);
 			all_snippets.add(new SnippetLog(ourselves.getTimeStamp(), content, ourselves));
-			
-			//System.out.println("Broadcast to: " + peer.toString());
+
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Unable to sendUDPMessage (SnippetHandler): " + peer.toString());
+			System.out.println("Unable to sendUDPMessage (SnippetHandler): " + peer_ip + ":" + peer_port);
 		}
 
 	}
 	
 	//handle the incoming snippet, updating our timestamp and also adding it to our logs
-	public void handleIncomingSnip(String message, PeerOld sourcePeer) {
+	public void handleIncomingSnip(UDPMessage message_pack) {
 		try {
+			String message = message_pack.getMessage();
+
 			
 			message = message.substring(4, message.length());
 			String[] message_split = message.split(" ", 2);
 			int received_timestamp = Integer.parseInt(message_split[0]);
 			String content = message_split[1];
+			       
+	        ourselves.setMaxTimeStamp(received_timestamp);
 			
-			PeerOld ourselves = new PeerOld(public_ip, port, null);	        
-	        ReturnSearch location = findPeer(ourselves);
-	        PeerOld p = all_sources.get(location.getSource()).get(location.getIteration());
-	        int max = Math.max(p.getTimeStamp(), received_timestamp) + 1;
-			p.setTimeStamp(max);
-			
-			System.out.println("Message has been sent from: " + sourcePeer.toString() + ". They sent: " + content);
-			this.all_snippets.add(new SnippetLog(p.getTimeStamp(), content, sourcePeer));
+			System.out.println("Message has been sent from: " + message_pack.getSourcePeer().toString() + ". They sent: " + content);
+			//this.all_snippets.add(new SnippetLog(p.getTimeStamp(), content, sourcePeer));
 	        
 	        
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Unable to parse incoming snip: " + message);
+			System.err.println("Unable to parse incoming snip: " + message_pack.getMessage());
 		}
 	}
 	
-	//this finds the peer in our datastructure
-	private ReturnSearch findPeer(PeerOld peer){
-		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
-			Vector<PeerOld> listOfPeers = s.getValue();
-			for (int i = 0; i < listOfPeers.size(); i++) 
-				if (listOfPeers.get(i).equals(peer)) 
-					return new ReturnSearch(s.getKey(), i);
-		}
-		return new ReturnSearch(null, -1);
-	}
+	
+
 
 }

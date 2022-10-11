@@ -10,9 +10,9 @@ package Main.HelperDataClasses;
 public class SnippetLog {
 	private int timeStamp;
 	private String content;
-	private PeerOld sourcePeer;
+	private Peer sourcePeer;
 
-	public SnippetLog(int timeStamp, String content, PeerOld sourcePeer) {
+	public SnippetLog(int timeStamp, String content, Peer sourcePeer) {
 		this.timeStamp = timeStamp;
 		this.content = content;
 		this.sourcePeer = sourcePeer;
@@ -26,7 +26,7 @@ public class SnippetLog {
 		return this.content;
 	}
 
-	public PeerOld getSourcePeer() {
+	public Peer getSourcePeer() {
 		return this.sourcePeer;
 	}
 

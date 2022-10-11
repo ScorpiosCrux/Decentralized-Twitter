@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Vector;
-
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.MessageLogs;
-import Main.HelperDataClasses.PeerOld;
+import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessage;
-import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
 
 public class PeerCommHandler {
@@ -69,7 +67,7 @@ public class PeerCommHandler {
                     pu.start();
                     break;
                 case "snip":
-                    snippet_handler.handleIncomingSnip(message.getMessage(), message.getSourcePeer());
+                    snippet_handler.handleIncomingSnip(message);
                     break;
                 case "stop":
                     sendUDPStopMessage(message.getSourcePeer());
@@ -87,7 +85,7 @@ public class PeerCommHandler {
     }
 
     // Sends a stop message to registry request to stop
-    private void sendUDPStopMessage(PeerOld peer) {
+    private void sendUDPStopMessage(Peer peer) {
         try {
             String ip = peer.getIP();
             int port = peer.getPort();

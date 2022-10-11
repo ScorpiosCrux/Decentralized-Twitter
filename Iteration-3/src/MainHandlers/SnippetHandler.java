@@ -37,9 +37,6 @@ public class SnippetHandler extends Thread{
     private Vector<SnippetLog> all_snippets;
 
 	private Peer ourselves;
-
-	private String public_ip;
-	private int port;
 	private boolean stop = false;
 
 	
@@ -53,8 +50,6 @@ public class SnippetHandler extends Thread{
 		this.threadName = "Snippet Handler";
 		this.all_sources = parent.getAllSources();
 		this.outgoingSocket = network_handler.getOutGoingUDP();
-		this.public_ip = network_handler.getExternalIP();
-		this.port = settings.client_port;
 
 		this.ourselves = new Peer(network_handler.getExternalIP(), settings.client_port);
 		
@@ -121,8 +116,6 @@ public class SnippetHandler extends Thread{
 			
 			outgoingSocket.send(response);
 			all_snippets.add(new SnippetLog(ourselves.getTimeStamp(), content, ourselves));
-
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Unable to sendUDPMessage (SnippetHandler): " + peer_ip + ":" + peer_port);

@@ -63,7 +63,7 @@ public class PeerCommHandler {
 
             switch (msgType) {
                 case "peer":
-                    HandlePeerUpdate pu = new HandlePeerUpdate(this.settings, message, this);
+                    HandlePeerUpdate pu = new HandlePeerUpdate(this, message);
                     pu.start();
                     break;
                 case "snip":
@@ -124,6 +124,14 @@ public class PeerCommHandler {
 
     public MessageLogs getReceivedLogs(){
         return this.received_logs;
+    }
+
+    public NetworkHandler getNetworkHandler(){
+        return this.network_handler;
+    }
+
+    public UserSettings getSettings(){
+        return this.settings;
     }
 
 }

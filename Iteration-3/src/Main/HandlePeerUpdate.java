@@ -13,10 +13,14 @@ import Main.HelperDataClasses.DataValidator;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessage;
+import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import Settings.UserSettings;
 
 public class HandlePeerUpdate extends Thread {
+	private UserSettings settings;
+	private NetworkHandler network_handler;
+
 	private UDPMessage message_raw;
 	private SourceList all_sources;
 	private MessageLogs received_logs;
@@ -24,7 +28,10 @@ public class HandlePeerUpdate extends Thread {
 	private Thread t;
 	private String threadName;
 
-	public HandlePeerUpdate(UserSettings settings, UDPMessage message_raw, PeerCommHandler parent) {
+	public HandlePeerUpdate(PeerCommHandler parent, UDPMessage message_raw) {
+		this.settings = parent.getSettings();
+		this.network_handler = parent.getNetworkHandler();
+
 		this.message_raw = message_raw;
 
 		this.all_sources = parent.getAllSources();
@@ -37,10 +44,14 @@ public class HandlePeerUpdate extends Thread {
 	public void run() {
 		String peer_ip = parsePeerIP(message_raw);
 		int peer_port = parsePeerPort(message_raw);
-		all_sources.addPeer(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
-				peer_port);
-		this.received_logs.addLog(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
-				peer_port);
+		if (peer_ip != network_handler.getExternalIP() && peer_port != settings.client_port) {
+			all_sources.addPeer(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
+					peer_port);
+			this.received_logs.addLog(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(),
+					peer_ip,
+					peer_port);
+		}
+
 	}
 
 	public String parsePeerIP(UDPMessage message_raw) {

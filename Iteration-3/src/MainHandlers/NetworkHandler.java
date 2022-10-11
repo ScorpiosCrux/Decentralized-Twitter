@@ -22,13 +22,19 @@ import Settings.UserSettings;
 public class NetworkHandler {
 
     private DatagramSocket outgoing_udp;
+    private String external_ip;
 
     public NetworkHandler(UserSettings settings) throws IOException{
         this.outgoing_udp = createUDPSocket(settings.client_port);
+        this.external_ip = findExternalIP();
     }
 
     public DatagramSocket getOutGoingUDP(){
         return outgoing_udp;
+    }
+
+    public String getExternalIP(){
+        return this.external_ip;
     }
 
     // Gets the IP address from the socket
@@ -45,7 +51,7 @@ public class NetworkHandler {
     }
 
     // Gets the externalIP for broadcasting
-    public String getExternalIP() {
+    public String findExternalIP() {
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");

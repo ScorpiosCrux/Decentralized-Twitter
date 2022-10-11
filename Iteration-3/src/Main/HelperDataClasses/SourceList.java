@@ -21,8 +21,6 @@ public class SourceList {
         }
     }
 
-    public void 
-
     public Source findSource(String ip, int port) {
         Source target = new Source(ip, port);
         for (Source source : this.sources) {

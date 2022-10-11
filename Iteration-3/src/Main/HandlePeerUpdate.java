@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import Main.HelperDataClasses.DataValidator;
+import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.ReturnSearch;
 import Main.HelperDataClasses.SourceList;
@@ -27,7 +28,7 @@ import Settings.UserSettings;
 public class HandlePeerUpdate extends Thread {
 	private UDPMessage message_raw;
 	private SourceList all_sources;
-	private Vector<UDPMessageLog> peers_received;
+	private MessageLogs received_logs;
 
 	private Thread t;
 	private String threadName;
@@ -36,7 +37,7 @@ public class HandlePeerUpdate extends Thread {
 		this.message_raw = message_raw;
 
 		this.all_sources = parent.getAllSources();
-		this.peers_received = parent.getAllPeersRec();
+		this.received_logs = parent.getReceivedLogs();
 
 		this.threadName = "Peer Update Handler";
 	}
@@ -49,7 +50,8 @@ public class HandlePeerUpdate extends Thread {
 		all_sources.addPeer(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
 				peer_port);
 
-		this.peers_received.add(new UDPMessageLog(message_raw.getSourcePeer(), peer, null));
+		this.received_logs.addLog(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
+				peer_port);
 
 	}
 

@@ -111,7 +111,7 @@ public class RequestHandler {
     private String generateReport() {
         Hashtable<SourceOld, Vector<PeerOld>> all_sources = null;
         Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
-        Vector<UDPMessageLog> peers_received = peer_comm_handler.getAllPeersRec();
+        Vector<UDPMessageLog> peers_received = null;
         //Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
 
         int numOfSources = all_sources.size();

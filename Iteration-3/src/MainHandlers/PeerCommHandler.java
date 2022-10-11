@@ -26,15 +26,17 @@ public class PeerCommHandler {
     // Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
     // private Vector<Source> all_sources = new Vector<Source>();
     private SourceList all_sources;
-    private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
+    //private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private final MessageLogs sent_logs;
+    private final MessageLogs received_logs;
     
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {
         this.settings = settings;
         this.network_handler = network_handler;
         this.sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
+        this.received_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
         this.all_sources = all_sources;
     }
 
@@ -114,16 +116,16 @@ public class PeerCommHandler {
         return all_sources;
     }
 
-    public Vector<UDPMessageLog> getAllPeersRec() {
-        return peers_received;
-    }
-
     public Vector<SnippetLog> getAllSnippets() {
         return all_snippets;
     }
 
     public MessageLogs getSentLogs(){
         return this.sent_logs;
+    }
+
+    public MessageLogs getReceivedLogs(){
+        return this.received_logs;
     }
 
 }

@@ -28,12 +28,13 @@ public class PeerCommHandler {
     private SourceList all_sources;
     private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
-    private final MessageLogs sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
+    private final MessageLogs sent_logs;
     
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {
         this.settings = settings;
         this.network_handler = network_handler;
+        this.sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
         this.all_sources = all_sources;
     }
 

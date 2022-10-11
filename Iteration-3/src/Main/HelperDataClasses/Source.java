@@ -29,6 +29,11 @@ public class Source {
         return null;
     }
 
+    public void updateActivity(String target_ip, int target_port){
+        Peer target = findPeer(target_ip, target_port);
+        target.updateActivity();
+    }
+
     public void addPeer(Peer peer) {
         this.peers.add(peer);
     }

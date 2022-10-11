@@ -21,6 +21,8 @@ public class SourceList {
         }
     }
 
+    public void 
+
     public Source findSource(String ip, int port) {
         Source target = new Source(ip, port);
         for (Source source : this.sources) {
@@ -28,6 +30,11 @@ public class SourceList {
                 return source;
         }
         return null;
+    }
+
+    public void updateActivity(String source_ip, int source_port, String target_ip, int target_port){
+        Source target_source = findSource(source_ip, source_port);
+        target_source.updateActivity(target_ip, target_port);
     }
 
     public void checkActivity(int inactivity_max){

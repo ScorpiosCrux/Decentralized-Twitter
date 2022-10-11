@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import Main.Iteration3Solution;
+
 public class Peer {
 
 	// This peer
@@ -81,6 +83,10 @@ public class Peer {
 			active = true;
 			// System.out.println("Peer has been set to true! Info: " + peer.toString());
 		}
+	}
+
+	public void updateActivity() {
+		this.lastCommunication = Instant.now();
 	}
 
 	// Allows Comparable to work

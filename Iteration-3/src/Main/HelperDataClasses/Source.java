@@ -41,6 +41,11 @@ public class Source {
         return this.source_port;
     }
 
+    public void checkActivity(int inactivity_max){
+        for (Peer p : peers)
+            p.checkActivity(inactivity_max);
+    }
+
     public Vector<Peer> getActivePeers() {
         Vector<Peer> active_peers = new Vector<Peer>();
 

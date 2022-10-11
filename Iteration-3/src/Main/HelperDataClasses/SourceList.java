@@ -30,6 +30,11 @@ public class SourceList {
         return null;
     }
 
+    public void checkActivity(int inactivity_max){
+        for (Source s : sources)
+            s.checkActivity(inactivity_max);
+    }
+
     public boolean isEmpty(){
         return sources.isEmpty();
     }

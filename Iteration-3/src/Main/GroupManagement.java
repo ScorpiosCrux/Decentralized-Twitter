@@ -79,7 +79,7 @@ public class GroupManagement extends Thread {
 			try {
 				broadcast();
 				if (checkInactivePeers == true) {
-					checkActivity(inactivity_max);
+					all_sources.checkActivity(inactivity_max);
 					checkInactivePeers = false;
 				} else
 					checkInactivePeers = !checkInactivePeers;
@@ -104,49 +104,20 @@ public class GroupManagement extends Thread {
 		this.stop = true;
 	}
 
-	// This function checks the activity and updates the peer to active/inactive
-	// Returns:
-	// true - active
-	// false - inactive
-	private void checkActivity(int inactivity_max) {
 
-		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
-			Vector<PeerOld> listOfPeers = s.getValue();
-			for (PeerOld peer : s.getValue()) {
-
-				// Inspired by:
-				// https://stackoverflow.com/questions/4927856/how-can-i-calculate-a-time-difference-in-java
-				Instant start = peer.getInstant();
-				Instant end = Instant.now();
-				Duration timeElapsed = Duration.between(start, end);
-
-				// if peer is active and timeElapsed > x
-				if (timeElapsed.toSeconds() > inactivity_max && peer.isActive()) {
-					peer.setActivity(false);
-					// System.out.println("Peer has been set to false! Info: " + peer.toString());
-
-				} else if (timeElapsed.toSeconds() < inactivity_max && !peer.isActive()) { // peer comes back alive
-					peer.setActivity(true);
-					// System.out.println("Peer has been set to true! Info: " + peer.toString());
-				}
-			}
-		}
-
-	}
 
 	// Function for sending a UDPMessage via the socket we created in main and sends
 	// a "peer" message to the peer param
 	private void sendUDPMessage(String dest_ip, int dest_port) {
 		try {
-			byte[] buffer = new byte[1024];
-			InetAddress address = InetAddress.getByName(dest_ip);
-
 			String data = "peer" + this.ip + ":" + this.port;
+
+			byte[] buffer = new byte[1024];
 			buffer = data.getBytes();
+			InetAddress address = InetAddress.getByName(dest_ip);
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-			peers_sent.add(new UDPMessageLog(peer, new PeerOld(this.ip, this.port, null), null));
-
+			sent_logs.addLog(dest_ip, dest_port);
 			outgoingSocket.send(response);
 			// System.out.println("Broadcast to: " + peer.toString());
 

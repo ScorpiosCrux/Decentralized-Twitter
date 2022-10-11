@@ -38,4 +38,8 @@ public class SourceList {
         return sources.size();
     }
 
+    public Vector<Source> getSources(){
+        return this.sources;
+    }
+
 }

@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import Main.GroupManagement;
 import Main.HandlePeerUpdate;
+import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
@@ -31,7 +32,8 @@ public class PeerCommHandler {
     private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private final Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
-
+    private final MessageLogs sent_logs = new MessageLogs();
+    
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {
         this.settings = settings;
@@ -125,6 +127,10 @@ public class PeerCommHandler {
 
     public Vector<UDPMessageLog> getAllPeersSent() {
         return peers_sent;
+    }
+
+    public MessageLogs getSentLogs(){
+        return this.sent_logs;
     }
 
 }

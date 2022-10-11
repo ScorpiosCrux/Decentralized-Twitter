@@ -20,7 +20,7 @@ public class Source {
         return this.peers;
     }
 
-    public Peer findPeer(String target_ip, int target_port){
+    public Peer findPeer(String target_ip, int target_port) {
         Peer target = new Peer(target_ip, target_port);
         for (Peer peer : this.peers) {
             if (peer.equals(target))
@@ -39,6 +39,16 @@ public class Source {
 
     public int getPort() {
         return this.source_port;
+    }
+
+    public Vector<Peer> getActivePeers() {
+        Vector<Peer> active_peers = new Vector<Peer>();
+
+        for (Peer p : this.peers)
+            if (p.isActive())
+                active_peers.add(p);
+
+        return active_peers;
     }
 
     public boolean equals(Object obj) {

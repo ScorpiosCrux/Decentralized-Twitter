@@ -16,7 +16,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
+import Main.HelperDataClasses.MessageLogs;
+import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.PeerOld;
+import Main.HelperDataClasses.Source;
+import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.NetworkHandler;
@@ -34,8 +38,9 @@ public class GroupManagement extends Thread {
 	private NetworkHandler network_handler;
 	private PeerCommHandler parent;
 
-	private Hashtable<SourceOld, Vector<PeerOld>> all_sources;
+	private SourceList all_sources;
     private Vector<UDPMessageLog> peers_sent;
+	private MessageLogs sent_logs;
 	
 	private Thread t;
 	private String threadName;
@@ -50,8 +55,9 @@ public class GroupManagement extends Thread {
 		this.network_handler = network_handler;
 		this.parent = parent;
 
-		//this.all_sources = parent.getAllSources();
+		this.all_sources = parent.getAllSources();
 		this.peers_sent = parent.getAllPeersSent();
+		this.sent_logs = parent.getSentLogs();
 
 		this.threadName = "Group Management";
 		this.outgoingSocket = network_handler.getOutGoingUDP();
@@ -130,19 +136,17 @@ public class GroupManagement extends Thread {
 
 	// Function for sending a UDPMessage via the socket we created in main and sends
 	// a "peer" message to the peer param
-	private void sendUDPMessage(PeerOld peer) {
+	private void sendUDPMessage(String dest_ip, int dest_port) {
 		try {
-			String ip = peer.getIP();
-			int port = peer.getPort();
-
 			byte[] buffer = new byte[1024];
-			InetAddress address = InetAddress.getByName(ip);
+			InetAddress address = InetAddress.getByName(dest_ip);
 
 			String data = "peer" + this.ip + ":" + this.port;
 			buffer = data.getBytes();
 			DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
 			peers_sent.add(new UDPMessageLog(peer, new PeerOld(this.ip, this.port, null), null));
+
 			outgoingSocket.send(response);
 			// System.out.println("Broadcast to: " + peer.toString());
 
@@ -155,14 +159,11 @@ public class GroupManagement extends Thread {
 
 	// Function that broadcasts to all active peers that we know about
 	private void broadcast() {
-		PeerOld ourselves = new PeerOld(ip, port, null);
-
-		for (Map.Entry<SourceOld, Vector<PeerOld>> s : all_sources.entrySet()) {
-			Vector<PeerOld> listOfPeers = s.getValue();
-			for (int i = 0; i < listOfPeers.size(); i++) {
-				PeerOld peer = listOfPeers.get(i);
-				if (peer.isActive() && !peer.equals(ourselves))
-					sendUDPMessage(peer);
+		Vector<Source> source_list = all_sources.getSources();
+		for (Source s : source_list){
+			Vector<Peer> active_peers = s.getActivePeers();
+			for (Peer p : active_peers){
+				sendUDPMessage(p.getIP(), p.getPort());
 			}
 		}
 	}

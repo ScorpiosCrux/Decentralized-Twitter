@@ -3,7 +3,6 @@ package MainHandlers;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import Main.GroupManagement;
@@ -11,9 +10,7 @@ import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.SourceOld;
 import Main.HelperDataClasses.UDPMessage;
 import Main.HelperDataClasses.UDPMessageLog;
 import Settings.UserSettings;
@@ -32,7 +29,7 @@ public class PeerCommHandler {
     private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private final Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
-    private final MessageLogs sent_logs = new MessageLogs();
+    private final MessageLogs sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
     
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {

@@ -63,8 +63,8 @@ public class GroupManagement extends Thread {
 		this.outgoingSocket = network_handler.getOutGoingUDP();
 		this.ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
-		//this.all_sources = parent.getAllSources();
 		this.stop = false;
+
 		System.out.println("Group Management Thread Created!");
 	}
 
@@ -104,8 +104,6 @@ public class GroupManagement extends Thread {
 		this.stop = true;
 	}
 
-
-
 	// Function for sending a UDPMessage via the socket we created in main and sends
 	// a "peer" message to the peer param
 	private void sendUDPMessage(String dest_ip, int dest_port) {
@@ -119,11 +117,9 @@ public class GroupManagement extends Thread {
 
 			sent_logs.addLog(dest_ip, dest_port);
 			outgoingSocket.send(response);
-			// System.out.println("Broadcast to: " + peer.toString());
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
+			System.out.println("Unable to sendUDPMessage (GroupManagment): ");
 		}
 
 	}

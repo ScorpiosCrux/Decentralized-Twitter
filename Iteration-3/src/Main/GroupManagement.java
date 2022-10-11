@@ -10,19 +10,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Vector;
-
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.Peer;
-import Main.HelperDataClasses.PeerOld;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.SourceOld;
-import Main.HelperDataClasses.UDPMessageLog;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import Settings.UserSettings;
@@ -39,7 +31,6 @@ public class GroupManagement extends Thread {
 	private PeerCommHandler parent;
 
 	private SourceList all_sources;
-    private Vector<UDPMessageLog> peers_sent;
 	private MessageLogs sent_logs;
 	
 	private Thread t;
@@ -56,7 +47,6 @@ public class GroupManagement extends Thread {
 		this.parent = parent;
 
 		this.all_sources = parent.getAllSources();
-		this.peers_sent = parent.getAllPeersSent();
 		this.sent_logs = parent.getSentLogs();
 
 		this.threadName = "Group Management";
@@ -135,8 +125,6 @@ public class GroupManagement extends Thread {
 		}
 	}
 
-	public Vector<UDPMessageLog> getSendLogs(){
-		return this.peers_sent;
-	}
+
 
 }

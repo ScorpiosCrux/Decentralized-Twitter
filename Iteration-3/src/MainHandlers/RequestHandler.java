@@ -112,7 +112,7 @@ public class RequestHandler {
         Hashtable<SourceOld, Vector<PeerOld>> all_sources = null;
         Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
         Vector<UDPMessageLog> peers_received = peer_comm_handler.getAllPeersRec();
-        Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
+        //Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
 
         int numOfSources = all_sources.size();
         int totalNumOfPeers = 0;
@@ -149,7 +149,7 @@ public class RequestHandler {
             }
         }
 
-        peers_sent_str += peers_sent.size() + "\n";
+/*         peers_sent_str += peers_sent.size() + "\n";
         for (UDPMessageLog m : peers_sent) {
             try {
                 peers_sent_str += m.getMsgOrigin().toString() + " " +
@@ -158,7 +158,7 @@ public class RequestHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } */
 
         snip_list += all_snippets.size() + "\n";
         for (SnippetLog sl : all_snippets) {

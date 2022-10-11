@@ -28,7 +28,6 @@ public class PeerCommHandler {
     private SourceList all_sources;
     private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
-    private final Vector<UDPMessageLog> peers_sent = new Vector<UDPMessageLog>(); // Used in GroupManagement.java
     private final MessageLogs sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
     
     // Constructor
@@ -98,8 +97,8 @@ public class PeerCommHandler {
             buffer = data.getBytes();
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-            this.group_management.getSendLogs().add(new UDPMessageLog(peer,
-                    new PeerOld(network_handler.getExternalIP(), settings.client_port, null), null));
+            
+            this.sent_logs.addLog(settings.registry_ip, settings.registry_port);
             network_handler.getOutGoingUDP().send(response);
             // System.out.println("Broadcast to: " + peer.toString());
 
@@ -120,10 +119,6 @@ public class PeerCommHandler {
 
     public Vector<SnippetLog> getAllSnippets() {
         return all_snippets;
-    }
-
-    public Vector<UDPMessageLog> getAllPeersSent() {
-        return peers_sent;
     }
 
     public MessageLogs getSentLogs(){

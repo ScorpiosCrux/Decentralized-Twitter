@@ -20,11 +20,7 @@ public class PeerCommHandler {
     GroupManagement group_management;
     SnippetHandler snippet_handler;
 
-    // private Hashtable<SourceOld, Vector<PeerOld>> all_sources = new
-    // Hashtable<SourceOld, Vector<PeerOld>>();// Used in all below
-    // private Vector<Source> all_sources = new Vector<Source>();
     private SourceList all_sources;
-    //private final Vector<UDPMessageLog> peers_received = new Vector<UDPMessageLog>(); // Used in HandlePeerUpdate
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private final MessageLogs sent_logs;
     private final MessageLogs received_logs;

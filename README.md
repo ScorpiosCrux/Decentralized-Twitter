@@ -10,7 +10,7 @@
 - You will need to comment out the try catch block
 - Tested on Java 17
 - Compile with `javac /*.java` outside the registry folder
-- Run with `java registry/Registry`
+- Run with `java registry/Registry` or `java registry.Registry`
 
 
 ## Changelog

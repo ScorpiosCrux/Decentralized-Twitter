@@ -93,7 +93,11 @@ public class RegistryHandler {
             for (int i = 0; i < numOfPeers; i++) {
                 String peer = reader.readLine();
                 String[] parts = peer.split(":");
-                all_sources.addPeer(settings.registry_ip, settings.registry_port, parts[0], Integer.parseInt(parts[1]));
+                String ip = parts[0];
+                int port = Integer.parseInt(parts[1]);
+                /* if (ip.equals(peer_comm_handler.getNetworkHandler().getExternalIP()) && port == settings.client_port)
+                    continue; */
+                all_sources.addPeer(settings.registry_ip, settings.registry_port, ip, port);
             }
         } catch (Exception e) {
             System.out.println("Error in receiving peers!");

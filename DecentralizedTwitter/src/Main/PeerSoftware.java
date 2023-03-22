@@ -2,6 +2,10 @@ package Main;
 
 /* Imports */
 import java.io.IOException;
+import java.util.Vector;
+
+import Main.HelperDataClasses.MessageLogs;
+import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.SourceList;
 import Main.Threads.GroupManager;
 import Main.Threads.MessageReceiver;
@@ -28,12 +32,16 @@ public class PeerSoftware {
 
 	/* Data */
 	public final SourceList sourceList = new SourceList(); //
+	private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
+	private final MessageLogs sent_logs;
+	private final MessageLogs received_logs;
 
 	/*
 	 * Function that initiates all threads
 	 */
 	public PeerSoftware() {
-		// this.settings = settings;
+		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
+		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 
 		/* Initialize Handlers */
 		initializeHandlers();
@@ -129,7 +137,7 @@ public class PeerSoftware {
 		public final static boolean RUNNING_ON_LAN = false;
 		public final static int CLIENT_PORT = 30001;
 
-		/* 
+		/*
 		 * These two times should be multiples of each other.
 		 * Broadcast should also be shorter than inactivity.
 		 */

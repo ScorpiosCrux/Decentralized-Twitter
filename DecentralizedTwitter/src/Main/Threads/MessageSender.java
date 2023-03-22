@@ -49,7 +49,6 @@ public class MessageSender extends Thread {
 
 		while (true) {
 			try {
-
 				if (br.ready()) {
 					String content = br.readLine();
 					// ourselves.incrementTimeStamp();
@@ -59,13 +58,15 @@ public class MessageSender extends Thread {
 					Thread.sleep(INPUT_CHECK_FREQUENCY_SECONDS * 1000);
 					continue;
 				}
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
+			if (threadStop)
+				break;
 		}
 
-		// System.out.println("SYSTEM: " + threadName + " thread exiting!");
+		System.out.println("SYSTEM: " + threadName + " thread exiting!");
 	}
 
 	/* Sends the inputted message to all active peers */

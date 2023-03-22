@@ -15,7 +15,7 @@ import java.net.URL;
 
 import Main.PeerSoftware;
 import Main.HelperDataClasses.Peer;
-import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
 
 /* 
@@ -130,14 +130,14 @@ public class NetworkHandler {
     // Received UDP messages and returns a UDPMessage with information about the
     // source and the content itself
     // TODO: MOVE THIS
-    public UDPMessage receiveUDPMessage() {
+    public UDPMessagePack receiveUDPMessage() {
         // System.out.println("Waiting for UDP message");
         try {
             DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
             outgoing_udp_socket.receive(packet);
             Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort());
             String message = new String(packet.getData(), 0, packet.getLength());
-            return new UDPMessage(message, sourcePeer);
+            return new UDPMessagePack(message, sourcePeer);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -20,9 +20,8 @@ import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
-
 
 public class SnippetHandler extends Thread {
 
@@ -123,7 +122,7 @@ public class SnippetHandler extends Thread {
 
 	// handle the incoming snippet, updating our timestamp and also adding it to our
 	// logs
-	public void handleIncomingSnip(UDPMessage message_pack) {
+	public void handleIncomingSnip(UDPMessagePack message_pack) {
 		try {
 			String message = message_pack.getMessage();
 

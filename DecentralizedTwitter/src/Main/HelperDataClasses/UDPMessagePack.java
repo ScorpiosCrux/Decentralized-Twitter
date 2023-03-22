@@ -6,11 +6,11 @@ package Main.HelperDataClasses;
  * CPSC 559
  */
 
-public class UDPMessage {
+public class UDPMessagePack {
 	private String message;
 	private Peer sourcePeer;
 
-	public UDPMessage(String message, Peer sourcePeer) {
+	public UDPMessagePack(String message, Peer sourcePeer) {
 		this.message = message;
 		this.sourcePeer = sourcePeer;
 	}

@@ -12,7 +12,7 @@ package Main;
 import Main.HelperDataClasses.DataValidator;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
@@ -21,14 +21,14 @@ public class HandlePeerUpdate extends Thread {
 
 	private NetworkHandler network_handler;
 
-	private UDPMessage message_raw;
+	private UDPMessagePack message_raw;
 	private SourceList all_sources;
 	private MessageLogs received_logs;
 
 	private Thread t;
 	private String threadName;
 
-	public HandlePeerUpdate(PeerCommHandler parent, UDPMessage message_raw) {
+	public HandlePeerUpdate(PeerCommHandler parent, UDPMessagePack message_raw) {
 
 		this.network_handler = parent.getNetworkHandler();
 
@@ -54,7 +54,7 @@ public class HandlePeerUpdate extends Thread {
 
 	}
 
-	public String parsePeerIP(UDPMessage message_raw) {
+	public String parsePeerIP(UDPMessagePack message_raw) {
 		String message = message_raw.getMessage();
 		String ip_port = message.substring(4, message.length());
 		String[] ip_port_lst = ip_port.split(":");
@@ -67,7 +67,7 @@ public class HandlePeerUpdate extends Thread {
 			return null;
 	}
 
-	public Integer parsePeerPort(UDPMessage message_raw) {
+	public Integer parsePeerPort(UDPMessagePack message_raw) {
 		String message = message_raw.getMessage();
 		String ip_port = message.substring(4, message.length());
 		String[] ip_port_lst = ip_port.split(":");

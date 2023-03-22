@@ -10,10 +10,9 @@ import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.SourceList;
-import Main.HelperDataClasses.UDPMessage;
+import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
 import Main.Threads.GroupManager;
-
 
 public class PeerCommHandler {
     NetworkHandler network_handler;
@@ -39,7 +38,7 @@ public class PeerCommHandler {
     public void start() {
         // create objects for group management and snippetHandler, these are in their
         // own threads
-        this.group_management = new GroupManager(null, network_handler, this);
+        // this.group_management = new GroupManager(null, network_handler, this);
         group_management.start();
 
         snippet_handler = new SnippetHandler(network_handler, this);
@@ -49,7 +48,7 @@ public class PeerCommHandler {
         // receiving UDP messages
         boolean stop = false;
         while (true) {
-            UDPMessage message = network_handler.receiveUDPMessage();
+            UDPMessagePack message = network_handler.receiveUDPMessage();
             String msgType = "";
             // System.out.println("Received message: " + message.message);
 
@@ -126,7 +125,5 @@ public class PeerCommHandler {
     public NetworkHandler getNetworkHandler() {
         return this.network_handler;
     }
-
-
 
 }

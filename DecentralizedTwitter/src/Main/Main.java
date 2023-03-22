@@ -10,6 +10,7 @@ import Main.HelperDataClasses.SourceList;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import MainHandlers.PrintHandler;
+import MainHandlers.ProcessHandler;
 import MainHandlers.RegistryHandler;
 import Settings.UserSettings;
 
@@ -40,9 +41,11 @@ public class Main {
 
 		/* Initialize Handlers */
 		initializeHandlers();
+		ProcessHandler.pause(1);
 
 		/* Initialize Registry Communication */
 		initializeRegistryCommunication();
+		ProcessHandler.pause(1);
 
 		startPeerCommunication();
 		finishRegistryCommunication();

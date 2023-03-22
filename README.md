@@ -27,6 +27,7 @@ This project was originally created for my distributed systems class. I then ref
 ## 🏃 Running the Peer(s)
 
 1. Make sure you have Java JDK 17.
+
    To be completed...
 
 ## 📝 Changelog
@@ -37,6 +38,7 @@ Preparing this code base for use in my resume. Demonstrates strong programming s
 
 - Removed `Main.java` and renamed `Iteration3Solution.java` to contain the short piece of code.
 - Added System updates with print statements
+- `ProcessHandler.java` added pauses to let the user know what has happened.
 - `Main.java` renamed and separated methods to do only what they're named to do.
 - `NetworkHandler.java` now contains proper comments and proper error handling.
 

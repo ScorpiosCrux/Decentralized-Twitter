@@ -11,21 +11,26 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
+
+import Main.PeerSoftware;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessage;
-import Settings.UserSettings;
+import Main.PeerSoftware.Settings;
+
 
 /* 
  * This class contains all functions related to networks.
  */
 public class NetworkHandler {
 
+    private PeerSoftware ps;
     private DatagramSocket outgoing_udp_socket; // UDP Socket for sending data to peers
     private String external_ip;
 
     /* Constructor */
-    public NetworkHandler(UserSettings settings) throws IOException {
-        this.outgoing_udp_socket = createUDPSocket(settings.client_port);
+    public NetworkHandler(PeerSoftware ps) throws IOException {
+        this.ps = ps;
+        this.outgoing_udp_socket = createUDPSocket(Settings.CLIENT_PORT);
         this.external_ip = findExternalIP();
 
         System.out.println("SYSTEM: Network Handler Initialized! External IP: " + external_ip);

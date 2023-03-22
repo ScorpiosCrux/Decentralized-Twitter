@@ -14,8 +14,6 @@ import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Vector;
 
 import Main.HelperDataClasses.Peer;
@@ -23,10 +21,11 @@ import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessage;
-import Settings.UserSettings;
+import Main.PeerSoftware.Settings;
+
 
 public class SnippetHandler extends Thread {
-	private UserSettings settings;
+
 	private NetworkHandler network_handler;
 	private PeerCommHandler parent;
 
@@ -39,8 +38,8 @@ public class SnippetHandler extends Thread {
 	private Peer ourselves;
 	private boolean stop = false;
 
-	public SnippetHandler(UserSettings settings, NetworkHandler network_handler, PeerCommHandler parent) {
-		this.settings = settings;
+	public SnippetHandler(NetworkHandler network_handler, PeerCommHandler parent) {
+
 		this.network_handler = network_handler;
 		this.parent = parent;
 
@@ -50,7 +49,7 @@ public class SnippetHandler extends Thread {
 		this.all_sources = parent.getAllSources();
 		this.outgoingSocket = network_handler.getOutgoingUDPSocket();
 
-		this.ourselves = new Peer(network_handler.getExternalIP(), settings.client_port);
+		this.ourselves = new Peer(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 
 		System.out.println("Snippet Handler Thread Created!");
 	}

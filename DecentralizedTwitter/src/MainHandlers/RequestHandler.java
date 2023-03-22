@@ -9,18 +9,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
-import Main.Main;
+import Main.PeerSoftware;
 import Main.HelperDataClasses.SnippetLog;
-import Settings.UserSettings;
+import Main.PeerSoftware.Settings;
+
 
 public class RequestHandler {
 
-    private UserSettings settings;
-    private Main main;
+    // private Settings settings;
+    private PeerSoftware main;
     private PeerCommHandler peer_comm_handler;
 
-    public RequestHandler(UserSettings settings, Main main, PeerCommHandler peer_comm_handler) {
-        this.settings = settings;
+    public RequestHandler(PeerSoftware main, PeerCommHandler peer_comm_handler) {
+        // this.settings = settings;
         this.main = main;
         this.peer_comm_handler = peer_comm_handler;
     }
@@ -31,7 +32,7 @@ public class RequestHandler {
         NetworkHandler network_handler = main.getNetworkHandler();
         switch (request) {
             case "get team name":
-                return settings.team_name + "\n";
+                return Settings.TEAM_NAME + "\n";
             case "get code":
                 String language = "Java";
                 String newline = "\n";
@@ -44,10 +45,10 @@ public class RequestHandler {
             case "get report":
                 // return generateReport();
             case "get location":
-                if (settings.running_on_lan == true) {
-                    return "127.0.0.1" + ":" + settings.client_port + "\n";
+                if (Settings.RUNNING_ON_LAN == true) {
+                    return "127.0.0.1" + ":" + Settings.CLIENT_PORT + "\n";
                 } else {
-                    return network_handler.getExternalIP() + ":" + settings.client_port + "\n";
+                    return network_handler.getExternalIP() + ":" + Settings.CLIENT_PORT + "\n";
                 }
             case "close":
                 network_handler.closeSocket(socket);
@@ -105,66 +106,71 @@ public class RequestHandler {
     }
 
     // Generates report based on assignment specs
-/*     private String generateReport() {
-        Hashtable<SourceOld, Vector<PeerOld>> all_sources = null;
-        Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
-        Vector<UDPMessageLog> peers_received = null;
-        //Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
+    /*
+     * private String generateReport() {
+     * Hashtable<SourceOld, Vector<PeerOld>> all_sources = null;
+     * Vector<SnippetLog> all_snippets = peer_comm_handler.getAllSnippets();
+     * Vector<UDPMessageLog> peers_received = null;
+     * //Vector<UDPMessageLog> peers_sent = peer_comm_handler.getAllPeersSent();
+     * 
+     * int numOfSources = all_sources.size();
+     * int totalNumOfPeers = 0;
+     * String peer_list_sources = "";
+     * String peer_list = "";
+     * String peers_recd = "";
+     * String peers_sent_str = "";
+     * String snip_list = "";
+     * 
+     * for (Map.Entry<SourceOld, Vector<PeerOld>> e : all_sources.entrySet()) {
+     * SourceOld source = e.getKey();
+     * String sourceLocation = source.getPeer().toString() + "\n";
+     * Vector<PeerOld> listOfPeers = e.getValue();
+     * String peers = "";
+     * for (PeerOld p : listOfPeers) {
+     * String peer_string = p.toString() + "\n";
+     * peers += peer_string;
+     * peer_list += peer_string;
+     * totalNumOfPeers++;
+     * }
+     * // adds one source
+     * peer_list_sources += sourceLocation + source.getTime() + "\n" +
+     * listOfPeers.size() + "\n" + peers;
+     * }
+     * 
+     * peers_recd += peers_received.size() + "\n";
+     * for (UDPMessageLog m : peers_received) {
+     * try {
+     * peers_recd += m.getMsgOrigin().toString() + " " +
+     * m.getTransmittedPeer().toString() + " "
+     * + m.getTimeStamp() + "\n";
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * }
+     * }
+     */
+    /*
+     * peers_sent_str += peers_sent.size() + "\n";
+     * for (UDPMessageLog m : peers_sent) {
+     * try {
+     * peers_sent_str += m.getMsgOrigin().toString() + " " +
+     * m.getTransmittedPeer().toString() + " "
+     * + m.getTimeStamp() + "\n";
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * }
+     * }
+     */
 
-        int numOfSources = all_sources.size();
-        int totalNumOfPeers = 0;
-        String peer_list_sources = "";
-        String peer_list = "";
-        String peers_recd = "";
-        String peers_sent_str = "";
-        String snip_list = "";
-
-        for (Map.Entry<SourceOld, Vector<PeerOld>> e : all_sources.entrySet()) {
-            SourceOld source = e.getKey();
-            String sourceLocation = source.getPeer().toString() + "\n";
-            Vector<PeerOld> listOfPeers = e.getValue();
-            String peers = "";
-            for (PeerOld p : listOfPeers) {
-                String peer_string = p.toString() + "\n";
-                peers += peer_string;
-                peer_list += peer_string;
-                totalNumOfPeers++;
-            }
-            // adds one source
-            peer_list_sources += sourceLocation + source.getTime() + "\n" +
-                    listOfPeers.size() + "\n" + peers;
-        }
-
-        peers_recd += peers_received.size() + "\n";
-        for (UDPMessageLog m : peers_received) {
-            try {
-                peers_recd += m.getMsgOrigin().toString() + " " +
-                        m.getTransmittedPeer().toString() + " "
-                        + m.getTimeStamp() + "\n";
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
- */
-/*         peers_sent_str += peers_sent.size() + "\n";
-        for (UDPMessageLog m : peers_sent) {
-            try {
-                peers_sent_str += m.getMsgOrigin().toString() + " " +
-                        m.getTransmittedPeer().toString() + " "
-                        + m.getTimeStamp() + "\n";
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } */
-
-        /* snip_list += all_snippets.size() + "\n";
-        for (SnippetLog sl : all_snippets) {
-            snip_list += sl.getTimeStamp() + " " + sl.getContent() + " " +
-                    sl.getSourcePeer().toString() + "\n";
-        }
-
-        return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
-                peer_list_sources + peers_recd + peers_sent_str + snip_list;
-    } */
+    /*
+     * snip_list += all_snippets.size() + "\n";
+     * for (SnippetLog sl : all_snippets) {
+     * snip_list += sl.getTimeStamp() + " " + sl.getContent() + " " +
+     * sl.getSourcePeer().toString() + "\n";
+     * }
+     * 
+     * return totalNumOfPeers + "\n" + peer_list + numOfSources + "\n" +
+     * peer_list_sources + peers_recd + peers_sent_str + snip_list;
+     * }
+     */
 
 }

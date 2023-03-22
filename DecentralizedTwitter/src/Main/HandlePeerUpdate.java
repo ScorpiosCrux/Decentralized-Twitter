@@ -13,12 +13,12 @@ import Main.HelperDataClasses.DataValidator;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessage;
+import Main.PeerSoftware.Settings;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
-import Settings.UserSettings;
 
 public class HandlePeerUpdate extends Thread {
-	private UserSettings settings;
+
 	private NetworkHandler network_handler;
 
 	private UDPMessage message_raw;
@@ -29,7 +29,7 @@ public class HandlePeerUpdate extends Thread {
 	private String threadName;
 
 	public HandlePeerUpdate(PeerCommHandler parent, UDPMessage message_raw) {
-		this.settings = parent.getSettings();
+
 		this.network_handler = parent.getNetworkHandler();
 
 		this.message_raw = message_raw;
@@ -44,7 +44,7 @@ public class HandlePeerUpdate extends Thread {
 	public void run() {
 		String peer_ip = parsePeerIP(message_raw);
 		int peer_port = parsePeerPort(message_raw);
-		if (peer_ip != network_handler.getExternalIP() && peer_port != settings.client_port) {
+		if (peer_ip != network_handler.getExternalIP() && peer_port != Settings.CLIENT_PORT) {
 			all_sources.addPeer(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(), peer_ip,
 					peer_port);
 			this.received_logs.addLog(message_raw.getSourcePeer().getIP(), message_raw.getSourcePeer().getPort(),

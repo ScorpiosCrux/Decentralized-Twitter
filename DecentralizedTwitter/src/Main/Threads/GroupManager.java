@@ -1,4 +1,4 @@
-package Main;
+package Main.Threads;
 /*
  * Author: Tyler Chen
  * UCID: 30066806
@@ -11,6 +11,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Vector;
+
+import Main.PeerSoftware;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.Source;
@@ -22,8 +24,12 @@ import MainHandlers.PeerCommHandler;
 //This class is for group management:
 //	-broadcasting
 //	-sets inactive peers
-//Inspired by: https://www.tutorialspoint.com/java/java_multithreading.htm for threading
 
+/*
+* This threaded class manages checking inactivity and sending updates to peers
+* that we're still active.
+* Source: https://www.tutorialspoint.com/java/java_multithreading.htm
+*/
 public class GroupManager extends Thread {
 
 	private PeerSoftware ps;
@@ -40,12 +46,9 @@ public class GroupManager extends Thread {
 	private int port;
 	private boolean stop;
 
-	/*
-	 * This threaded class manages checking inactivity and sending updates to peers
-	 * that we're still active
-	 */
+	/* Constructor */
 	public GroupManager(PeerSoftware ps, NetworkHandler network_handler, PeerCommHandler parent) {
-		this.threadName = "GroupManager";
+		this.threadName = "-- Group Manager";
 		this.ps = ps;
 
 		this.all_sources = parent.getAllSources();

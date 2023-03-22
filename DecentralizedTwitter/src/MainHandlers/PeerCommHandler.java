@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Vector;
-import Main.GroupManager;
+
 import Main.HandlePeerUpdate;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.Peer;
@@ -12,6 +12,7 @@ import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessage;
 import Main.PeerSoftware.Settings;
+import Main.Threads.GroupManager;
 
 
 public class PeerCommHandler {

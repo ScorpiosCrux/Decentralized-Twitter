@@ -18,7 +18,7 @@ import MainHandlers.RegistryHandler;
 
 public class PeerSoftware {
 
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 
 	private GroupManager groupManager;
 	private MessageReceiver messageReceiver;
@@ -40,18 +40,21 @@ public class PeerSoftware {
 	 * Function that initiates all threads
 	 */
 	public PeerSoftware() {
-		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
-		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 
 		/* Initialize Handlers */
 		initializeHandlers();
 		ProcessHandler.pause(1);
 
+		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
+		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
+
 		/* Initialize Registry Communication */
 		initializeRegistryCommunication();
 		ProcessHandler.pause(1);
 
+		initializePeerCommunication();
 		startPeerCommunication();
+
 		finishRegistryCommunication();
 	}
 
@@ -61,8 +64,8 @@ public class PeerSoftware {
 		try {
 			this.print_handler = new PrintHandler();
 			this.network_handler = new NetworkHandler(this);
-			this.peer_comm_handler = new PeerCommHandler(network_handler, sourceList);
-			this.registry_handler = new RegistryHandler(this, peer_comm_handler);
+			// this.peer_comm_handler = new PeerCommHandler(network_handler, sourceList);
+			this.registry_handler = new RegistryHandler(this);
 			System.out.println("SYSTEM: FINISHED INITIALIZING HANDLERS");
 
 		} catch (IOException e) {
@@ -109,7 +112,10 @@ public class PeerSoftware {
 
 	public void startPeerCommunication() {
 		// communication with the peer
-		peer_comm_handler.start();
+		// peer_comm_handler.start();
+		this.groupManager.start();
+		this.messageReceiver.start();
+		this.messageSender.start();
 	}
 
 	// public Settings getSettings() {

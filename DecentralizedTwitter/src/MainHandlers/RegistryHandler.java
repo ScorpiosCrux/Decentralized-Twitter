@@ -15,26 +15,26 @@ import Main.PeerSoftware.Settings;
 public class RegistryHandler {
 
     // private PeerSettings settings;
-    private PeerSoftware main;
+    private PeerSoftware ps;
     private RequestHandler request_handler;
-    private PeerCommHandler peer_comm_handler;
+    // private PeerCommHandler peer_comm_handler;
     private Source registry;
     private boolean registry_connected;
 
     /* Constructor */
-    public RegistryHandler(PeerSoftware main, PeerCommHandler peer_comm_handler) {
-        this.main = main;
-        this.request_handler = new RequestHandler(main, peer_comm_handler);
-        this.peer_comm_handler = peer_comm_handler;
+    public RegistryHandler(PeerSoftware ps) {
+        this.ps = ps;
+        this.request_handler = new RequestHandler(ps, null);
+        // this.peer_comm_handler = peer_comm_handler;
         this.registry = new Source(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
     }
 
     /* Initializer */
     public void start(int port) throws IOException {
-        NetworkHandler network_handler = main.getNetworkHandler();
-        PrintHandler print_handler = main.getPrintHandler();
 
-        Socket registry_socket = network_handler.createSocket(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
+        PrintHandler print_handler = ps.getPrintHandler();
+
+        Socket registry_socket = ps.network_handler.createSocket(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(registry_socket.getInputStream()));
 
@@ -51,7 +51,7 @@ public class RegistryHandler {
                 continue;
             } else if (returnMessage.equals("1"))
                 break;
-            network_handler.send(registry_socket, returnMessage); // Send response
+            ps.network_handler.send(registry_socket, returnMessage); // Send response
             print_handler.printResponse(returnMessage, request);
         }
         registry_socket.close();
@@ -75,7 +75,7 @@ public class RegistryHandler {
      * Receive peers from registry. Adds the peers to a SourceList.
      */
     private void receivePeers(Socket socket, BufferedReader reader) throws IOException {
-        SourceList all_sources = peer_comm_handler.getAllSources();
+        // SourceList all_sources = peer_comm_handler.getAllSources();
 
         String numOfPeersString = reader.readLine();
         try {
@@ -90,7 +90,7 @@ public class RegistryHandler {
                  * == settings.client_port)
                  * continue;
                  */
-                all_sources.addPeer(Settings.REGISTRY_IP, Settings.REGISTRY_PORT, ip, port);
+                ps.sourceList.addPeer(Settings.REGISTRY_IP, Settings.REGISTRY_PORT, ip, port);
             }
         } catch (Exception e) {
             System.out.println("Error in receiving peers!");

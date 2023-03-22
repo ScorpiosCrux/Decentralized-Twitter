@@ -12,7 +12,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
-
 import Main.PeerSoftware;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessagePack;

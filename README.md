@@ -16,12 +16,6 @@ This project was originally created for my distributed systems class. I then ref
 
 ### `Distributed Systems Design`
 
-- I got this project from my distributed systems class. This was a solo project.
-
-- You can run this code, but it won't work without a Registry setup on another machine and at least 1 other peer.
-- This is a large system and sadly by the time of submission the code will not be 100% running and bug free.
-- I will keep working on this as the history is documented by git with time and date so that I can further refactor so that I can show this off to employers
-
 ## 🏃 Running The Registry
 
 1. Make sure you have Java JDK 17.
@@ -30,7 +24,7 @@ This project was originally created for my distributed systems class. I then ref
 4. Run with `java registry.Registry`
    - If this doesn't work, try `java registry/Registry`
 
-## 🏃 Running the Peer(s)\
+## 🏃 Running the Peer(s)
 
 1. Make sure you have Java JDK 17.
    To be completed...

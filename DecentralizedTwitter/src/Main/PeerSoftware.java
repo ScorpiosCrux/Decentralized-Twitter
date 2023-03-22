@@ -3,6 +3,9 @@ package Main;
 /* Imports */
 import java.io.IOException;
 import Main.HelperDataClasses.SourceList;
+import Main.Threads.GroupManager;
+import Main.Threads.MessageReceiver;
+import Main.Threads.MessageSender;
 import MainHandlers.NetworkHandler;
 import MainHandlers.PeerCommHandler;
 import MainHandlers.PrintHandler;
@@ -13,13 +16,18 @@ public class PeerSoftware {
 
 	private final boolean DEBUG = false;
 
+	private GroupManager groupManager;
+	private MessageReceiver messageReceiver;
+	private MessageSender messageSender;
+
 	/* System Handlers */
 	private RegistryHandler registry_handler;
-	private NetworkHandler network_handler;
+	public NetworkHandler network_handler;
 	private PrintHandler print_handler;
 	private PeerCommHandler peer_comm_handler;
+
 	/* Data */
-	private final SourceList all_sources = new SourceList();
+	public final SourceList sourceList = new SourceList(); //
 
 	/*
 	 * Function that initiates all threads
@@ -45,7 +53,7 @@ public class PeerSoftware {
 		try {
 			this.print_handler = new PrintHandler();
 			this.network_handler = new NetworkHandler(this);
-			this.peer_comm_handler = new PeerCommHandler(network_handler, all_sources);
+			this.peer_comm_handler = new PeerCommHandler(network_handler, sourceList);
 			this.registry_handler = new RegistryHandler(this, peer_comm_handler);
 			System.out.println("SYSTEM: FINISHED INITIALIZING HANDLERS");
 
@@ -85,6 +93,12 @@ public class PeerSoftware {
 		 */
 	}
 
+	private void initializePeerCommunication() {
+		this.groupManager = new GroupManager(this);
+		this.messageReceiver = new MessageReceiver(this);
+		this.messageSender = new MessageSender(this);
+	}
+
 	public void startPeerCommunication() {
 		// communication with the peer
 		peer_comm_handler.start();
@@ -114,6 +128,13 @@ public class PeerSoftware {
 		public final static String TEAM_NAME = "TylerChen";
 		public final static boolean RUNNING_ON_LAN = false;
 		public final static int CLIENT_PORT = 30001;
+
+		/* 
+		 * These two times should be multiples of each other.
+		 * Broadcast should also be shorter than inactivity.
+		 */
+		public final static int MAX_INACTIVITY_SECONDS = 60;
+		public final static int BROADCAST_INTERVALS_SECONDS = 5;
 
 		private Settings() {
 		}

@@ -1,10 +1,12 @@
 package Main.HelperDataClasses;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 public class SourceList {
 
     private Vector<Source> sources;
+    private LinkedList<Source> activeSources;
 
     public SourceList() {
         this.sources = new Vector<Source>();

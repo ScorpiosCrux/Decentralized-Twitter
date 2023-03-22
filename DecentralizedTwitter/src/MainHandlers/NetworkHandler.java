@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
@@ -16,7 +17,6 @@ import Main.PeerSoftware;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessage;
 import Main.PeerSoftware.Settings;
-
 
 /* 
  * This class contains all functions related to networks.
@@ -102,6 +102,27 @@ public class NetworkHandler {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         writer.write(message);
         writer.flush();
+    }
+
+    /*
+     * Sends a UDP Message
+     * Params:
+     * ip - destination ip
+     * port - destination port
+     * message - payload
+     */
+    public void send(String ip, int port, String message) {
+        try {
+            byte[] buffer = new byte[1024];
+            buffer = message.getBytes();
+            InetAddress address = InetAddress.getByName(ip);
+            DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
+            outgoing_udp_socket.send(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Unable to send UDP message!");
+        }
+
     }
 
     /* ===================== (end) TCP SOCKETS ===================== */

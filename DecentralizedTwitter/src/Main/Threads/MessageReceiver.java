@@ -11,7 +11,7 @@ public class MessageReceiver extends Thread {
 	private Thread t;
 	private String threadName;
 
-	protected MessageReceiver(PeerSoftware ps) {
+	public MessageReceiver(PeerSoftware ps) {
 		this.threadName = "-- Message Receiver";
 		this.ps = ps;
 	}

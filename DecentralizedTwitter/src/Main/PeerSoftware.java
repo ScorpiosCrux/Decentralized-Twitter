@@ -135,6 +135,7 @@ public class PeerSoftware {
 		 */
 		public final static int MAX_INACTIVITY_SECONDS = 60;
 		public final static int BROADCAST_INTERVALS_SECONDS = 5;
+		public final static int INPUT_CHECK_FREQUENCY_SECONDS = 1;
 
 		private Settings() {
 		}

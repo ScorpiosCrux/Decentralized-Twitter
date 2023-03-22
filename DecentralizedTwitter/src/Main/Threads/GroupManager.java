@@ -79,11 +79,12 @@ public class GroupManager extends Thread {
 	}
 
 	private void sendPeerUpdates() {
+		String message = "peer" + this.ip + ":" + this.port;
+		
 		Vector<Source> source_list = ps.sourceList.getSources();
 		for (Source s : source_list) {
 			Vector<Peer> active_peers = s.getActivePeers();
 			for (Peer p : active_peers) {
-				String message = "peer" + this.ip + ":" + this.port;
 				ps.network_handler.send(p.getIP(), p.getPort(), message);
 				// sent_logs.addLog(dest_ip, dest_port););
 			}

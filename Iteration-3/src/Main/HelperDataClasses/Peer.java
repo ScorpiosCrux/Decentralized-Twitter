@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import Main.Iteration3Solution;
+import Main.Main;
 
 public class Peer {
 

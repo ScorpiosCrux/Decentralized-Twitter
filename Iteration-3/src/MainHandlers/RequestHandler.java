@@ -9,17 +9,17 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
-import Main.Iteration3Solution;
+import Main.Main;
 import Main.HelperDataClasses.SnippetLog;
 import Settings.UserSettings;
 
 public class RequestHandler {
 
     private UserSettings settings;
-    private Iteration3Solution main;
+    private Main main;
     private PeerCommHandler peer_comm_handler;
 
-    public RequestHandler(UserSettings settings, Iteration3Solution main, PeerCommHandler peer_comm_handler) {
+    public RequestHandler(UserSettings settings, Main main, PeerCommHandler peer_comm_handler) {
         this.settings = settings;
         this.main = main;
         this.peer_comm_handler = peer_comm_handler;

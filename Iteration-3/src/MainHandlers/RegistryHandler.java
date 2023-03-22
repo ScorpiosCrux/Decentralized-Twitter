@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import Main.Iteration3Solution;
+import Main.Main;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
@@ -13,7 +13,7 @@ import Settings.UserSettings;
 public class RegistryHandler {
 
     private UserSettings settings;
-    private Iteration3Solution main;
+    private Main main;
     private RequestHandler request_handler;
     private PeerCommHandler peer_comm_handler;
 
@@ -21,7 +21,7 @@ public class RegistryHandler {
     private boolean registry_connected;
 
     // Constructor
-    public RegistryHandler(UserSettings settings, Iteration3Solution main, PeerCommHandler peer_comm_handler) {
+    public RegistryHandler(UserSettings settings, Main main, PeerCommHandler peer_comm_handler) {
         this.settings = settings;
         this.main = main;
         this.request_handler = new RequestHandler(settings, main, peer_comm_handler);
@@ -61,7 +61,7 @@ public class RegistryHandler {
                 continue;
             }else if (returnMessage.equals("1"))
                 break;
-            network_handler.writeSocket(registry_socket, returnMessage); // Send response
+            network_handler.send(registry_socket, returnMessage); // Send response
             print_handler.printResponse(returnMessage, request);
         }
         registry_socket.close();

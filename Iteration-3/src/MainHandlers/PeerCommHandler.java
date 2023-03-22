@@ -24,7 +24,7 @@ public class PeerCommHandler {
     private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
     private final MessageLogs sent_logs;
     private final MessageLogs received_logs;
-    
+
     // Constructor
     public PeerCommHandler(UserSettings settings, NetworkHandler network_handler, SourceList all_sources) {
         this.settings = settings;
@@ -32,6 +32,7 @@ public class PeerCommHandler {
         this.sent_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
         this.received_logs = new MessageLogs(network_handler.getExternalIP(), settings.client_port);
         this.all_sources = all_sources;
+        System.out.println("SYSTEM: Peer Handler Initialized!");
     }
 
     public void start() {
@@ -47,7 +48,7 @@ public class PeerCommHandler {
         // receiving UDP messages
         boolean stop = false;
         while (true) {
-            UDPMessage message = network_handler.receiveUDPMsg();
+            UDPMessage message = network_handler.receiveUDPMessage();
             String msgType = "";
             // System.out.println("Received message: " + message.message);
 
@@ -94,9 +95,8 @@ public class PeerCommHandler {
             buffer = data.getBytes();
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
 
-            
             this.sent_logs.addLog(settings.registry_ip, settings.registry_port);
-            network_handler.getOutGoingUDP().send(response);
+            network_handler.getOutgoingUDPSocket().send(response);
             // System.out.println("Broadcast to: " + peer.toString());
 
         } catch (IOException e) {
@@ -114,19 +114,19 @@ public class PeerCommHandler {
         return all_snippets;
     }
 
-    public MessageLogs getSentLogs(){
+    public MessageLogs getSentLogs() {
         return this.sent_logs;
     }
 
-    public MessageLogs getReceivedLogs(){
+    public MessageLogs getReceivedLogs() {
         return this.received_logs;
     }
 
-    public NetworkHandler getNetworkHandler(){
+    public NetworkHandler getNetworkHandler() {
         return this.network_handler;
     }
 
-    public UserSettings getSettings(){
+    public UserSettings getSettings() {
         return this.settings;
     }
 

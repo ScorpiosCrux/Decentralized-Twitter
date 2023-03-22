@@ -1,5 +1,6 @@
 package MainHandlers;
 
+/* Imports */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,39 +11,32 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
-import java.net.UnknownHostException;
-
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessage;
 import Settings.UserSettings;
 
-		// this.peer_socket = network_handler.createUDPSocket(this.settings.client_port);
-		// this.externalIP = network_handler.getExternalIP();
-
+/* 
+ * This class contains all functions related to networks.
+ */
 public class NetworkHandler {
 
-    private DatagramSocket outgoing_udp;
+    private DatagramSocket outgoing_udp_socket; // UDP Socket for sending data to peers
     private String external_ip;
 
-    public NetworkHandler(UserSettings settings) throws IOException{
-        this.outgoing_udp = createUDPSocket(settings.client_port);
+    /* Constructor */
+    public NetworkHandler(UserSettings settings) throws IOException {
+        this.outgoing_udp_socket = createUDPSocket(settings.client_port);
         this.external_ip = findExternalIP();
+
+        System.out.println("SYSTEM: Network Handler Initialized! External IP: " + external_ip);
     }
 
-    public DatagramSocket getOutGoingUDP(){
-        return outgoing_udp;
-    }
-
-    public String getExternalIP(){
-        return this.external_ip;
-    }
-
-    // Gets the IP address from the socket
-    public String getIP(Socket socket) {
-        return socket.getInetAddress().getHostAddress();
-    }
-
-    // -1 to let the OS choose a port
+    /*
+     * Creates a UDP Socket
+     * Params:
+     * port - the port number. Specify -1 to let the OS choose a value.
+     * 
+     */
     public DatagramSocket createUDPSocket(int port) throws SocketException {
         if (port == -1)
             return new DatagramSocket();
@@ -50,12 +44,18 @@ public class NetworkHandler {
             return new DatagramSocket(port);
     }
 
-    // Gets the externalIP for broadcasting
+    /*
+     * Finds the external IP address of the system
+     * 
+     * Source :
+     * https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-
+     * in-java
+     * 
+     */
     public String findExternalIP() {
-        // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
         try {
-            URL whatismyip = new URL("http://checkip.amazonaws.com");
-            BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+            URL ip_stream = new URL("http://checkip.amazonaws.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(ip_stream.openStream()));
             String ip = in.readLine();
             return ip;
         } catch (IOException e) {
@@ -65,42 +65,75 @@ public class NetworkHandler {
         }
     }
 
+    /* ===================== TCP SOCKETS ===================== */
 
-    // Creates a socket with ip and port.
-	// Returns the socket
-	public Socket createSocket(String ip, int port) throws UnknownHostException, IOException {
-		Socket socket = new Socket(ip, port);
-		return socket;
-	}
+    /* Creates a socket compatible with TCP/IP */
+    public Socket createSocket(String ip, int port) {
+        try {
+            Socket socket = new Socket(ip, port);
+            return socket;
+        } catch (Exception e) {
+            System.out.println("SYSTEM: Unable to create socket!");
+            e.printStackTrace();
+            System.exit(0);
+            return null;
+        }
+    }
 
-	// Closes the socket
-	public void closeSocket(Socket socket) throws IOException {
-		socket.close();
-	}
+    /* Closes the socket */
+    public void closeSocket(Socket socket) {
+        try {
+            socket.close();
+        } catch (Exception e) {
+            System.out.println("SYSTEM: Unable to create socket!");
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
 
-    // Writes to socket with message then flushes the message to the stream.
-	public void writeSocket(Socket socket, String message) throws IOException {
-		// TODO: Convert message to Unicode characters
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		writer.write(message);
-		writer.flush();
-	}
+    /* Sends message to TCP/IP Socket. Flushes stream after. */
+    public void send(Socket socket, String message) throws IOException {
+        // TODO: Convert message to Unicode characters
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        writer.write(message);
+        writer.flush();
+    }
+
+    /* ===================== (end) TCP SOCKETS ===================== */
 
     // Received UDP messages and returns a UDPMessage with information about the
-	// source and the content itself
-	public UDPMessage receiveUDPMsg() {
-		// System.out.println("Waiting for UDP message");
-		try {
-			DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
-			outgoing_udp.receive(packet);
-			Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort());
-			String message = new String(packet.getData(), 0, packet.getLength());
-			return new UDPMessage(message, sourcePeer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+    // source and the content itself
+    // TODO: MOVE THIS
+    public UDPMessage receiveUDPMessage() {
+        // System.out.println("Waiting for UDP message");
+        try {
+            DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+            outgoing_udp_socket.receive(packet);
+            Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort());
+            String message = new String(packet.getData(), 0, packet.getLength());
+            return new UDPMessage(message, sourcePeer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-    
+    /* ===================== GETTERS ===================== */
+
+    /* Returns this systems UDP socket */
+    public DatagramSocket getOutgoingUDPSocket() {
+        return outgoing_udp_socket;
+    }
+
+    public String getExternalIP() {
+        return this.external_ip;
+    }
+
+    /* Gets the IP address from the incoming socket */
+    public String getSocketIP(Socket socket) {
+        return socket.getInetAddress().getHostAddress();
+    }
+
+    /* ===================== (END) GETTERS ===================== */
+
 }

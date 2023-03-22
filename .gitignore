@@ -1,5 +1,7 @@
 .DS_Store
 Iteration-3/bin/
 
+sourceCode*/
+
 *.class
 *.log

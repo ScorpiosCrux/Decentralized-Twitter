@@ -28,7 +28,7 @@ public class GroupManagement extends Thread {
 
 	private SourceList all_sources;
 	private MessageLogs sent_logs;
-	
+
 	private Thread t;
 	private String threadName;
 
@@ -43,7 +43,7 @@ public class GroupManagement extends Thread {
 		this.sent_logs = parent.getSentLogs();
 
 		this.threadName = "Group Management";
-		this.outgoingSocket = network_handler.getOutGoingUDP();
+		this.outgoingSocket = network_handler.getOutgoingUDPSocket();
 		this.ip = network_handler.getExternalIP();
 		this.port = settings.client_port;
 		this.stop = false;
@@ -110,14 +110,12 @@ public class GroupManagement extends Thread {
 	// Function that broadcasts to all active peers that we know about
 	private void broadcast() {
 		Vector<Source> source_list = all_sources.getSources();
-		for (Source s : source_list){
+		for (Source s : source_list) {
 			Vector<Peer> active_peers = s.getActivePeers();
-			for (Peer p : active_peers){
+			for (Peer p : active_peers) {
 				sendUDPMessage(p.getIP(), p.getPort());
 			}
 		}
 	}
-
-
 
 }

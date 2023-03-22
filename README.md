@@ -1,35 +1,66 @@
-# CPSC-559 Distributed Systems Project
+# Decentralized Twitter
+
+This is a system where we create a twitter like app. One `Peer` connects to a `Registry`, and any other `Peer` that connects to the `Registry` will receive any messages sent by any `Peer`.
+
+This project was originally created for my distributed systems class. I then refactored it in my advanced programming class.
+
+## 💻 Technology & Concepts
+
+### `Socket Programming`
+
+### `Threads`
+
+### `Testing`
+
+### `Refactoring`
+
+### `Distributed Systems Design`
+
 - I got this project from my distributed systems class. This was a solo project.
 
 - You can run this code, but it won't work without a Registry setup on another machine and at least 1 other peer.
 - This is a large system and sadly by the time of submission the code will not be 100% running and bug free.
 - I will keep working on this as the history is documented by git with time and date so that I can further refactor so that I can show this off to employers
 
+## 🏃 Running The Registry
 
-## Registry
-- You will need to comment out the try catch block
-- Tested on Java 17
-- Compile with `javac /*.java` outside the registry folder
-- Run with `java registry/Registry` or `java registry.Registry`
+1. Make sure you have Java JDK 17.
+2. Navigate outside of the `registry/` folder.
+3. Compile the entire folder of `registry` with `javac registry/*.java`
+4. Run with `java registry.Registry`
+   - If this doesn't work, try `java registry/Registry`
+
+## 🏃 Running the Peer(s)\
+
+1. Make sure you have Java JDK 17.
+   To be completed...
+
+## 📝 Changelog
+
+### `Version 1.2`
+
+Preparing this code base for use in my resume. Demonstrates strong programming skills.
+
+- Removed `Main.java` and renamed `Iteration3Solution.java` to contain the short piece of code.
+- Added System updates with print statements
+- `Main.java` renamed and separated methods to do only what they're named to do.
+- `NetworkHandler.java` now contains proper comments and proper error handling.
 
 
-## Changelog
-- Added Settings File. 
-- Major Refact 1: Large-Class
-    - NetworkHandler.java methods from Iteration3Solution.java\
+### `Version 1.1`
 
-- Major Refactor 2: Long Methods GenerateReport?
+This project was refactored and cleaned up using [Refactoring Guru's](https://refactoring.guru/refactoring) code smells and solutions.
 
-- Long params
-    -PeerCommHandler Constructor (after e53e8c5) actual: 025d73c
+- Added settings file
+- Large Class: Removed non cohesive methods from Main.java
+- Long Methods: Separated, the GenerateReport method into smaller methods
+- Long Params: Shortened the length of parameters by passing objects instead
+- Removed Dead Code
+- Removed Duplicate Code
+- Overuse of Primitive Types caused a lot of confusion. Thus, creating objects and getter/setters simplifies the system.
+  - picture
 
-- Dead Code:
-    d1f0a5b
-    e2fd1c9
+### `Version 1`
 
-- Duplicate Code
+This project was completed after the CPSC 559 class ended.
 
-- Primitive Types
-    -all_sources
-
-- 

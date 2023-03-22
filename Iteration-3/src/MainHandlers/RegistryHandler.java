@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import Main.Main;
-import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
 import Settings.UserSettings;

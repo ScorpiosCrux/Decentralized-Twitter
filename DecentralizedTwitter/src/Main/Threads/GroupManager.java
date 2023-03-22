@@ -1,19 +1,10 @@
 package Main.Threads;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.util.LinkedList;
 import java.util.Vector;
 import Main.PeerSoftware;
-import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.Source;
-import Main.HelperDataClasses.SourceList;
 import Main.PeerSoftware.Settings;
-import MainHandlers.NetworkHandler;
-import MainHandlers.PeerCommHandler;
 
 /*
 * This threaded class manages checking inactivity and sending updates to peers

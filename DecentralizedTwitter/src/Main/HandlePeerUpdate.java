@@ -6,6 +6,9 @@ package Main;
  * CPSC 559
  */
 
+import Handlers.NetworkHandler;
+import Handlers.PeerCommHandler;
+
 //This class handles incoming UDP Message with "peer" at the start
 //
 
@@ -14,8 +17,6 @@ import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SourceList;
 import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
-import MainHandlers.NetworkHandler;
-import MainHandlers.PeerCommHandler;
 
 public class HandlePeerUpdate extends Thread {
 

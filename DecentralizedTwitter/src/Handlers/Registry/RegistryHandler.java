@@ -1,36 +1,43 @@
-package MainHandlers;
+package Handlers.Registry;
 
 /* Imports */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+
+import Handlers.PrintHandler;
 import Main.PeerSoftware;
 import Main.HelperDataClasses.Source;
 import Main.HelperDataClasses.SourceList;
 import Main.PeerSoftware.Settings;
 
-
 /* This class handles communication with the registry */
 public class RegistryHandler {
 
-    // private PeerSettings settings;
     private PeerSoftware ps;
-    private RequestHandler request_handler;
-    // private PeerCommHandler peer_comm_handler;
+    private RequestHandler requestHandler;
+
     private Source registry;
     private boolean registry_connected;
 
-    /* Constructor */
+    /*
+     * Registry Constructor
+     * 
+     */
     public RegistryHandler(PeerSoftware ps) {
         this.ps = ps;
-        this.request_handler = new RequestHandler(ps, null);
-        // this.peer_comm_handler = peer_comm_handler;
-        this.registry = new Source(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
+        this.requestHandler = new RequestHandler(ps.externalIP, Settings.CLIENT_PORT);
     }
 
-    /* Initializer */
+    /*
+     * Registry Runner
+     * 
+     */
     public void start(int port) throws IOException {
+
+        /* Adds the registry as a source for peers */
+        this.ps.hostMap.addSource(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
 
         PrintHandler print_handler = ps.getPrintHandler();
 

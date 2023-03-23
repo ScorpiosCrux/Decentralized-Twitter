@@ -1,35 +1,25 @@
-package MainHandlers;
+package Handlers.Registry;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Vector;
-
-import Main.PeerSoftware;
-import Main.HelperDataClasses.SnippetLog;
 import Main.PeerSoftware.Settings;
-
 
 public class RequestHandler {
 
-    // private Settings settings;
-    private PeerSoftware main;
-    private PeerCommHandler peer_comm_handler;
+    /* Our information */
+    String externalIP;
+    int port;
 
-    public RequestHandler(PeerSoftware main, PeerCommHandler peer_comm_handler) {
-        // this.settings = settings;
-        this.main = main;
-        this.peer_comm_handler = peer_comm_handler;
+    public RequestHandler(String externalIP, int port) {
+        this.externalIP = externalIP;
+        this.port = port;
     }
 
     // This function handles the requests from the registry and returns a response.
     // Other code: -1=error; 0=no response; 1=connection closed, exit main loop
-    public String handleRequest(Socket socket, String request) throws IOException {
-        NetworkHandler network_handler = main.getNetworkHandler();
+    public String handleRequest(String request) throws IOException {
         switch (request) {
             case "get team name":
                 return Settings.TEAM_NAME + "\n";
@@ -45,14 +35,10 @@ public class RequestHandler {
             case "get report":
                 // return generateReport();
             case "get location":
-                if (Settings.RUNNING_ON_LAN == true) {
-                    return "127.0.0.1" + ":" + Settings.CLIENT_PORT + "\n";
-                } else {
-                    return network_handler.getExternalIP() + ":" + Settings.CLIENT_PORT + "\n";
-                }
-            case "close":
-                network_handler.closeSocket(socket);
-                return "1";
+                return this.externalIP + ":" + this.port + "\n";
+            // case "close":
+            // network_handler.closeSocket(socket);
+            // return "1";
         }
         return "-1";
     }

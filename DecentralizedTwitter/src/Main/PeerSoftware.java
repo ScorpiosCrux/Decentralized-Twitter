@@ -4,21 +4,20 @@ package Main;
 import java.io.IOException;
 import java.util.Vector;
 
+import Handlers.NetworkHandler;
+import Handlers.PeerCommHandler;
+import Handlers.PrintHandler;
+import Handlers.ProcessHandler;
+import Handlers.Registry.RegistryHandler;
+import Host.HostMap;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SnippetLog;
 import Main.HelperDataClasses.SourceList;
 import Main.Threads.GroupManager;
 import Main.Threads.MessageReceiver;
 import Main.Threads.MessageSender;
-import MainHandlers.NetworkHandler;
-import MainHandlers.PeerCommHandler;
-import MainHandlers.PrintHandler;
-import MainHandlers.ProcessHandler;
-import MainHandlers.RegistryHandler;
 
 public class PeerSoftware {
-
-	
 
 	private GroupManager groupManager;
 	private MessageReceiver messageReceiver;
@@ -31,10 +30,15 @@ public class PeerSoftware {
 	private PeerCommHandler peer_comm_handler;
 
 	/* Data */
-	public final SourceList sourceList = new SourceList(); //
+	// public final SourceList sourceList = new SourceList(); //
+	public final HostMap hostMap = new HostMap();
 	private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
 	private final MessageLogs sent_logs;
 	private final MessageLogs received_logs;
+
+	/* Shared Data */
+	public final String externalIP;
+
 
 	/*
 	 * Function that initiates all threads
@@ -45,6 +49,7 @@ public class PeerSoftware {
 		initializeHandlers();
 		ProcessHandler.pause(1);
 
+		this.externalIP = network_handler.getExternalIP();
 		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 

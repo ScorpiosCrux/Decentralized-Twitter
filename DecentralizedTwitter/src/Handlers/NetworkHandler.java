@@ -1,4 +1,4 @@
-package MainHandlers;
+package Handlers;
 
 /* Imports */
 import java.io.BufferedReader;
@@ -56,7 +56,7 @@ public class NetworkHandler {
      * in-java
      * 
      */
-    public String findExternalIP() {
+    private String findExternalIP() {
         try {
             if (Settings.RUNNING_ON_LAN){
                 return "127.0.0.1";

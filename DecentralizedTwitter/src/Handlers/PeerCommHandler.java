@@ -1,4 +1,4 @@
-package MainHandlers;
+package Handlers;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -1,4 +1,4 @@
-package MainHandlers;
+package Handlers;
 /*
  * Author: Tyler Chen
  * UCID: 30066806

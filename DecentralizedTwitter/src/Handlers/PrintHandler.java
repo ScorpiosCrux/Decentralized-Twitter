@@ -1,4 +1,4 @@
-package MainHandlers;
+package Handlers;
 
 public class PrintHandler {
     public void printResponse(String message, String request) {

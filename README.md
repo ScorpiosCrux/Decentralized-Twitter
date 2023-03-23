@@ -30,6 +30,9 @@ This project was originally created for my distributed systems class. I then ref
 
    To be completed...
 
+## 🧭 Project Structure
+The way the code is setup 
+
 ## 📝 Changelog
 
 ### `Version 1.2`

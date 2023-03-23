@@ -18,7 +18,7 @@ import MainHandlers.RegistryHandler;
 
 public class PeerSoftware {
 
-	private final boolean DEBUG = true;
+	
 
 	private GroupManager groupManager;
 	private MessageReceiver messageReceiver;
@@ -69,7 +69,7 @@ public class PeerSoftware {
 			System.out.println("SYSTEM: FINISHED INITIALIZING HANDLERS");
 
 		} catch (IOException e) {
-			if (DEBUG)
+			if (Settings.DEBUG)
 				e.printStackTrace();
 			else
 				System.out.println("SYSTEM: FAILED TO INITIALIZE");
@@ -84,7 +84,7 @@ public class PeerSoftware {
 		try {
 			this.registry_handler.start(Settings.CLIENT_PORT);
 		} catch (Exception e) {
-			if (DEBUG)
+			if (Settings.DEBUG)
 				e.printStackTrace();
 			else
 				System.out.println("SYSTEM: FAILED TO CONNECT TO REGISTRY");
@@ -136,11 +136,14 @@ public class PeerSoftware {
 
 	/* Defines the settings of the app. Allows usage globally */
 	public static class Settings {
+
+		public final static boolean DEBUG = true;
+
 		public final static String REGISTRY_IP = "127.0.0.1";
 		public final static int REGISTRY_PORT = 55921;
 
 		public final static String TEAM_NAME = "TylerChen";
-		public final static boolean RUNNING_ON_LAN = false;
+		public final static boolean RUNNING_ON_LAN = true;
 		public final static int CLIENT_PORT = 30001;
 
 		/*
@@ -149,7 +152,7 @@ public class PeerSoftware {
 		 */
 		public final static int MAX_INACTIVITY_SECONDS = 60;
 		public final static int BROADCAST_INTERVALS_SECONDS = 5;
-		public final static int INPUT_CHECK_FREQUENCY_SECONDS = 1;
+		public final static int INPUT_CHECK_FREQUENCY_MILLISECONDS = 500;
 
 		private Settings() {
 		}

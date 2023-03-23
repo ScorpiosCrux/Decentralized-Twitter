@@ -58,10 +58,14 @@ public class NetworkHandler {
      */
     public String findExternalIP() {
         try {
-            URL ip_stream = new URL("http://checkip.amazonaws.com");
-            BufferedReader in = new BufferedReader(new InputStreamReader(ip_stream.openStream()));
-            String ip = in.readLine();
-            return ip;
+            if (Settings.RUNNING_ON_LAN){
+                return "127.0.0.1";
+            } else {
+                URL ip_stream = new URL("http://checkip.amazonaws.com");
+                BufferedReader in = new BufferedReader(new InputStreamReader(ip_stream.openStream()));
+                String ip = in.readLine();
+                return ip;
+            }
         } catch (IOException e) {
             System.out.println("Error getting External IP!");
             e.printStackTrace();
@@ -116,6 +120,8 @@ public class NetworkHandler {
             buffer = message.getBytes();
             InetAddress address = InetAddress.getByName(ip);
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
+            if(Settings.DEBUG)
+                System.out.println("DEBUG: UDP MESSAGE SENT (" + ip + ":" + port + "). CONTENT: " + message);
             outgoing_udp_socket.send(response);
         } catch (Exception e) {
             e.printStackTrace();

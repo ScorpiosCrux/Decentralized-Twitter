@@ -42,7 +42,7 @@ public class MessageSender extends Thread {
 	public void run() {
 		System.out.println("SYSTEM: Running " + threadName + " thread");
 
-		int INPUT_CHECK_FREQUENCY_SECONDS = Settings.INPUT_CHECK_FREQUENCY_SECONDS;
+		int INPUT_CHECK_FREQUENCY_MILLISECONDS = Settings.INPUT_CHECK_FREQUENCY_MILLISECONDS;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		System.out.println("Tweet your thoughts: ");
@@ -55,7 +55,7 @@ public class MessageSender extends Thread {
 					sendPeerMessage(content);
 					System.out.println("Tweet has been tweeted! \nTweet your thoughts: ");
 				} else {
-					Thread.sleep(INPUT_CHECK_FREQUENCY_SECONDS * 1000);
+					Thread.sleep(INPUT_CHECK_FREQUENCY_MILLISECONDS);
 					continue;
 				}
 			} catch (Exception e) {
@@ -72,7 +72,7 @@ public class MessageSender extends Thread {
 	/* Sends the inputted message to all active peers */
 	public void sendPeerMessage(String message) {
 		// String data = "snip" + ourselves.getTimeStamp() + " " + message;
-		String updatedMessage = "snip" + " " + message;
+		String updatedMessage = "snip1" + " " + message;
 
 		Vector<Source> source_list = ps.sourceList.getSources();
 		for (Source s : source_list) {

@@ -2,6 +2,7 @@ package Main.Threads;
 
 import Main.PeerSoftware;
 import Main.HelperDataClasses.UDPMessagePack;
+import Main.PeerSoftware.Settings;
 
 /* This class handles all message sending */
 public class MessageReceiver extends Thread {
@@ -32,19 +33,26 @@ public class MessageReceiver extends Thread {
 
 		while (true) {
 			UDPMessagePack pack = ps.network_handler.receiveUDPMessage();
+			if (Settings.DEBUG) {
+				System.out.println(
+						"DEBUG: RECEIVED MESSAGE FROM " + pack.getSourcePeer().toString() + " CONTENT: " + pack.getMessage());
+			}
 
 			try {
 				String messageType = pack.getMessage().substring(0, 4);
 
 				switch (messageType) {
 					case "peer":
+						System.out.println("Peer");
 						// HandlePeerUpdate pu = new HandlePeerUpdate(this, message);
 						// pu.start();
 						break;
 					case "snip":
+						System.out.println("Snip");
 						// snippet_handler.handleIncomingSnip(message);
 						break;
 					case "stop":
+						System.out.println("Stop");
 						// sendUDPStopMessage(message.getSourcePeer());
 						// stop = true;
 						// group_management.setStop();
@@ -52,7 +60,6 @@ public class MessageReceiver extends Thread {
 						// System.out.println("\n\nstop");
 						break;
 				}
-
 			} catch (Exception e) {
 				// e.printStackTrace();
 				System.out.println("Invalid Message Type! Message: " + pack.getMessage());
@@ -67,28 +74,32 @@ public class MessageReceiver extends Thread {
 	}
 }
 
-
- /*   // Sends a stop message to registry request to stop
-	 private void sendUDPStopMessage(Peer peer) {
-		try {
-				String ip = peer.getIP();
-				int port = peer.getPort();
-
-				byte[] buffer = new byte[1024];
-				InetAddress address = InetAddress.getByName(ip);
-				System.out.println("\n\n\n\n\nAddress that sent stop: " + address.toString());
-
-				String data = "ack" + Settings.TEAM_NAME;
-				buffer = data.getBytes();
-				DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
-
-				this.sent_logs.addLog(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
-				network_handler.getOutgoingUDPSocket().send(response);
-				// System.out.println("Broadcast to: " + peer.toString());
-
-		} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Unable to sendUDPMessage (GroupManagment): " + peer.toString());
-		}
-
-} */
+/*
+ * // Sends a stop message to registry request to stop
+ * private void sendUDPStopMessage(Peer peer) {
+ * try {
+ * String ip = peer.getIP();
+ * int port = peer.getPort();
+ * 
+ * byte[] buffer = new byte[1024];
+ * InetAddress address = InetAddress.getByName(ip);
+ * System.out.println("\n\n\n\n\nAddress that sent stop: " +
+ * address.toString());
+ * 
+ * String data = "ack" + Settings.TEAM_NAME;
+ * buffer = data.getBytes();
+ * DatagramPacket response = new DatagramPacket(buffer, buffer.length, address,
+ * port);
+ * 
+ * this.sent_logs.addLog(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
+ * network_handler.getOutgoingUDPSocket().send(response);
+ * // System.out.println("Broadcast to: " + peer.toString());
+ * 
+ * } catch (IOException e) {
+ * e.printStackTrace();
+ * System.out.println("Unable to sendUDPMessage (GroupManagment): " +
+ * peer.toString());
+ * }
+ * 
+ * }
+ */

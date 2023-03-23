@@ -12,7 +12,6 @@ import Handlers.Registry.RegistryHandler;
 import Host.HostMap;
 import Main.HelperDataClasses.MessageLogs;
 import Main.HelperDataClasses.SnippetLog;
-import Main.HelperDataClasses.SourceList;
 import Main.Threads.GroupManager;
 import Main.Threads.MessageReceiver;
 import Main.Threads.MessageSender;
@@ -37,8 +36,7 @@ public class PeerSoftware {
 	private final MessageLogs received_logs;
 
 	/* Shared Data */
-	public final String externalIP;
-
+	public String externalIP;
 
 	/*
 	 * Function that initiates all threads
@@ -49,7 +47,7 @@ public class PeerSoftware {
 		initializeHandlers();
 		ProcessHandler.pause(1);
 
-		this.externalIP = network_handler.getExternalIP();
+		
 		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
 

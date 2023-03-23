@@ -1,9 +1,8 @@
 package Main.Threads;
 
 import java.util.Vector;
+import Host.Host;
 import Main.PeerSoftware;
-import Main.HelperDataClasses.Peer;
-import Main.HelperDataClasses.Source;
 import Main.PeerSoftware.Settings;
 
 /*
@@ -52,15 +51,16 @@ public class GroupManager extends Thread {
 	public void run() {
 		System.out.println("SYSTEM: Running " + threadName + " thread");
 
-		int MAX_INACTIVITY_SECONDS = Settings.MAX_INACTIVITY_SECONDS;
 		int BROADCAST_INTERVALS_SECONDS = Settings.BROADCAST_INTERVALS_SECONDS;
 		int timeSlept = 0;
 
+		Vector<Host> activeHosts = ps.hostMap.getActiveHosts();
+
 		while (stop != true) {
 			try {
-				sendPeerUpdates();
+				sendPeerUpdates(activeHosts);
 				if (timeSlept >= BROADCAST_INTERVALS_SECONDS) {
-					ps.sourceList.checkActivity(MAX_INACTIVITY_SECONDS);
+					activeHosts = ps.hostMap.getActiveHosts();
 					timeSlept = 0;
 				}
 				timeSlept += BROADCAST_INTERVALS_SECONDS;
@@ -78,16 +78,12 @@ public class GroupManager extends Thread {
 		this.stop = true;
 	}
 
-	private void sendPeerUpdates() {
+	private void sendPeerUpdates(Vector<Host> activeHosts) {
 		String message = "peer" + this.ip + ":" + this.port;
-		
-		Vector<Source> source_list = ps.sourceList.getSources();
-		for (Source s : source_list) {
-			Vector<Peer> active_peers = s.getActivePeers();
-			for (Peer p : active_peers) {
-				ps.network_handler.send(p.getIP(), p.getPort(), message);
-				// sent_logs.addLog(dest_ip, dest_port););
-			}
+
+		for (Host host : activeHosts) {
+			ps.network_handler.send(host.getIPAddress(), host.getPort(), message);
+			// sent_logs.addLog(dest_ip, dest_port););
 		}
 	}
 }

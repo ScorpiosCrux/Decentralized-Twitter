@@ -99,6 +99,7 @@ public class Host {
 	}
 
 	/* Allows comparable to work */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -110,5 +111,13 @@ public class Host {
 		if (!(ip.equals(other.ip) && port == other.port))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + this.ip.hashCode();
+		result = 31 * result + port;
+		return result;
 	}
 }

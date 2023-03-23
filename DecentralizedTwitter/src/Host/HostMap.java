@@ -7,6 +7,7 @@ import Main.PeerSoftware.Settings;
 
 public class HostMap {
 	private HashMap<Host, Vector<Host>> map = new HashMap<Host, Vector<Host>>();
+	private Vector<Host> activeHosts;
 
 	// ============ BASIC FUNCTIONS ============
 
@@ -44,12 +45,12 @@ public class HostMap {
 	// ============ (end) BASIC FUNCTIONS ============
 
 	// ============ PROJECT SPECIFIC FUNCTIONS ============
-	
+
 	/* 
-	 * Gets all active hosts.
+	 * Refreshes the list of active hosts
 	 * 
 	 */
-	public Vector<Host> getActiveHosts() {
+	public void checkActiveHosts() {
 		int inactivity_max = Settings.MAX_INACTIVITY_SECONDS;
 		Vector<Host> activeHosts = new Vector<Host>();
 
@@ -57,7 +58,7 @@ public class HostMap {
 			Vector<Host> hosts = this.map.get(source);
 			for (Host host : hosts) {
 				host.checkActivity(inactivity_max);
-				
+
 				/* If host is active */
 				if (host.getActivity()) {
 					activeHosts.add(host);
@@ -65,7 +66,19 @@ public class HostMap {
 			}
 		}
 
-		return activeHosts;
+		this.activeHosts = activeHosts;
+	}
+
+	/*
+	 * Gets all active hosts.
+	 * 
+	 */
+	public Vector<Host> getActiveHosts() {
+
+		if (this.activeHosts == null)
+			this.checkActiveHosts();
+
+		return this.activeHosts;
 	}
 	// ============ (end) PROJECT SPECIFIC FUNCTIONS ============
 

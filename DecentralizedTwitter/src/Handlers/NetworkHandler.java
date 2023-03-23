@@ -26,11 +26,16 @@ public class NetworkHandler {
     private DatagramSocket outgoing_udp_socket; // UDP Socket for sending data to peers
     private String external_ip;
 
+    /* For TCP Socket */
+    private Socket socket;
+    private BufferedReader reader;
+
     /* Constructor */
     public NetworkHandler(PeerSoftware ps) throws IOException {
         this.ps = ps;
         this.outgoing_udp_socket = createUDPSocket(Settings.CLIENT_PORT);
         this.external_ip = findExternalIP();
+        this.ps.externalIP = getExternalIP();
 
         System.out.println("SYSTEM: Network Handler Initialized! External IP: " + external_ip);
     }
@@ -58,7 +63,7 @@ public class NetworkHandler {
      */
     private String findExternalIP() {
         try {
-            if (Settings.RUNNING_ON_LAN){
+            if (Settings.RUNNING_ON_LAN) {
                 return "127.0.0.1";
             } else {
                 URL ip_stream = new URL("http://checkip.amazonaws.com");
@@ -76,15 +81,14 @@ public class NetworkHandler {
     /* ===================== TCP SOCKETS ===================== */
 
     /* Creates a socket compatible with TCP/IP */
-    public Socket createSocket(String ip, int port) {
+    public void createSocket(String ip, int port) {
         try {
-            Socket socket = new Socket(ip, port);
-            return socket;
+            this.socket = new Socket(ip, port);
+            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (Exception e) {
             System.out.println("SYSTEM: Unable to create socket!");
             e.printStackTrace();
             System.exit(0);
-            return null;
         }
     }
 
@@ -99,12 +103,28 @@ public class NetworkHandler {
         }
     }
 
+    /* Reads from the socket */
+    public String readSocket() {
+        try {
+            String message = reader.readLine();
+            return message;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("SYSTEM: Error! Unable to read from socket!");
+            return null;
+        }
+    }
+
     /* Sends message to TCP/IP Socket. Flushes stream after. */
-    public void send(Socket socket, String message) throws IOException {
+    public void send(String message) throws IOException {
         // TODO: Convert message to Unicode characters
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         writer.write(message);
         writer.flush();
+    }
+
+    public boolean checkConnection() {
+        return this.socket.isConnected();
     }
 
     /*
@@ -120,7 +140,7 @@ public class NetworkHandler {
             buffer = message.getBytes();
             InetAddress address = InetAddress.getByName(ip);
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, address, port);
-            if(Settings.DEBUG)
+            if (Settings.DEBUG)
                 System.out.println("DEBUG: UDP MESSAGE SENT (" + ip + ":" + port + "). CONTENT: " + message);
             outgoing_udp_socket.send(response);
         } catch (Exception e) {

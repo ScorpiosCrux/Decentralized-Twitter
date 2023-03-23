@@ -30,17 +30,12 @@ public class RequestHandler {
                 String end_of_code = "...";
 
                 return language + newline + code + newline + end_of_code + newline;
-            case "receive peers":
-                return "0";
             case "get report":
                 // return generateReport();
             case "get location":
                 return this.externalIP + ":" + this.port + "\n";
-            // case "close":
-            // network_handler.closeSocket(socket);
-            // return "1";
         }
-        return "-1";
+        return null;
     }
 
     // Assuming that src code is less than 2 million chars.

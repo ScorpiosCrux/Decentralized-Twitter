@@ -4,6 +4,8 @@ This is a system where we create a twitter like app. One `Peer` connects to a `R
 
 This project was originally created for my distributed systems class. I then refactored it in my advanced programming class.
 
+The Git history of this project demonstrates a lesson that designing and code organization plays a crucial role!
+
 ## 💻 Technology & Concepts
 
 ### `Socket Programming`

@@ -6,21 +6,23 @@ package Main.HelperDataClasses;
  * CPSC 559
  */
 
+import Host.Host;
+
 public class UDPMessagePack {
 	private String message;
-	private Peer sourcePeer;
+	private Host source;
 
-	public UDPMessagePack(String message, Peer sourcePeer) {
+	public UDPMessagePack(String message, Host source) {
 		this.message = message;
-		this.sourcePeer = sourcePeer;
+		this.source = source;
 	}
 
 	public String getMessage() {
 		return this.message;
 	}
 
-	public Peer getSourcePeer() {
-		return sourcePeer;
+	public Host getSourcePeer() {
+		return source;
 	}
 
 }

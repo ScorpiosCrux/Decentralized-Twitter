@@ -12,8 +12,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
+
+import Host.Host;
 import Main.PeerSoftware;
-import Main.HelperDataClasses.Peer;
 import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
 
@@ -160,9 +161,9 @@ public class NetworkHandler {
         try {
             DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
             outgoing_udp_socket.receive(packet);
-            Peer sourcePeer = new Peer(packet.getAddress().getHostAddress(), packet.getPort());
+            Host source = new Host(packet.getAddress().getHostAddress(), packet.getPort());
             String message = new String(packet.getData(), 0, packet.getLength());
-            return new UDPMessagePack(message, sourcePeer);
+            return new UDPMessagePack(message, source);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

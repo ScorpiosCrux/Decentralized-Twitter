@@ -1,21 +1,17 @@
 package Main.HelperDataClasses;
 
-/*
- * Author: Tyler Chen
- * UCID: 30066806
- * Iteration 3
- * CPSC 559
- */
+import Host.Host;
+
 //This class is a log for Snippets
 public class SnippetLog {
 	private int timeStamp;
 	private String content;
-	private Peer sourcePeer;
+	private Host source;
 
-	public SnippetLog(int timeStamp, String content, Peer sourcePeer) {
+	public SnippetLog(int timeStamp, String content, Host source) {
 		this.timeStamp = timeStamp;
 		this.content = content;
-		this.sourcePeer = sourcePeer;
+		this.source = source;
 	}
 
 	public int getTimeStamp() {
@@ -26,8 +22,8 @@ public class SnippetLog {
 		return this.content;
 	}
 
-	public Peer getSourcePeer() {
-		return this.sourcePeer;
+	public Host getSource() {
+		return this.source;
 	}
 
 }

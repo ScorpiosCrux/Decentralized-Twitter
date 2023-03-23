@@ -4,7 +4,6 @@ package Handlers.Registry;
 import java.io.IOException;
 import Handlers.PrintHandler;
 import Main.PeerSoftware;
-import Main.HelperDataClasses.Source;
 import Main.PeerSoftware.Settings;
 
 /* This class handles communication with the registry */
@@ -12,10 +11,6 @@ public class RegistryHandler {
 
     private PeerSoftware ps;
     private RequestHandler requestHandler;
-
-    private Source registry;
-    private boolean registry_connected;
-
     private PrintHandler printHandler;
 
     /*
@@ -86,16 +81,5 @@ public class RegistryHandler {
         }
     }
 
-    /* ===================== GETTERS ===================== */
-
-    public boolean getRegistryStatus() {
-        return registry_connected;
-    }
-
-    public Source getRegistry() {
-        return this.registry;
-    }
-
-    /* ===================== (END) GETTERS ===================== */
 
 }

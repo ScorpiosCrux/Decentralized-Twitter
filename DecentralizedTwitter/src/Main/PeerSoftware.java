@@ -4,7 +4,6 @@ package Main;
 import java.io.IOException;
 import java.util.Vector;
 import Handlers.NetworkHandler;
-import Handlers.PeerCommHandler;
 import Handlers.PrintHandler;
 import Handlers.ProcessHandler;
 import Handlers.Registry.RegistryHandler;
@@ -25,7 +24,6 @@ public class PeerSoftware {
 	private RegistryHandler registry_handler;
 	public NetworkHandler network_handler;
 	private PrintHandler print_handler;
-	private PeerCommHandler peer_comm_handler;
 
 	/* Data */
 	// public final SourceList sourceList = new SourceList(); //
@@ -132,9 +130,6 @@ public class PeerSoftware {
 		return this.print_handler;
 	}
 
-	public PeerCommHandler getPeerCommHandler() {
-		return this.peer_comm_handler;
-	}
 
 	/* Defines the settings of the app. Allows usage globally */
 	public static class Settings {

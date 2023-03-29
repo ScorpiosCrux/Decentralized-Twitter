@@ -54,12 +54,14 @@ public class GroupManager extends Thread {
 		int BROADCAST_INTERVALS_SECONDS = Settings.BROADCAST_INTERVALS_SECONDS;
 		int timeSlept = 0;
 
+		ps.hostMap.checkActiveHosts();
 		Vector<Host> activeHosts = ps.hostMap.getActiveHosts();
 
 		while (stop != true) {
 			try {
 				sendPeerUpdates(activeHosts);
 				if (timeSlept >= BROADCAST_INTERVALS_SECONDS) {
+					ps.hostMap.checkActiveHosts();
 					activeHosts = ps.hostMap.getActiveHosts();
 					timeSlept = 0;
 				}

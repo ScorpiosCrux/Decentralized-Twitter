@@ -2,8 +2,6 @@ package Host;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import Main.PeerSoftware.Settings;
 
 public class Host {
@@ -11,7 +9,7 @@ public class Host {
 	private int port;
 	private boolean isActive;
 	private Instant lastCommunication;
-	private String creationTime;
+	private Instant creationTime;
 	private int timeStamp;
 
 	public Host(String ip, int port) {
@@ -19,11 +17,8 @@ public class Host {
 		this.port = port;
 		this.isActive = true;
 		this.lastCommunication = Instant.now();
+		this.creationTime = Instant.now();
 		this.timeStamp = 0;
-
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String creationTime = dtf.format(LocalDateTime.now());
-		this.creationTime = creationTime;
 	}
 
 	public String toString() {
@@ -70,9 +65,9 @@ public class Host {
 		this.timeStamp += 1;
 	}
 
-	public String getCreationTime() {
-		return creationTime;
-	}
+	// public String getCreationTime() {
+	// return creationTime;
+	// }
 
 	public void checkActivity(int inactivity_max) {
 		Instant end = Instant.now();
@@ -82,15 +77,17 @@ public class Host {
 		if (timeElapsed.toSeconds() > inactivity_max && isActive) {
 			isActive = false;
 			if (Settings.DEBUG) {
-				System.out.println("DEBUG: Host (" + this.toString() + ") Activity: Info: " + this.isActive);
+				System.out.println("DEBUG: HOST (" + this.toString() + ") ACTIVITY STATUS CHANGED TO: " + this.isActive);
 			}
+				System.out.println("SYSTEM: " + this.toString() + " HAS DISCONNECTED!"); 
 		}
 		/* If host resumes communication, set peer as active again. */
 		else if (timeElapsed.toSeconds() < inactivity_max && !isActive) {
 			isActive = true;
 			if (Settings.DEBUG) {
-				System.out.println("DEBUG: Host (" + this.toString() + ") Activity: Info: " + this.isActive);
+				System.out.println("DEBUG: HOST (" + this.toString() + ") ACTIVITY STATUS CHANGED TO: " + this.isActive);
 			}
+			System.out.println("SYSTEM: " + this.toString() + " HAS RECONNECTED!"); 
 		}
 	}
 

@@ -37,7 +37,7 @@ public class MessageSender extends Thread {
 		int INPUT_CHECK_FREQUENCY_MILLISECONDS = Settings.INPUT_CHECK_FREQUENCY_MILLISECONDS;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		System.out.println("Tweet your thoughts: ");
+		System.out.println("\nTweet your thoughts: ");
 
 		while (true) {
 			try {
@@ -45,7 +45,7 @@ public class MessageSender extends Thread {
 					String content = br.readLine();
 					// ourselves.incrementTimeStamp();
 					broadcastMessage(content);
-					System.out.println("Tweet has been tweeted! \nTweet your thoughts: ");
+					System.out.println("SYSTEM: Tweet has been sent!\n\nTweet your thoughts: ");
 				} else {
 					Thread.sleep(INPUT_CHECK_FREQUENCY_MILLISECONDS);
 					continue;

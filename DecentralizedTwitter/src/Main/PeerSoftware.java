@@ -2,14 +2,10 @@ package Main;
 
 /* Imports */
 import java.io.IOException;
-import java.util.Vector;
 import Handlers.NetworkHandler;
-import Handlers.PrintHandler;
 import Handlers.ProcessHandler;
 import Handlers.Registry.RegistryHandler;
 import Host.HostMap;
-import Main.HelperDataClasses.MessageLogs;
-import Main.HelperDataClasses.SnippetLog;
 import Main.Threads.GroupManager;
 import Main.Threads.MessageReceiver;
 import Main.Threads.MessageSender;
@@ -21,16 +17,12 @@ public class PeerSoftware {
 	private MessageSender messageSender;
 
 	/* System Handlers */
-	private RegistryHandler registry_handler;
-	public NetworkHandler network_handler;
-	private PrintHandler print_handler;
+	private RegistryHandler registryHandler;
+	public NetworkHandler networkHandler;
 
 	/* Data */
 	// public final SourceList sourceList = new SourceList(); //
 	public final HostMap hostMap = new HostMap();
-	private final Vector<SnippetLog> all_snippets = new Vector<SnippetLog>(); // Used in SnippetHandler.java
-	private final MessageLogs sent_logs;
-	private final MessageLogs received_logs;
 
 	/* Shared Data */
 	public String externalIP;
@@ -40,33 +32,25 @@ public class PeerSoftware {
 	 */
 	public PeerSoftware() {
 
-		/* Initialize Handlers */
 		initializeHandlers();
-		ProcessHandler.pause(1);
-
-		
-		this.sent_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
-		this.received_logs = new MessageLogs(network_handler.getExternalIP(), Settings.CLIENT_PORT);
-
-		/* Initialize Registry Communication */
 		initializeRegistryCommunication();
-		ProcessHandler.pause(1);
-
 		initializePeerCommunication();
-		startPeerCommunication();
 
-		finishRegistryCommunication();
+		startPeerCommunication();
 	}
 
-	/* Initializes Handlers for this peer */
+	/*
+	 * Initializes handlers for this client
+	 * 
+	 */
 	private void initializeHandlers() {
 		System.out.println("SYSTEM: INITIALIZING HANDLERS");
 		try {
-			this.print_handler = new PrintHandler();
-			this.network_handler = new NetworkHandler(this);
+			this.networkHandler = new NetworkHandler(this);
 			// this.peer_comm_handler = new PeerCommHandler(network_handler, sourceList);
-			this.registry_handler = new RegistryHandler(this);
+			this.registryHandler = new RegistryHandler(this);
 			System.out.println("SYSTEM: FINISHED INITIALIZING HANDLERS");
+			ProcessHandler.pause(1);
 
 		} catch (IOException e) {
 			if (Settings.DEBUG)
@@ -79,10 +63,12 @@ public class PeerSoftware {
 
 	/*
 	 * Registers this peer to the registry
+	 * 
 	 */
 	private void initializeRegistryCommunication() {
 		try {
-			this.registry_handler.start(Settings.CLIENT_PORT);
+			this.registryHandler.start(Settings.CLIENT_PORT);
+			ProcessHandler.pause(1);
 		} catch (Exception e) {
 			if (Settings.DEBUG)
 				e.printStackTrace();
@@ -90,51 +76,38 @@ public class PeerSoftware {
 				System.out.println("SYSTEM: FAILED TO CONNECT TO REGISTRY");
 			System.exit(0);
 		}
-
 	}
 
-	public void finishRegistryCommunication() {
-		/*
-		 * // final communication with registry
-		 * try {
-		 * client.stop();
-		 * } catch (IOException ioe) {
-		 * ioe.printStackTrace();
-		 * }
-		 */
-	}
-
+	/*
+	 * Initializes peer communication
+	 * 
+	 */
 	private void initializePeerCommunication() {
 		this.groupManager = new GroupManager(this);
 		this.messageReceiver = new MessageReceiver(this);
 		this.messageSender = new MessageSender(this);
 	}
 
-	public void startPeerCommunication() {
-		// communication with the peer
-		// peer_comm_handler.start();
+	/*
+	 * Begins peer communication threads
+	 * 
+	 */
+	private void startPeerCommunication() {
 		this.groupManager.start();
 		this.messageReceiver.start();
 		this.messageSender.start();
 	}
 
-	// public Settings getSettings() {
-	// return this.settings;
-	// }
-
-	public NetworkHandler getNetworkHandler() {
-		return this.network_handler;
+	public void stopPeerCommunication() {
+		this.groupManager.setThreadStop();
+		this.messageReceiver.setThreadStop();
+		this.messageSender.setThreadStop();
 	}
-
-	public PrintHandler getPrintHandler() {
-		return this.print_handler;
-	}
-
 
 	/* Defines the settings of the app. Allows usage globally */
 	public static class Settings {
 
-		public final static boolean DEBUG = true;
+		public final static boolean DEBUG = false;
 
 		public final static String REGISTRY_IP = "127.0.0.1";
 		public final static int REGISTRY_PORT = 55921;

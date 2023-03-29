@@ -17,9 +17,10 @@ public class GroupManager extends Thread {
 	/* Thread Setup */
 	private Thread t;
 	private String threadName;
+	private boolean threadStop;
+
 	private String ip;
 	private int port;
-	private boolean stop;
 
 	/* Constructor */
 	public GroupManager(PeerSoftware ps) {
@@ -29,10 +30,10 @@ public class GroupManager extends Thread {
 		// this.all_sources = parent.getAllSources();
 		// this.sent_logs = parent.getSentLogs();
 
-		this.ip = ps.network_handler.getExternalIP();
+		this.ip = ps.networkHandler.getExternalIP();
 		this.port = Settings.CLIENT_PORT;
 
-		this.stop = false;
+		this.threadStop = false;
 
 		System.out.println("SYSTEM: Creating " + threadName + " thread");
 	}
@@ -46,6 +47,10 @@ public class GroupManager extends Thread {
 		}
 	}
 
+	public void setThreadStop() {
+		this.threadStop = true;
+	}
+
 	/* Runs the thread */
 	@Override
 	public void run() {
@@ -57,7 +62,7 @@ public class GroupManager extends Thread {
 		ps.hostMap.checkActiveHosts();
 		Vector<Host> activeHosts = ps.hostMap.getActiveHosts();
 
-		while (stop != true) {
+		while (true) {
 			try {
 				sendPeerUpdates(activeHosts);
 				if (timeSlept >= BROADCAST_INTERVALS_SECONDS) {
@@ -72,19 +77,18 @@ public class GroupManager extends Thread {
 				System.out.println("Error in Group Management!");
 			}
 
+			if (threadStop)
+				break;
 		}
-		System.out.println("Thread " + threadName + " exiting");
-	}
 
-	public void setStop() {
-		this.stop = true;
+		System.out.println("SYSTEM: " + threadName + " exiting!");
 	}
 
 	private void sendPeerUpdates(Vector<Host> activeHosts) {
 		String message = "peer" + this.ip + ":" + this.port;
 
 		for (Host host : activeHosts) {
-			ps.network_handler.send(host.getIPAddress(), host.getPort(), message);
+			ps.networkHandler.send(host.getIPAddress(), host.getPort(), message);
 			// sent_logs.addLog(dest_ip, dest_port););
 		}
 	}

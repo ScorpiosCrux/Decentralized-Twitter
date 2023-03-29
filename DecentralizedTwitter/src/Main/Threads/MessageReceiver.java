@@ -27,12 +27,16 @@ public class MessageReceiver extends Thread {
 		}
 	}
 
+	public void setThreadStop() {
+		this.threadStop = true;
+	}
+
 	@Override
 	public void run() {
 		System.out.println("SYSTEM: Running " + threadName + " thread");
 
 		while (true) {
-			UDPMessagePack pack = ps.network_handler.receiveUDPMessage();
+			UDPMessagePack pack = ps.networkHandler.receiveUDPMessage();
 			if (Settings.DEBUG) {
 				System.out.println(
 						"DEBUG: RECEIVED MESSAGE FROM " + pack.getSource().toString() + " CONTENT: " + pack.getMessage());
@@ -43,22 +47,14 @@ public class MessageReceiver extends Thread {
 
 				switch (messageType) {
 					case "peer":
-						System.out.println("Peer");
 						ps.hostMap.refreshHost(pack.getSource());
-						// HandlePeerUpdate pu = new HandlePeerUpdate(this, message);
-						// pu.start();
 						break;
 					case "snip":
 						System.out.println("SYSTEM: (Incoming Message) " + pack.getMessage());
-						// snippet_handler.handleIncomingSnip(message);
 						break;
 					case "stop":
-						System.out.println("Stop");
-						// sendUDPStopMessage(message.getSourcePeer());
-						// stop = true;
-						// group_management.setStop();
-						// snippet_handler.setStop();
-						// System.out.println("\n\nstop");
+						System.out.println("SYSTEM: RECEIVED STOP REQUEST.\nSTARTING SHUT DOWN...\n");
+						ps.stopPeerCommunication();
 						break;
 				}
 			} catch (Exception e) {
@@ -71,36 +67,6 @@ public class MessageReceiver extends Thread {
 
 		}
 
-		System.out.println("SYSTEM: " + threadName + " thread exiting!");
+		System.out.println("SYSTEM: " + threadName + " exiting!");
 	}
 }
-
-/*
- * // Sends a stop message to registry request to stop
- * private void sendUDPStopMessage(Peer peer) {
- * try {
- * String ip = peer.getIP();
- * int port = peer.getPort();
- * 
- * byte[] buffer = new byte[1024];
- * InetAddress address = InetAddress.getByName(ip);
- * System.out.println("\n\n\n\n\nAddress that sent stop: " +
- * address.toString());
- * 
- * String data = "ack" + Settings.TEAM_NAME;
- * buffer = data.getBytes();
- * DatagramPacket response = new DatagramPacket(buffer, buffer.length, address,
- * port);
- * 
- * this.sent_logs.addLog(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
- * network_handler.getOutgoingUDPSocket().send(response);
- * // System.out.println("Broadcast to: " + peer.toString());
- * 
- * } catch (IOException e) {
- * e.printStackTrace();
- * System.out.println("Unable to sendUDPMessage (GroupManagment): " +
- * peer.toString());
- * }
- * 
- * }
- */

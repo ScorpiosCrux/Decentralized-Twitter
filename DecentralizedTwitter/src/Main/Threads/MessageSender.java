@@ -30,6 +30,10 @@ public class MessageSender extends Thread {
 		}
 	}
 
+	public void setThreadStop() {
+		this.threadStop = true;
+	}
+
 	@Override
 	public void run() {
 		System.out.println("SYSTEM: Running " + threadName + " thread");
@@ -48,7 +52,6 @@ public class MessageSender extends Thread {
 					System.out.println("SYSTEM: Tweet has been sent!\n\nTweet your thoughts: ");
 				} else {
 					Thread.sleep(INPUT_CHECK_FREQUENCY_MILLISECONDS);
-					continue;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -58,7 +61,7 @@ public class MessageSender extends Thread {
 				break;
 		}
 
-		System.out.println("SYSTEM: " + threadName + " thread exiting!");
+		System.out.println("SYSTEM: " + threadName + " exiting!");
 	}
 
 	/*
@@ -71,7 +74,7 @@ public class MessageSender extends Thread {
 
 		Vector<Host> activeHosts = ps.hostMap.getActiveHosts();
 		for (Host host : activeHosts) {
-			ps.network_handler.send(host.getIPAddress(), host.getPort(), updatedMessage);
+			ps.networkHandler.send(host.getIPAddress(), host.getPort(), updatedMessage);
 			// sent_logs.addLog(dest_ip, dest_port););
 		}
 

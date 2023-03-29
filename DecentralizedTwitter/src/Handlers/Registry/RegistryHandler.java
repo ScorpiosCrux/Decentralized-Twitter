@@ -33,11 +33,11 @@ public class RegistryHandler {
         /* Adds the registry as a source for peers */
         this.ps.hostMap.addSource(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
 
-        ps.network_handler.createSocket(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
+        ps.networkHandler.createSocket(Settings.REGISTRY_IP, Settings.REGISTRY_PORT);
 
-        while (ps.network_handler.checkConnection()) {
+        while (ps.networkHandler.checkConnection()) {
             /* Read Request */
-            String request = ps.network_handler.readSocket();
+            String request = ps.networkHandler.readSocket();
 
             if (request.equals("receive peers")) {
                 receivePeers();
@@ -46,7 +46,7 @@ public class RegistryHandler {
 
             String response = requestHandler.handleRequest(request);
             if (response != null) {
-                ps.network_handler.send(response);
+                ps.networkHandler.send(response);
                 this.printHandler.printResponse(response, request);
                 continue;
             }
@@ -61,11 +61,11 @@ public class RegistryHandler {
      */
     private void receivePeers() throws IOException {
         try {
-            String message = ps.network_handler.readSocket();
+            String message = ps.networkHandler.readSocket();
             int numberOfPeers = Integer.parseInt(message);
 
             for (int i = 0; i < numberOfPeers; i++) {
-                message = ps.network_handler.readSocket();
+                message = ps.networkHandler.readSocket();
 
                 String[] messageSplit = message.split(":");
                 String ip = messageSplit[0];
@@ -80,6 +80,5 @@ public class RegistryHandler {
             System.out.println("SYSTEM: ERROR RECEIVING PEERS FROM REGISTRY");
         }
     }
-
 
 }

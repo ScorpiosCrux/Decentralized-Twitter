@@ -65,9 +65,9 @@ public class Host {
 		this.timeStamp += 1;
 	}
 
-	// public String getCreationTime() {
-	// return creationTime;
-	// }
+	public Instant getCreationTime() {
+	return this.creationTime;
+	}
 
 	public void checkActivity(int inactivity_max) {
 		Instant end = Instant.now();

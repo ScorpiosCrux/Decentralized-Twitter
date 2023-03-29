@@ -12,7 +12,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
-
 import Host.Host;
 import Main.PeerSoftware;
 import Main.HelperDataClasses.UDPMessagePack;
@@ -118,7 +117,6 @@ public class NetworkHandler {
 
     /* Sends message to TCP/IP Socket. Flushes stream after. */
     public void send(String message) throws IOException {
-        // TODO: Convert message to Unicode characters
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         writer.write(message);
         writer.flush();
@@ -153,11 +151,11 @@ public class NetworkHandler {
 
     /* ===================== (end) TCP SOCKETS ===================== */
 
-    // Received UDP messages and returns a UDPMessage with information about the
-    // source and the content itself
-    // TODO: MOVE THIS
+    /* 
+     * Receives UDP messages from the socket
+     * Returns: a pack that contains the host info and the message content
+     */
     public UDPMessagePack receiveUDPMessage() {
-        // System.out.println("Waiting for UDP message");
         try {
             DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
             outgoing_udp_socket.receive(packet);
@@ -177,6 +175,7 @@ public class NetworkHandler {
         return outgoing_udp_socket;
     }
 
+    /* Returns the external IP of the client */
     public String getExternalIP() {
         return this.external_ip;
     }

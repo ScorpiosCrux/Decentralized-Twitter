@@ -35,7 +35,7 @@ public class MessageReceiver extends Thread {
 			UDPMessagePack pack = ps.network_handler.receiveUDPMessage();
 			if (Settings.DEBUG) {
 				System.out.println(
-						"DEBUG: RECEIVED MESSAGE FROM " + pack.getSourcePeer().toString() + " CONTENT: " + pack.getMessage());
+						"DEBUG: RECEIVED MESSAGE FROM " + pack.getSource().toString() + " CONTENT: " + pack.getMessage());
 			}
 
 			try {
@@ -44,11 +44,12 @@ public class MessageReceiver extends Thread {
 				switch (messageType) {
 					case "peer":
 						System.out.println("Peer");
+						ps.hostMap.refreshHost(pack.getSource());
 						// HandlePeerUpdate pu = new HandlePeerUpdate(this, message);
 						// pu.start();
 						break;
 					case "snip":
-						System.out.println("Snip");
+						System.out.println("SYSTEM: (Incoming Message) " + pack.getMessage());
 						// snippet_handler.handleIncomingSnip(message);
 						break;
 					case "stop":

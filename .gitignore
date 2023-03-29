@@ -5,3 +5,5 @@ sourceCode*/
 
 *.class
 *.log
+RegistryLogger.log.lck
+reports*/*.txt

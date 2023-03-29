@@ -1,10 +1,4 @@
 package Main.HelperDataClasses;
-/*
- * Author: Tyler Chen
- * UCID: 30066806
- * Iteration 3
- * CPSC 559
- */
 
 import Host.Host;
 
@@ -21,7 +15,10 @@ public class UDPMessagePack {
 		return this.message;
 	}
 
-	public Host getSourcePeer() {
+	/* 
+	 * Returns the Host of the message origin
+	 */
+	public Host getSource() {
 		return source;
 	}
 

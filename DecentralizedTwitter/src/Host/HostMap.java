@@ -46,7 +46,7 @@ public class HostMap {
 
 	// ============ PROJECT SPECIFIC FUNCTIONS ============
 
-	/* 
+	/*
 	 * Refreshes the list of active hosts
 	 * 
 	 */
@@ -79,6 +79,20 @@ public class HostMap {
 			this.checkActiveHosts();
 
 		return this.activeHosts;
+	}
+
+	/*
+	 * Finds the host and refreshes their lack communication
+	 * TODO: Optimize with map
+	 */
+	public void refreshHost(Host target) {
+		for (Host source : this.map.keySet()) {
+			Vector<Host> hosts = this.map.get(source);
+			for (Host host : hosts) {
+				if (host.equals(target))
+					host.updateActivity();
+			}
+		}
 	}
 	// ============ (end) PROJECT SPECIFIC FUNCTIONS ============
 

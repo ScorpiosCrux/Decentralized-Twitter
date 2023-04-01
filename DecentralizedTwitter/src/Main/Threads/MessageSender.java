@@ -8,30 +8,11 @@ import Main.PeerSoftware;
 import Main.PeerSoftware.Settings;
 
 /* This class handles all message the user wishes to send */
-public class MessageSender extends Thread {
-
-	private PeerSoftware ps;
-
-	/* Thread Setup */
-	private Thread t;
-	private String threadName;
-	private boolean threadStop;
+public class MessageSender extends ThreadedRunner {
 
 	public MessageSender(PeerSoftware ps) {
-		this.threadName = "-- Message Sender";
-		this.ps = ps;
-	}
+		super(ps, "-- Message Sender");
 
-	public void start() {
-		System.out.println("SYSTEM: Starting " + threadName + " thread");
-		if (t == null) {
-			this.t = new Thread(this, threadName);
-			this.t.start();
-		}
-	}
-
-	public void setThreadStop() {
-		this.threadStop = true;
 	}
 
 	@Override

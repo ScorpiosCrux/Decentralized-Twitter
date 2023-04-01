@@ -5,30 +5,10 @@ import Main.HelperDataClasses.UDPMessagePack;
 import Main.PeerSoftware.Settings;
 
 /* This class handles all message sending */
-public class MessageReceiver extends Thread {
-
-	private PeerSoftware ps;
-
-	/* Thread Setup */
-	private Thread t;
-	private String threadName;
-	private boolean threadStop;
+public class MessageReceiver extends ThreadedRunner {
 
 	public MessageReceiver(PeerSoftware ps) {
-		this.threadName = "-- Message Receiver";
-		this.ps = ps;
-	}
-
-	public void start() {
-		System.out.println("SYSTEM: Starting " + threadName + " thread");
-		if (t == null) {
-			this.t = new Thread(this, threadName);
-			this.t.start();
-		}
-	}
-
-	public void setThreadStop() {
-		this.threadStop = true;
+		super(ps, "-- Message Receiver");
 	}
 
 	@Override
